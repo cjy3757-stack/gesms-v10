@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#9e1b32" name="theme-color"/>
 <meta content="noindex,nofollow" name="robots"/>
-<title>GunpoEunhye Smart Ministry System (GESMS) V10.4</title>
+<title>GunpoEunhye Smart Ministry System (GESMS) V10.5</title>
 <link href="manifest.webmanifest" rel="manifest"/>
 <link href="icon-192.png" rel="icon"/>
 <style>
@@ -364,11 +364,26 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 
 
 .past-notices{margin-top:20px;border-top:1px solid #e5e7eb;padding-top:14px}.past-notices summary{cursor:pointer;font-weight:800;color:#52606d;padding:8px 0}.notice.expired{opacity:.72}.notice.expired time{color:#7b8794}
+
+.weekly-attendance-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+.weekly-attendance-head h3{margin:0 0 4px}
+.weekly-attendance-head small{color:var(--muted);font-size:12px}
+.weekly-attendance-list{display:grid;gap:8px;margin-top:10px}
+.weekly-attendance-row{display:grid;grid-template-columns:minmax(92px,1fr) auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:13px;background:#fff}
+.weekly-attendance-row .service-info b{display:block;font-size:14px}
+.weekly-attendance-row .service-info small{display:block;color:var(--muted);font-size:12px;margin-top:3px}
+.weekly-attendance-row .attendance-count{text-align:right}
+.weekly-attendance-row .attendance-count b{display:block;font-size:20px}
+.weekly-attendance-row .attendance-count small{color:var(--muted);font-size:11px}
+.weekly-attendance-total{margin-top:10px;padding:12px 14px;border-radius:14px;background:#f4f8ff;display:flex;align-items:center;justify-content:space-between}
+.weekly-attendance-total b{font-size:22px}
+@media(max-width:760px){.weekly-attendance-head{align-items:stretch;flex-direction:column}.weekly-attendance-head .action-btn{width:100%}}
+
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.4</h1><p>군포은혜영문 스마트 목양 시스템 V10.4</p></div><div class="private">🔒 교회 내부용</div></div></header>
+<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.5</h1><p>군포은혜영문 스마트 목양 시스템 V10.5</p></div><div class="private">🔒 교회 내부용</div></div></header>
 <main>
 <section class="page active" id="home">
 <div class="install-banner" id="installBanner">
@@ -387,7 +402,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <button data-jump="carePage">📞 돌봄 관리</button>
 </div>
 </div>
-<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.4</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
+<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.5</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
 <div class="ministry-dashboard">
 <div class="ministry-card soul"><div class="ministry-icon">❤️</div><div><span>영혼구원 진행</span><b id="homeSoulProgress">데이터 확인중</b><small id="homeSoulMeta">기도대상자 Excel을 자동으로 읽어 집계합니다.</small></div></div>
 <div class="ministry-card prayer"><div class="ministry-icon">🙏</div><div><span>오늘 기도대상</span><b id="homePrayerCount">- 명</b><small id="homePrayerNames">오늘 기도할 대상을 표시합니다.</small></div></div>
@@ -399,7 +414,17 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <h3>📅 다가오는 교회 일정</h3>
 <div id="homeEvents"></div>
 </div>
-<div class="grid2"><div class="card"><h3>📢 최근 공지</h3><div id="homeNotices"></div></div><div class="card"><h3>📊 가족 규모 현황</h3><div class="chart" id="familySizeChart"></div></div></div>
+<div class="grid2">
+<div class="card"><h3>📢 최근 공지</h3><div id="homeNotices"></div></div>
+<div class="card">
+  <div class="weekly-attendance-head">
+    <div><h3>✅ 이번 주 출석현황</h3><small id="homeWeeklyAttendancePeriod">이번 주 예배 출석자료를 확인합니다.</small></div>
+    <button class="action-btn secondary" id="refreshWeeklyAttendance">새로고침</button>
+  </div>
+  <div class="remote-status" id="homeWeeklyAttendanceStatus">출석자료를 불러오는 중입니다…</div>
+  <div id="homeWeeklyAttendance"></div>
+</div>
+</div>
 <div class="card" style="margin-top:16px"><h3>🎂 생일 알림</h3><div id="solarBirthdayHome"></div></div>
 <div class="card goal-card">
 <div class="goal-head">
@@ -1266,6 +1291,60 @@ async function loadHomeMonthlyAttendance(){
 }
 
 
+
+function currentWeekRange(){
+  const now=new Date();
+  const monday=new Date(now);
+  const day=(now.getDay()+6)%7;
+  monday.setHours(12,0,0,0);
+  monday.setDate(now.getDate()-day);
+  const sunday=new Date(monday);
+  sunday.setDate(monday.getDate()+6);
+  return {monday,sunday};
+}
+function dateForWeekday(monday,weekday){
+  const d=new Date(monday);
+  const offset=(weekday+6)%7;
+  d.setDate(monday.getDate()+offset);
+  return isoDate(d);
+}
+async function loadHomeWeeklyAttendance(){
+  const root=$('#homeWeeklyAttendance');
+  const status=$('#homeWeeklyAttendanceStatus');
+  const period=$('#homeWeeklyAttendancePeriod');
+  if(!root||!status)return;
+  const {monday,sunday}=currentWeekRange();
+  const start=isoDate(monday),end=isoDate(sunday);
+  if(period)period.textContent=`${start.replaceAll('-','.')} ~ ${end.replaceAll('-','.')}`;
+  status.className='remote-status';
+  status.textContent='이번 주 출석 CSV와 기기 저장자료를 확인하는 중입니다…';
+  root.innerHTML='';
+  const services=['성결예배','구령예배','수요예배','금요기도회','새벽기도','소그룹모임','부흥집회','기타'];
+  const rows=[];
+  for(const service of services){
+    const date=dateForWeekday(monday,serviceWeekday(service));
+    if(date>appTodayISO())continue;
+    const count=await fetchAttendanceCount(date,service);
+    if(count!==null)rows.push({service,date,count});
+  }
+  if(!rows.length){
+    status.className='remote-status warn';
+    status.textContent='이번 주에 저장되거나 업로드된 출석자료가 아직 없습니다.';
+    root.innerHTML='<div class="empty" style="padding:22px">출석 메뉴에서 체크한 뒤 CSV를 저장하거나 GitHub에 업로드하면 여기에 표시됩니다.</div>';
+    return;
+  }
+  rows.sort((a,b)=>a.date.localeCompare(b.date)||services.indexOf(a.service)-services.indexOf(b.service));
+  const total=rows.reduce((sum,row)=>sum+row.count,0);
+  root.innerHTML=`<div class="weekly-attendance-list">${rows.map(row=>`
+    <div class="weekly-attendance-row">
+      <div class="service-info"><b>${esc(row.service)}</b><small>${row.date.replaceAll('-','.')}</small></div>
+      <div class="attendance-count"><b>${row.count}명</b><small>교인·온라인·방문자 포함</small></div>
+    </div>`).join('')}</div>
+    <div class="weekly-attendance-total"><span>이번 주 예배별 참석 합계</span><b>${total}명</b></div>`;
+  status.className='remote-status ok';
+  status.textContent=`이번 주 출석자료 ${rows.length}건을 불러왔습니다.`;
+}
+
 function getGoal(){return Number(localStorage.getItem('gunpoAttendanceGoal')||60)}
 function setGoal(value){localStorage.setItem('gunpoAttendanceGoal',String(value))}
 async function updateAttendanceGoal(){
@@ -1799,14 +1878,6 @@ bindClick('#toggleLargeText',toggleLargeText);
 bindClick('#resetLocalData',resetLocalRecords);
 bindClick('#installPwaBtn',installPwa);
 bindClick('#refreshOfficeExcel',()=>window.loadLatestOfficeExcel&&window.loadLatestOfficeExcel());
-const fs={'1인':0,'2인':0,'3인':0,'4인 이상':0};
-(D.families||[]).forEach(f=>{const size=Number(f.size)||Number((f.members||[]).length)||0;const k=size>=4?'4인 이상':size>=1?`${size}인`:'';if(k)fs[k]=(fs[k]||0)+1});
-$('#familyKpi').textContent=(D.families||[]).length;
-$('#memberKpi').textContent=(D.members||[]).length;
-$('#avgKpi').textContent=(D.families||[]).length?((D.members||[]).length/(D.families||[]).length).toFixed(1):'0';
-$('#groupKpi').textContent=allGroups.length;
-renderOfficeData();
-chart($('#familySizeChart'),Object.fromEntries(Object.entries(fs).filter(([,v])=>v>0)));
 chart($('#positionChart'),(D.stats&&D.stats.positions)||{});
 chart($('#groupChart'),(D.stats&&D.stats.groups)||{});
 const bm={};for(let i=1;i<=12;i++)bm[`${i}월`]=(D.stats&&D.stats.birthMonths&&D.stats.birthMonths[i])||0;chart($('#birthdayChart'),bm,12);
@@ -1833,6 +1904,8 @@ const bm={};for(let i=1;i<=12;i++)bm[`${i}월`]=(D.stats&&D.stats.birthMonths&&D
   bindChange('#attendanceCalendarMonth',loadMonthlyAttendanceCalendar);
   $('#statsDate').value=$('#attendanceDate').value;$('#statsService').value='성결예배';$('#careDate').value=$('#attendanceDate').value;$('#careService').value='성결예배';$('#refreshCare').onclick=loadCareManagement;$('#shareCare').onclick=shareCareList;$('#copyCare').onclick=copyCareList;$('#refreshStats').onclick=loadAttendanceStats;$('#statsService').onchange=loadAttendanceStats;$('#statsDate').onchange=loadAttendanceStats;
   $('#homeAttendanceService').onchange=loadHomeMonthlyAttendance;$('#refreshHomeAttendance').onclick=loadHomeMonthlyAttendance;loadHomeMonthlyAttendance();
+  bindClick('#refreshWeeklyAttendance',loadHomeWeeklyAttendance);
+  loadHomeWeeklyAttendance();
   $('#attendanceGoal').value=getGoal();$('#attendanceGoal').onchange=e=>{setGoal(e.target.value);updateAttendanceGoal();loadHomeMonthlyAttendance()};updateAttendanceGoal();
 
 
