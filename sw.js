@@ -1,4 +1,4 @@
-const CACHE='gesms-v10-5-weekly-attendance-20260723-1';
+const CACHE='gesms-v10-5-1-kpi-fix-20260723-1';
 const STATIC=['./','./index.html','./data.js','./service-data.js','./office-data.js','./office-excel.js','./prayer-excel.js','./jszip.min.js','./member-excel.js','./finance-data.js','./manifest.webmanifest','./logo.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(STATIC)));
