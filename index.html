@@ -320,6 +320,33 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 
 .prayer-toolbar{display:grid;grid-template-columns:2fr 1fr 1fr auto;gap:9px;margin-bottom:12px}.prayer-toolbar input,.prayer-toolbar select,.target-input{border:1px solid var(--line);border-radius:12px;padding:11px;background:#fff;color:var(--ink)}
 .prayer-status{padding:10px 12px;border-radius:12px;background:#eef6f0;color:#176b3a;font-size:12px;margin-bottom:12px}.prayer-status.error{background:#fff0f1;color:#9e1b32}
+/* 일만상상 프로젝트 카드 강조 */
+#tenThousand .card{border:2px solid #d9b24c;background:linear-gradient(180deg,#fffdf6 0%,#ffffff 42%);box-shadow:0 12px 28px rgba(9,42,78,.10)}
+#tenThousand .card>h3{margin:-1px -1px 16px;padding:15px 17px;border-radius:15px 15px 10px 10px;background:linear-gradient(135deg,#0b315b,#164f83 65%,#b01832);color:#fff;letter-spacing:-.2px}
+#projectSummary .soul-kpis div{border:1px solid rgba(9,42,78,.12);box-shadow:0 5px 12px rgba(9,42,78,.07)}
+#projectSummary .soul-kpis div:nth-child(1){background:#eaf4ff;border-top:4px solid #1d6fb8}
+#projectSummary .soul-kpis div:nth-child(2){background:#fff3d8;border-top:4px solid #d89a00}
+#projectSummary .soul-kpis div:nth-child(3){background:#eaf8ef;border-top:4px solid #2c8b52}
+#projectSummary .soul-kpis div:nth-child(4){background:#fff0f3;border-top:4px solid #b01832}
+#projectList{gap:15px}
+#projectList .prayer-person{border:0;border-left:7px solid #1d6fb8;box-shadow:0 7px 18px rgba(9,42,78,.10);transition:transform .18s ease,box-shadow .18s ease}
+#projectList .prayer-person:hover{transform:translateY(-2px);box-shadow:0 11px 24px rgba(9,42,78,.15)}
+#projectList .prayer-person:nth-child(4n+2){border-left-color:#d89a00}
+#projectList .prayer-person:nth-child(4n+3){border-left-color:#2c8b52}
+#projectList .prayer-person:nth-child(4n+4){border-left-color:#b01832}
+#projectList .prayer-head{background:linear-gradient(90deg,#edf6ff 0%,#fff 72%);padding:16px}
+#projectList .prayer-person:nth-child(4n+2) .prayer-head{background:linear-gradient(90deg,#fff6df 0%,#fff 72%)}
+#projectList .prayer-person:nth-child(4n+3) .prayer-head{background:linear-gradient(90deg,#eaf8ef 0%,#fff 72%)}
+#projectList .prayer-person:nth-child(4n+4) .prayer-head{background:linear-gradient(90deg,#fff0f3 0%,#fff 72%)}
+#projectList .prayer-avatar{background:#0b315b;color:#fff;box-shadow:0 4px 10px rgba(9,42,78,.22)}
+#projectList .prayer-head h4{font-size:16px;font-weight:900}
+#projectList .stage-badge{background:#0b315b;color:#fff;padding:7px 11px;box-shadow:0 3px 8px rgba(9,42,78,.18)}
+#projectList .prayer-detail{background:#f7fafc;border-top:2px dashed #cbd7e3}
+#projectList .detail-grid div{border:0;border-top:4px solid #1d6fb8;background:#fff;box-shadow:0 3px 9px rgba(9,42,78,.07)}
+#projectList .detail-grid div:nth-child(2){border-top-color:#d89a00}
+#projectList .detail-grid div:nth-child(3){border-top-color:#2c8b52}
+#projectList .detail-grid div:nth-child(4){border-top-color:#b01832}
+#projectList .prayer-topic{border-left:6px solid #d89a00;background:#fff4d8;font-weight:600}
 .prayer-list{display:grid;gap:10px}.prayer-person{background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden}.prayer-head{display:grid;grid-template-columns:46px 1fr auto;gap:11px;align-items:center;padding:14px;cursor:pointer}.prayer-avatar{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;background:#fff0f3;color:var(--sa-red);font-weight:900}.prayer-head h4{margin:0 0 3px;color:var(--navy)}.prayer-head p{margin:0;color:var(--muted);font-size:12px}.stage-badge{padding:6px 9px;border-radius:99px;background:#eef2f6;color:var(--navy);font-size:11px;font-weight:900}.prayer-detail{display:none;border-top:1px dashed var(--line);padding:14px;background:#fafafa}.prayer-person.open .prayer-detail{display:block}.detail-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.detail-grid div{background:#fff;border:1px solid #ece7e1;border-radius:12px;padding:10px}.detail-grid span{display:block;color:var(--muted);font-size:11px}.detail-grid b{display:block;color:var(--navy);margin-top:4px;font-size:13px}.prayer-topic{margin-top:10px;padding:12px;border-left:4px solid var(--gold);background:#fff8e7;border-radius:0 12px 12px 0;line-height:1.55;font-size:13px}.stage-pills{display:flex;gap:5px;flex-wrap:wrap;margin-top:10px}.stage-pills span{padding:5px 8px;border-radius:99px;background:#eceff2;color:#7b858f;font-size:10px;font-weight:800}.stage-pills span.done{background:#e8f6ed;color:#176b3a}.stage-chart{display:grid;gap:9px;margin-top:15px}.stage-row{display:grid;grid-template-columns:76px 1fr 32px;gap:8px;align-items:center;font-size:12px}.stage-row i{height:12px;border-radius:99px;background:linear-gradient(90deg,var(--sa-red),#e77784);display:block}.stage-row b{text-align:right;color:var(--navy)}.contact-list{display:grid;gap:7px;margin-top:8px}.contact-mini{display:flex;justify-content:space-between;gap:10px;padding:9px 10px;border-radius:11px;background:#f7f8fa;font-size:12px}.upload-box{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.upload-box input{display:none}.target-setting{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.target-setting label{font-size:13px;color:var(--muted)}.target-setting input{width:90px}.no-results{text-align:center;color:var(--muted);padding:26px}
 .gesms-footer{text-align:center;padding:24px 12px 90px;color:var(--muted)}.gesms-footer b,.gesms-footer span,.gesms-footer small{display:block}.gesms-footer b{color:var(--navy)}.gesms-footer span{margin:4px 0;font-size:13px}.gesms-footer small{font-size:11px}
 @media(max-width:720px){.prayer-toolbar{grid-template-columns:1fr}.detail-grid{grid-template-columns:1fr}.target-setting{align-items:stretch}.target-setting input{width:auto}.brand img{width:78px;height:78px}.brand h1{font-size:18px}.brand p{font-size:11px}.private{display:none}.gesms-hero img{width:92px;height:92px}.ministry-dashboard,.evangelism-menu{grid-template-columns:1fr}.soul-kpis{grid-template-columns:repeat(2,1fr)}.project-grid,.data-manager-grid{grid-template-columns:repeat(2,1fr)}}
