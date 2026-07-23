@@ -304,7 +304,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 
 .stats-index-help{margin:10px 0 12px;padding:11px 13px;border-radius:12px;background:#f7f8fb;color:var(--muted);font-size:13px;line-height:1.6}
 
-/* GESMS V10.2 */
+/* GESMS V10.2.2 */
 :root{--gold:#d9a326;--deep-navy:#09244b;--sa-red:#d31324}
 .brand img{width:104px;height:104px;border-radius:50%;box-shadow:0 5px 18px rgba(9,36,75,.18)}
 .gesms-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(135deg,#09244b,#153f72 70%,#7d1224)}
@@ -649,7 +649,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 </section>
 <section class="page" id="settingsPage">
 <h2 class="section-title">⚙ 설정</h2>
-<div class="card"><h3>📂 Excel 데이터 관리</h3><div class="data-manager-grid"><div><span>👨‍👩‍👧</span><b>교인명단</b><small>data.js / 원본 Excel</small></div><div><span>✅</span><b>출석</b><small>날짜별 CSV</small></div><div><span>📢</span><b>공지</b><small>공지사항.xlsx</small></div><div><span>📅</span><b>일정</b><small>교회일정.xlsx</small></div><div class="new"><span>🙏</span><b>기도대상자</b><small>자동연동 적용</small></div><div class="new"><span>🌱</span><b>일만상상</b><small>통합 Excel 자동연동</small></div></div></div>
+<div class="card"><h3>📂 Excel 데이터 관리</h3><div class="data-manager-grid"><div><span>👨‍👩‍👧</span><b>교인명단</b><small>GESMS_군우명단.xlsx 자동연동</small></div><div><span>✅</span><b>출석</b><small>날짜별 CSV</small></div><div><span>📢</span><b>공지</b><small>공지사항.xlsx</small></div><div><span>📅</span><b>일정</b><small>교회일정.xlsx</small></div><div class="new"><span>🙏</span><b>기도대상자</b><small>자동연동 적용</small></div><div class="new"><span>🌱</span><b>일만상상</b><small>통합 Excel 자동연동</small></div></div></div>
 <div class="card" style="margin-top:16px"><h3>ℹ 시스템 정보</h3><div class="system-info"><img src="logo.png" alt="GESMS 로고"><div><b>GunpoEunhye Smart Ministry System</b><p>군포은혜영문 스마트 목양 시스템</p><span>GESMS V10.2</span></div></div></div>
 </section>
 <section class="page" id="morePage"><h2 class="section-title">이용 안내</h2><div class="info"><b>📱 앱처럼 설치</b><br/>안드로이드 Chrome: ⋮ → 앱 설치 또는 홈 화면에 추가<br/>아이폰 Safari: 공유 □↑ → 홈 화면에 추가<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔄 데이터 업데이트</b><br/>명단 또는 시스템 파일이 변경되면 GitHub 저장소에 업로드하여 같은 주소에서 최신 자료를 사용할 수 있습니다.<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔐 개인정보 보호</b><br/>교회 내부에서만 사용하고 외부 전송이나 공개 게시를 삼가 주세요.</div></section>
@@ -672,10 +672,13 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <script src="service-data.js"></script>
 <script src="office-data.js"></script>
 <script src="jszip.min.js"></script>
+<script src="member-excel.js"></script>
 <script src="office-excel.js"></script>
 <script src="prayer-excel.js"></script>
 <script src="finance-data.js"></script>
 <script>
+;(async function(){
+await window.loadLatestMemberExcel();
 const D=window.APP_DATA,$=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const mask=p=>p?p.replace(/(\d{3})-(\d{3,4})-(\d{4})/,'$1-$2-****'):'미기재';
@@ -1839,5 +1842,6 @@ try{
   const home=document.getElementById('home');
   if(home)home.classList.add('active');
 }
+})();
 </script>
 </body></html>
