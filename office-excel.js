@@ -87,7 +87,19 @@
     let apiError='';
     try{
       const files=await githubFiles();
-      const item=files.find(x=>x.type==='file'&&matcher(x.name));
+      const candidates=files.filter(x=>x.type==='file'&&matcher(x.name));
+      const preferredNames=kind==='notice'
+        ? ['공지사항.xlsx','notice.xlsx']
+        : ['교회일정.xlsx','events.xlsx'];
+      const rank=name=>{
+        const exact=preferredNames.indexOf(name);
+        if(exact>=0)return exact;
+        if(kind==='notice'&&name.startsWith('공지사항'))return 10;
+        if(kind==='event'&&name.startsWith('교회일정'))return 10;
+        return 99;
+      };
+      candidates.sort((a,b)=>rank(a.name)-rank(b.name)||a.name.localeCompare(b.name,'ko'));
+      const item=candidates[0];
       if(item){
         const url=item.download_url || `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${item.path.split('/').map(encodeURIComponent).join('/')}`;
         return {rows:await parseXlsx(await fetchBuffer(url,item.name)),name:item.name};
@@ -134,7 +146,10 @@
     const results=await Promise.allSettled([fetchWorkbook('notice'),fetchWorkbook('event')]);
     const messages=[];
     if(results[0].status==='fulfilled'){
-      window.NOTICE_DATA=rowsToNotices(results[0].value.rows);messages.push(`공지 ${window.NOTICE_DATA.length}건 (${results[0].value.name})`);
+      window.NOTICE_DATA=rowsToNotices(results[0].value.rows);
+      const today=new Date().toISOString().slice(0,10);
+      const activeCount=window.NOTICE_DATA.filter(n=>(!n.start||n.start<=today)&&(!n.end||n.end>=today)).length;
+      messages.push(`현재 공지 ${activeCount}건 / 전체 ${window.NOTICE_DATA.length}건 (${results[0].value.name})`);
     }else messages.push(`공지 실패: ${results[0].reason?.message||results[0].reason}`);
     if(results[1].status==='fulfilled'){
       window.EVENT_DATA=rowsToEvents(results[1].value.rows);messages.push(`일정 ${window.EVENT_DATA.length}건 (${results[1].value.name})`);
