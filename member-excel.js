@@ -96,7 +96,7 @@ function monthDay(v){
 function buildData(rows){
   const h=findHeader(rows);
   const ix={
-    family:aliasIndex(h.headers,['가족코드','가정코드','가족','가정','family']),
+    family:aliasIndex(h.headers,['가족구분','가족 구분','가족코드','가족 코드','가정코드','가정 코드','가족번호','가족 번호','가정번호','가정 번호','가족','가정','family']),
     head:aliasIndex(h.headers,['가족대표','가정대표','세대주','가족대표자']),
     name:aliasIndex(h.headers,['이름','성명','군우명','교인명']),
     solar:aliasIndex(h.headers,['양력생일','양력 생일','양력생년월일']),
@@ -111,6 +111,7 @@ function buildData(rows){
     note:aliasIndex(h.headers,['비고','메모','특이사항'])
   };
   const get=(r,i)=>i>=0?text(r[i]):'';
+  if(ix.family<0)throw new Error('군우명단에서 가족구분 열을 찾지 못했습니다. 열 이름을 가족구분으로 확인해 주세요.');
   const members=[];
   for(let i=h.index+1;i<rows.length;i++){
     const r=rows[i]||[],name=get(r,ix.name);
@@ -118,7 +119,10 @@ function buildData(rows){
     const birthday=monthDay(get(r,ix.solar)||get(r,ix.birth));
     const kind=get(r,ix.kind);
     members.push({
-      family:get(r,ix.family)||String(members.length+1),name,birthday,
+      family:(()=>{
+        const code=get(r,ix.family);
+        return code || `미분류-${name}`;
+      })(),name,birthday,
       birthdayType:kind?`${kind.replace(/[()]/g,'').trim()}) ${birthday.replace(/\s+/g,'')}`:birthday,
       position:get(r,ix.position),phone:get(r,ix.phone),
       group1:get(r,ix.group1),group2:get(r,ix.group2),group3:get(r,ix.group3),group4:get(r,ix.group4),
@@ -192,7 +196,7 @@ window.loadLatestMemberExcel=async function(){
     target.members=fresh.members;
     target.families=fresh.families;
     target.stats=fresh.stats;
-    window.GESMS_MEMBER_EXCEL={ok:true,name:wb.name,sheet:wb.sheet,count:fresh.members.length};
+    window.GESMS_MEMBER_EXCEL={ok:true,name:wb.name,sheet:wb.sheet,count:fresh.members.length,familyCount:fresh.families.length};
     return true;
   }catch(e){
     window.GESMS_MEMBER_EXCEL={ok:false,error:e.message||String(e)};
