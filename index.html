@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#9e1b32" name="theme-color"/>
 <meta content="noindex,nofollow" name="robots"/>
-<title>GunpoEunhye Smart Ministry System (GESMS) V10.0 Beta</title>
+<title>GunpoEunhye Smart Ministry System (GESMS) V10.0 RC1</title>
 <link href="manifest.webmanifest" rel="manifest"/>
 <link href="icon-192.png" rel="icon"/>
 <style>
@@ -304,7 +304,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 
 .stats-index-help{margin:10px 0 12px;padding:11px 13px;border-radius:12px;background:#f7f8fb;color:var(--muted);font-size:13px;line-height:1.6}
 
-/* GESMS V10.0 Beta */
+/* GESMS V10.0 RC1 */
 :root{--gold:#d9a326;--deep-navy:#09244b;--sa-red:#d31324}
 .brand img{width:104px;height:104px;border-radius:50%;box-shadow:0 5px 18px rgba(9,36,75,.18)}
 .gesms-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(135deg,#09244b,#153f72 70%,#7d1224)}
@@ -329,7 +329,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.0 Beta</h1><p>군포은혜영문 스마트 목양 시스템 V10.0</p></div><div class="private">🔒 교회 내부용</div></div></header>
+<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.0 RC1</h1><p>군포은혜영문 스마트 목양 시스템 V10.0</p></div><div class="private">🔒 교회 내부용</div></div></header>
 <main>
 <section class="page active" id="home">
 <div class="install-banner" id="installBanner">
@@ -345,7 +345,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <button data-jump="evangelismPage">❤️ 전도(영혼구원)</button>
 </div>
 </div>
-<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.0 Beta</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
+<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.0 RC1</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
 <div class="ministry-dashboard">
 <div class="ministry-card soul"><div class="ministry-icon">❤️</div><div><span>영혼구원 진행</span><b id="homeSoulProgress">데이터 확인중</b><small id="homeSoulMeta">기도대상자 Excel을 자동으로 읽어 집계합니다.</small></div></div>
 <div class="ministry-card prayer"><div class="ministry-icon">🙏</div><div><span>오늘 기도대상</span><b id="homePrayerCount">- 명</b><small id="homePrayerNames">오늘 기도할 대상을 표시합니다.</small></div></div>
@@ -588,7 +588,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <section class="page" id="eventsPage"><h2 class="section-title">교회 일정</h2><div class="schedule" id="events"></div></section>
 <section class="page" id="evangelismPage">
 <h2 class="section-title">❤️ 전도(영혼구원)</h2>
-<div class="alpha-notice"><b>GESMS V10.0 Beta</b><span>기도대상자 Excel 자동연동, 검색·필터, 전도단계 통계와 영혼관리 카드를 적용한 시험 운영 버전입니다.</span></div>
+<div class="alpha-notice"><b>GESMS V10.0 RC1</b><span>기도대상자 Excel 자동연동, 검색·필터, 전도단계 통계와 영혼관리 카드를 적용한 시험 운영 버전입니다.</span></div>
 <div class="evangelism-menu">
 <button class="evangelism-tile" data-ev-tab="evStatus"><span>📈</span><b>전도현황</b><small>목표·현재·단계별 현황</small></button>
 <button class="evangelism-tile" data-ev-tab="prayerTargets"><span>🙏</span><b>기도대상자관리</b><small>Excel 자동연동</small></button>
@@ -608,11 +608,11 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <section class="page" id="settingsPage">
 <h2 class="section-title">⚙ 설정</h2>
 <div class="card"><h3>📂 Excel 데이터 관리</h3><div class="data-manager-grid"><div><span>👨‍👩‍👧</span><b>교인명단</b><small>data.js / 원본 Excel</small></div><div><span>✅</span><b>출석</b><small>날짜별 CSV</small></div><div><span>📢</span><b>공지</b><small>공지사항.xlsx</small></div><div><span>📅</span><b>일정</b><small>교회일정.xlsx</small></div><div class="new"><span>🙏</span><b>기도대상자</b><small>자동연동 적용</small></div><div class="new"><span>🌱</span><b>일만상상</b><small>RC 연동 예정</small></div></div></div>
-<div class="card" style="margin-top:16px"><h3>ℹ 시스템 정보</h3><div class="system-info"><img src="logo.png" alt="GESMS 로고"><div><b>GunpoEunhye Smart Ministry System</b><p>군포은혜영문 스마트 목양 시스템</p><span>GESMS V10.0 Beta</span></div></div></div>
+<div class="card" style="margin-top:16px"><h3>ℹ 시스템 정보</h3><div class="system-info"><img src="logo.png" alt="GESMS 로고"><div><b>GunpoEunhye Smart Ministry System</b><p>군포은혜영문 스마트 목양 시스템</p><span>GESMS V10.0 RC1</span></div></div></div>
 </section>
 <section class="page" id="morePage"><h2 class="section-title">이용 안내</h2><div class="info"><b>📱 앱처럼 설치</b><br/>안드로이드 Chrome: ⋮ → 앱 설치 또는 홈 화면에 추가<br/>아이폰 Safari: 공유 □↑ → 홈 화면에 추가<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔄 데이터 업데이트</b><br/>명단 또는 시스템 파일이 변경되면 GitHub 저장소에 업로드하여 같은 주소에서 최신 자료를 사용할 수 있습니다.<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔐 개인정보 보호</b><br/>교회 내부에서만 사용하고 외부 전송이나 공개 게시를 삼가 주세요.</div></section>
 </main>
-<footer class="gesms-footer"><b>GESMS V10.0 Beta</b><span>GunpoEunhye Smart Ministry System</span><small>© 2026 Salvation Army Gunpo Eunhye Corps</small></footer>
+<footer class="gesms-footer"><b>GESMS V10.0 RC1</b><span>GunpoEunhye Smart Ministry System</span><small>© 2026 Salvation Army Gunpo Eunhye Corps</small></footer>
 <nav class="bottom"><div class="nav" style="grid-template-columns:repeat(12,1fr)">
 <button class="active" data-page="home"><span>🏠</span>홈</button>
 <button data-page="familiesPage"><span>👨‍👩‍👧</span>가족</button>
@@ -1470,7 +1470,7 @@ function renderFinanceDashboard(){
 const ALL_SERVICES=['새벽기도','성결예배','구령예배','수요예배','금요기도회','소그룹모임','부흥집회','기타'];
 
 
-function attendanceIndexLocalKey(){return 'gunpoAttendanceIndex'}
+function attendanceIndexLocalKey(){return 'gesmsV10AttendanceIndex'}
 function normalizeAttendanceIndex(data){
   const arr=Array.isArray(data)?data:(Array.isArray(data.records)?data.records:[]);
   const seen=new Set();
@@ -1501,7 +1501,7 @@ function registerAttendanceIndexRecord(date,service){
   return saveLocalAttendanceIndex(records);
 }
 const GITHUB_REPO_OWNER='cjy3757-stack';
-const GITHUB_REPO_NAME='gunpo-family';
+const GITHUB_REPO_NAME='gesms-v10';
 const GITHUB_BRANCHES=['main','master'];
 
 function attendanceRecordFromPath(path){
@@ -1565,20 +1565,25 @@ async function scanGitHubAttendanceFiles(){
   }
 }
 async function fetchIndexedAttendanceRecord(record){
-  try{
-    const r=await fetch(`${encodeURI('./'+record.file)}?v=${Date.now()}`,{cache:'no-store'});
-    if(!r.ok)return null;
-    const parsed=parseAttendanceCsvData(await r.text());
-    const statuses=Object.values(parsed.attendance);
-    const presentCount=statuses.filter(x=>x==='present').length;
-    const onlineCount=statuses.filter(x=>x==='online').length;
-    const visitorCount=parsed.visitorCount;
-    return {
-      date:record.date,service:record.service,
-      presentCount,onlineCount,visitorCount,
-      count:presentCount+onlineCount+visitorCount
-    };
-  }catch(e){return null}
+  const localUrl=`${encodeURI('./'+record.file)}?v=${Date.now()}`;
+  const rawUrl=`https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/${record.file.split('/').map(encodeURIComponent).join('/')}?v=${Date.now()}`;
+  for(const url of [localUrl,rawUrl]){
+    try{
+      const r=await fetch(url,{cache:'no-store'});
+      if(!r.ok)continue;
+      const parsed=parseAttendanceCsvData(await r.text());
+      const statuses=Object.values(parsed.attendance);
+      const presentCount=statuses.filter(x=>x==='present').length;
+      const onlineCount=statuses.filter(x=>x==='online').length;
+      const visitorCount=parsed.visitorCount;
+      return {
+        date:record.date,service:record.service,
+        presentCount,onlineCount,visitorCount,
+        count:presentCount+onlineCount+visitorCount
+      };
+    }catch(e){}
+  }
+  return null;
 }
 async function probeMonthlyAttendanceFiles(year,mon,note){
   const days=new Date(year,mon,0).getDate();
@@ -1666,10 +1671,11 @@ async function loadMonthlyAttendanceCalendar(){
   }
 
   const total=loaded.reduce((sum,x)=>sum+x.count,0);
+  const indexedCount=monthRecords.length;
   const visitorTotal=loaded.reduce((sum,x)=>sum+x.visitorCount,0);
   if(!loaded.length){
     note.className='remote-status warn';
-    note.textContent=`${year}년 ${mon}월 출석 CSV가 GitHub에 없습니다. attendance-날짜-예배명.csv 파일을 업로드해 주세요.`;
+    note.textContent=indexedCount?`${year}년 ${mon}월 출석 CSV ${indexedCount}개는 확인했지만 내용을 읽지 못했습니다. 파일명·경로·CSV 형식을 확인해 주세요.`:`${year}년 ${mon}월 출석 CSV가 GitHub에 없습니다. attendance-날짜-예배명.csv 파일을 업로드해 주세요.`;
   }else{
     note.className='remote-status ok';
     note.textContent=`${year}년 ${mon}월 ${loaded.length}개 예배 · 전체 참석 ${total}명 · 방문자 ${visitorTotal}명입니다.`;
@@ -1763,7 +1769,7 @@ const fs={};D.families.forEach(f=>{const k=f.size>=4?'4인 이상':`${f.size}인
   $('#attendanceGoal').value=getGoal();$('#attendanceGoal').onchange=e=>{setGoal(e.target.value);updateAttendanceGoal();loadHomeMonthlyAttendance()};updateAttendanceGoal();
 
 
-// GESMS V10.0 Beta evangelism tabs
+// GESMS V10.0 RC1 evangelism tabs
 function bindEvangelismTabs(){
   document.querySelectorAll('[data-ev-tab]').forEach((btn,i)=>{
     if(i===0)btn.classList.add('active');
