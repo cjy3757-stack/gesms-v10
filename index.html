@@ -1,0 +1,1778 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
+<meta content="#9e1b32" name="theme-color"/>
+<meta content="noindex,nofollow" name="robots"/>
+<title>GunpoEunhye Smart Ministry System (GESMS) V10.0 Alpha</title>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="icon-192.png" rel="icon"/>
+<style>
+:root{--red:#9e1b32;--red2:#c8304a;--navy:#18304a;--ink:#17212b;--muted:#6b7580;--paper:#f7f4ef;--card:#fff;--line:#e6dfd7;--shadow:0 8px 24px rgba(34,29,26,.08)}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font-family:Pretendard,"Noto Sans KR",Arial,sans-serif}.app{min-height:100vh;padding-bottom:86px}
+header{background:#fff;border-bottom:1px solid var(--line);padding:14px 16px}.brand{max-width:1120px;margin:auto;display:flex;align-items:center;gap:14px}.brand img{width:96px;height:96px;object-fit:contain}.brand h1{margin:0;color:var(--navy);font-size:clamp(20px,3.8vw,32px);letter-spacing:-.03em}.brand p{margin:5px 0 0;color:var(--muted);font-size:13px}.private{margin-left:auto;background:#fff1f4;color:var(--red);padding:7px 10px;border-radius:99px;font-size:12px;font-weight:800}
+main{max-width:1120px;margin:auto;padding:18px 14px}.page{display:none}.page.active{display:block}.hero{background:linear-gradient(135deg,var(--navy),#275678);color:#fff;border-radius:24px;padding:24px;box-shadow:var(--shadow)}.hero h2{margin:0 0 8px;font-size:25px}.hero p{margin:0;line-height:1.6;opacity:.88}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:16px 0}.kpi{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}.kpi span{font-size:13px;color:var(--muted)}.kpi b{display:block;font-size:28px;color:var(--red);margin-top:4px}
+.grid2{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow)}.card h3{margin:0 0 14px;color:var(--navy)}
+.notice{padding:13px 0;border-bottom:1px solid var(--line)}.notice:last-child{border:0}.notice time{font-size:12px;color:var(--muted)}.notice strong{display:block;margin:4px 0}.notice p{margin:0;color:#4d5862;line-height:1.55;font-size:14px}
+.toolbar{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin-bottom:12px}.toolbar input,.toolbar select{width:100%;border:1px solid var(--line);background:#fff;border-radius:13px;padding:13px 14px;outline:none}.toolbar input:focus,.toolbar select:focus{border-color:var(--red);box-shadow:0 0 0 3px rgba(158,27,50,.1)}
+.result{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin:8px 2px 12px}.families{display:grid;gap:12px}.family{background:#fff;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}.family-head{display:flex;align-items:center;gap:12px;padding:16px;cursor:pointer}.family-icon{width:48px;height:48px;border-radius:16px;background:#f5e4e8;color:var(--red);display:grid;place-items:center;font-size:23px}.family-title{flex:1}.family-title h4{margin:0 0 4px;font-size:18px}.family-title small{color:var(--muted)}.chev{font-size:20px;color:var(--muted);transition:.2s}.family.open .chev{transform:rotate(180deg)}.family-body{display:none;border-top:1px solid var(--line);padding:12px 16px 16px}.family.open .family-body{display:block}
+.person{display:grid;grid-template-columns:42px 1fr auto;gap:11px;align-items:start;padding:12px 0;border-bottom:1px dashed var(--line)}.person:last-child{border:0}.avatar{width:42px;height:42px;border-radius:14px;background:#eef2f6;color:var(--navy);display:grid;place-items:center;font-weight:900}.person h5{margin:1px 0 4px;font-size:16px}.meta{font-size:13px;color:var(--muted);line-height:1.55}.tags{display:flex;gap:5px;flex-wrap:wrap;margin-top:6px}.tag{background:#f2f4f6;color:#4f5a66;padding:4px 8px;border-radius:99px;font-size:11px}.phone{border:0;background:#f7ecef;color:var(--red);padding:8px 9px;border-radius:10px;font-size:12px;font-weight:800;cursor:pointer}
+.member-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.member-card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:14px;display:grid;grid-template-columns:42px 1fr;gap:11px}.member-card h4{margin:0 0 5px}.empty{padding:48px;text-align:center;color:var(--muted);background:#fff;border:1px dashed var(--line);border-radius:18px}
+.chart{display:flex;flex-direction:column;gap:10px}.barrow{display:grid;grid-template-columns:minmax(85px,145px) 1fr 38px;gap:9px;align-items:center;font-size:13px}.track{height:11px;background:#eee8e2;border-radius:99px;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,var(--red),var(--red2));border-radius:99px}
+.birthday-tools{display:flex;gap:10px;align-items:center;margin-bottom:14px;flex-wrap:wrap}
+.birthday-tools select{border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px 14px;min-width:150px}
+.birthday-summary{color:var(--muted);font-size:13px}
+.birthday-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.birthday-card{background:#fff8f8;border:1px solid #efd9de;border-radius:16px;padding:14px;display:grid;grid-template-columns:42px 1fr;gap:11px;align-items:center}
+.birthday-card .cake{width:42px;height:42px;border-radius:14px;background:#f6e5e9;display:grid;place-items:center;font-size:22px}
+.birthday-card h4{margin:0 0 4px}.birthday-card p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}
+.schedule{display:grid;gap:10px}.schedule-item{border-left:4px solid var(--red);background:#fff8f8;border-radius:0 14px 14px 0;padding:14px}.schedule-item small{color:var(--muted)}.schedule-item b{display:block;margin:4px 0}.section-title{margin:3px 0 14px;color:var(--navy);font-size:24px}.info{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;line-height:1.7}
+.bottom{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);border-top:1px solid var(--line);z-index:30;display:flex;justify-content:center;padding:7px 8px calc(7px + env(safe-area-inset-bottom))}.nav{width:min(760px,100%);display:grid;grid-template-columns:repeat(6,1fr);gap:3px}.nav button{border:0;background:transparent;color:#69727c;padding:7px 2px;border-radius:12px;font-size:10px;cursor:pointer}.nav span{display:block;font-size:19px;margin-bottom:2px}.nav button.active{background:#fff0f3;color:var(--red);font-weight:800}
+
+.service-tools,.attendance-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.service-tools input,.service-tools select,.attendance-tools input,.attendance-tools select{border:1px solid var(--line);background:#fff;border-radius:13px;padding:11px 13px}
+.service-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.service-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.service-card.today{border:2px solid var(--red);background:#fff7f9}
+.service-card h4{margin:0 0 4px;color:var(--navy)}.service-date{font-size:12px;color:var(--muted);margin-bottom:10px}
+.duty-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.duty{background:#f7f5f2;border-radius:11px;padding:9px;font-size:13px}.duty b{display:block;color:var(--red);font-size:11px;margin-bottom:3px}
+.attendance-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.att-stat{background:#fff;border:1px solid var(--line);border-radius:15px;padding:13px;text-align:center}.att-stat b{display:block;font-size:23px;color:var(--red)}.att-stat span{font-size:12px;color:var(--muted)}
+.att-actions{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.action-btn{border:0;border-radius:11px;padding:10px 12px;background:var(--navy);color:#fff;font-weight:800;cursor:pointer}.action-btn.secondary{background:#eceff2;color:var(--navy)}.action-btn.danger{background:#f7e7ea;color:var(--red)}
+.att-family{background:#fff;border:1px solid var(--line);border-radius:18px;margin-bottom:10px;overflow:hidden}.att-family-head{padding:13px 15px;background:#faf8f5;font-weight:800;color:var(--navy)}
+.att-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:11px 15px;border-top:1px solid var(--line)}.att-name small{display:block;color:var(--muted);font-size:12px;margin-top:2px}
+.att-options{display:flex;gap:5px}.att-options button{border:1px solid var(--line);background:#fff;border-radius:9px;padding:7px 9px;cursor:pointer;font-size:12px}.att-options button.active.present{background:#e6f5eb;border-color:#98d2aa;color:#176a35}.att-options button.active.absent{background:#fdecef;border-color:#e9a8b4;color:#9e1b32}.att-options button.active.online{background:#eaf1fa;border-color:#a9c5e8;color:#24578a}
+.local-note{background:#fff8e8;border:1px solid #edd69d;border-radius:13px;padding:11px 13px;color:#725614;font-size:13px;line-height:1.55;margin-bottom:13px}
+
+
+.att-group{background:#fff;border:1px solid var(--line);border-radius:18px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
+.att-group-head{display:flex;align-items:center;gap:10px;padding:14px 15px;background:#faf8f5;cursor:pointer}
+.att-group-title{flex:1}.att-group-title h4{margin:0 0 3px;color:var(--navy)}.att-group-title small{color:var(--muted)}
+.att-group-actions{display:flex;gap:6px;flex-wrap:wrap}.mini-btn{border:0;border-radius:9px;padding:7px 9px;font-size:11px;font-weight:800;cursor:pointer}.mini-btn.present{background:#e6f5eb;color:#176a35}.mini-btn.absent{background:#fdecef;color:#9e1b32}.mini-btn.online{background:#eaf1fa;color:#24578a}
+.att-group-body{display:none}.att-group.open .att-group-body{display:block}.att-group .chev{transition:.2s}.att-group.open .chev{transform:rotate(180deg)}
+.group-rate{font-weight:800;color:var(--red)}
+
+
+.remote-status{margin:10px 0;padding:10px 12px;border-radius:12px;background:#f2f4f6;color:var(--muted);font-size:13px;line-height:1.55}
+.remote-status.ok{background:#eaf6ee;color:#176a35}
+.remote-status.warn{background:#fff4e5;color:#7a5917}
+
+
+.att-view-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0}
+.att-view-tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 11px;cursor:pointer;font-size:12px}
+.att-view-tabs button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.att-list-summary{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin:12px 0;box-shadow:var(--shadow)}
+.att-list-summary h3{margin:0 0 10px;color:var(--navy)}
+.share-box{background:#fff8e8;border:1px solid #ecd79e;border-radius:15px;padding:13px;white-space:pre-wrap;font-size:13px;line-height:1.65;max-height:280px;overflow:auto}
+.stats-head{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.stats-head select,.stats-head input{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px}
+.stats-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:15px}
+.stats-kpi{background:#fff;border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:var(--shadow)}
+.stats-kpi span{display:block;color:var(--muted);font-size:12px}.stats-kpi b{display:block;color:var(--red);font-size:24px;margin-top:4px}
+.stats-trend{display:flex;flex-direction:column;gap:9px}
+.stats-row{display:grid;grid-template-columns:92px 1fr 48px;gap:9px;align-items:center;font-size:13px}
+.stats-bar{height:13px;background:#eee8e2;border-radius:99px;overflow:hidden}.stats-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--navy),#3f759f);border-radius:99px}
+.stats-note{font-size:12px;color:var(--muted);line-height:1.55}
+
+.home-attendance-chart{margin-top:16px}
+.home-chart-toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.home-chart-toolbar select{border:1px solid var(--line);background:#fff;border-radius:12px;padding:9px 12px}
+.monthly-chart{display:flex;align-items:flex-end;gap:8px;min-height:230px;padding:18px 8px 4px;overflow-x:auto;border-top:1px solid var(--line)}
+.month-col{min-width:48px;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px}
+.month-bar-wrap{height:160px;width:100%;display:flex;align-items:flex-end;justify-content:center}
+.month-bar{width:72%;min-width:24px;border-radius:10px 10px 3px 3px;background:linear-gradient(180deg,#3f759f,var(--navy));position:relative;transition:.2s}
+.month-bar span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:800;color:var(--navy);white-space:nowrap}
+.month-label{font-size:11px;color:var(--muted)}
+.home-chart-note{font-size:12px;color:var(--muted);line-height:1.55;margin-top:8px}
+
+
+.goal-card{margin-top:16px;background:linear-gradient(135deg,#fff,#fff5f7);border:1px solid #eed8de}
+.goal-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.goal-head input{width:90px;border:1px solid var(--line);border-radius:10px;padding:8px}
+.goal-progress{height:18px;background:#eee8e2;border-radius:99px;overflow:hidden;margin:12px 0}
+.goal-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--red2));border-radius:99px}
+.goal-meta{display:flex;justify-content:space-between;color:var(--muted);font-size:13px}
+.care-tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.care-tools select,.care-tools input{border:1px solid var(--line);background:#fff;border-radius:12px;padding:10px 12px}
+.care-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.care-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow)}
+.care-card h3{margin:0 0 10px}.care-card.red h3{color:#a21f36}.care-card.orange h3{color:#a45c08}.care-card.green h3{color:#27714a}
+.care-person{padding:9px 0;border-bottom:1px dashed var(--line)}.care-person:last-child{border-bottom:0}
+.care-person b{display:block}.care-person small{color:var(--muted)}
+.care-share{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:760px){.care-grid{grid-template-columns:1fr}}
+
+@media(max-width:760px){.stats-kpis{grid-template-columns:repeat(2,1fr)}}
+
+@media(max-width:760px){.brand img{width:84px;height:84px}.private{display:none}.kpis{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.toolbar{grid-template-columns:1fr}.member-grid{grid-template-columns:1fr}.birthday-list{grid-template-columns:1fr}.service-grid{grid-template-columns:1fr}.attendance-summary{grid-template-columns:repeat(2,1fr)}.duty-grid{grid-template-columns:1fr}.person{grid-template-columns:40px 1fr auto}}
+
+:root{--tap:46px}
+body{font-size:16px}
+button,select,input{min-height:var(--tap)}
+.bottom .nav{overflow-x:auto;scrollbar-width:none}
+.bottom .nav::-webkit-scrollbar{display:none}
+.bottom button{min-width:74px;font-size:12px}
+.easy-panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:var(--shadow);margin-bottom:14px}
+.easy-panel h3{margin:0 0 10px;color:var(--navy)}
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.quick-actions button{border:0;border-radius:14px;padding:12px;background:#eef2f6;color:var(--navy);font-weight:800;cursor:pointer}
+.quick-actions button.primary{background:var(--red);color:#fff}
+.backup-box{display:flex;gap:8px;flex-wrap:wrap}
+.backup-box button{flex:1;min-width:150px}
+.simple-help{font-size:13px;line-height:1.65;color:var(--muted)}
+.install-banner{display:none;background:#fff4e5;border:1px solid #ecd39c;border-radius:15px;padding:12px;margin-bottom:14px}
+.install-banner.show{display:block}
+html.large-mode body{font-size:18px}
+html.large-mode .att-row{padding:15px}
+html.large-mode .att-options button{padding:10px 12px;font-size:14px}
+@media(max-width:760px){.quick-actions{grid-template-columns:1fr}.attendance-tools{display:grid;grid-template-columns:1fr}}
+
+
+.month-col.goal-col{min-width:62px}
+.month-col.goal-col .month-bar{background:linear-gradient(180deg,#b88319,#7d5709)}
+.month-col.goal-col .month-label{font-weight:800;color:#7d5709}
+
+.notice.important{border-left:5px solid var(--red);background:#fff6f7}
+.notice-badge,.event-badge{display:inline-block;border-radius:999px;padding:3px 8px;font-size:11px;font-weight:800;margin-right:6px}
+.notice-badge{background:#f7e6ea;color:var(--red)}
+.event-badge{background:#eaf1f8;color:var(--navy)}
+.event-card{background:#fff;border:1px solid var(--line);border-radius:17px;padding:15px;margin-bottom:10px;box-shadow:var(--shadow)}
+.event-card h4{margin:5px 0;color:var(--navy)}
+.event-card p{margin:4px 0;color:var(--muted);font-size:13px;line-height:1.55}
+
+.monthly-chart.compact{gap:5px;overflow-x:hidden}
+.monthly-chart.compact .month-col{min-width:0;flex:1}
+.monthly-chart.compact .month-col.goal-col{min-width:54px;flex:.9}
+.monthly-chart.compact .month-bar{width:78%;min-width:14px}
+.monthly-chart.compact .month-label{font-size:10px}
+.monthly-chart.compact .month-bar span{font-size:10px}
+.month-col.current-month .month-bar{outline:3px solid rgba(142,27,51,.18)}
+.month-col.current-month .month-label{font-weight:800;color:var(--red)}
+@media(max-width:520px){
+  .monthly-chart.compact{gap:3px;padding-left:2px;padding-right:2px}
+  .monthly-chart.compact .month-col.goal-col{min-width:48px}
+  .monthly-chart.compact .month-label{font-size:9px}
+  .monthly-chart.compact .month-bar span{font-size:9px}
+}
+
+
+.quick-actions button{
+  font-size:36px !important;
+  line-height:1.25;
+  min-height:96px;
+  padding:18px 14px !important;
+}
+@media(max-width:760px){
+  .quick-actions button{
+    font-size:30px !important;
+    min-height:86px;
+  }
+}
+
+.finance-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+.finance-kpi{background:#fff;border:1px solid var(--line);border-radius:17px;padding:16px;box-shadow:var(--shadow)}
+.finance-kpi span{display:block;color:var(--muted);font-size:12px}
+.finance-kpi b{display:block;font-size:23px;color:var(--navy);margin-top:5px}
+.finance-note{margin:5px 0 0;color:var(--muted);font-size:13px}
+.finance-bars{display:flex;flex-direction:column;gap:12px}
+.finance-bar-row{display:grid;grid-template-columns:118px 1fr 112px;gap:8px;align-items:center;font-size:13px}
+.finance-bar{height:14px;background:#eee8e2;border-radius:99px;overflow:hidden}
+.finance-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--navy),#4b81aa);border-radius:99px}
+.finance-list{display:flex;flex-direction:column;gap:8px}
+.finance-list-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px dashed var(--line)}
+.finance-list-row:last-child{border-bottom:0}
+.finance-list-row b{color:var(--navy)}
+.finance-budget-row{margin:12px 0}
+.finance-budget-head{display:flex;justify-content:space-between;gap:10px;font-size:13px}
+.finance-budget-bar{height:12px;background:#eee8e2;border-radius:99px;overflow:hidden;margin-top:6px}
+.finance-budget-bar i{display:block;height:100%;background:linear-gradient(90deg,#9b2840,#d36075);border-radius:99px}
+.finance-warning{margin-top:16px;background:#fff4e5;border:1px solid #ecd39c;border-radius:14px;padding:13px;color:#7a5917;font-size:13px;line-height:1.6}
+.finance-home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.finance-home-grid div{background:#f7f4ef;border-radius:14px;padding:13px}
+.finance-home-grid span{display:block;color:var(--muted);font-size:12px}
+.finance-home-grid b{display:block;color:var(--navy);font-size:18px;margin-top:4px}
+@media(max-width:760px){
+  .finance-kpis{grid-template-columns:repeat(2,1fr)}
+  .finance-bar-row{grid-template-columns:92px 1fr 88px;font-size:11px}
+  .finance-home-grid{grid-template-columns:1fr}
+}
+
+
+.finance-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.finance-month-select{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted)}
+.finance-month-select select{border:1px solid var(--line);border-radius:12px;background:#fff;padding:9px 12px}
+.finance-kpi small{display:block;margin-top:6px;color:var(--muted);font-size:12px}
+.finance-kpi em{display:block;margin-top:4px;color:var(--red);font-style:normal;font-weight:800}
+.finance-detail-row{padding:11px 0;border-bottom:1px dashed var(--line)}
+.finance-detail-row:last-child{border-bottom:0}
+.finance-detail-top{display:flex;justify-content:space-between;gap:10px}
+.finance-detail-top b{color:var(--navy)}
+.finance-detail-sub{display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px;margin-top:4px}
+.finance-detail-progress{height:8px;background:#eee8e2;border-radius:99px;overflow:hidden;margin-top:7px}
+.finance-detail-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--navy),#4b81aa);border-radius:99px}
+
+
+.quick-actions button{
+  font-size:21px !important;
+  line-height:1.25 !important;
+  min-height:70px !important;
+  padding:12px 10px !important;
+}
+@media(max-width:760px){
+  .quick-actions button{font-size:19px !important;min-height:66px !important}
+}
+
+
+.attendance-calendar{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-top:12px}
+.calendar-head{text-align:center;font-weight:800;color:var(--navy);font-size:12px;padding:7px}
+.calendar-day{min-height:112px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:7px;font-size:11px;overflow:hidden}
+.calendar-day.empty{background:transparent;border:0}
+.calendar-date{font-weight:900;color:var(--navy);margin-bottom:5px}
+.calendar-service{background:#eef2f6;border-radius:7px;padding:4px 5px;margin:3px 0;line-height:1.35}
+.calendar-total{margin-top:5px;font-weight:900;color:var(--red)}
+.monthly-service-summary{margin-top:12px;overflow-x:auto}
+.monthly-service-table{width:100%;border-collapse:separate;border-spacing:0;min-width:560px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.monthly-service-table th,.monthly-service-table td{padding:10px 8px;text-align:center;border-bottom:1px solid var(--line);font-size:13px}
+.monthly-service-table th{background:#f5f7fa;color:var(--navy);font-weight:800}
+.monthly-service-table td:first-child,.monthly-service-table th:first-child{text-align:left;padding-left:14px}
+.monthly-service-table tr:last-child td{border-bottom:0}
+.monthly-service-table .total-row td{font-weight:800;background:#faf7f2}
+.monthly-service-table .online-cell{font-weight:700}
+.monthly-service-table .visitor-cell{font-weight:700}
+@media(max-width:760px){
+  .attendance-calendar{gap:3px}
+  .calendar-day{min-height:88px;padding:4px;font-size:9px}
+  .calendar-head{font-size:10px;padding:4px}
+}
+
+
+.finance-accordion{display:flex;flex-direction:column;gap:9px}
+.finance-group{border:1px solid var(--line);border-radius:15px;overflow:hidden;background:#fff}
+.finance-group-head{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:13px;cursor:pointer;background:#faf8f5}
+.finance-group-head strong{color:var(--navy)}
+.finance-group-head span{font-size:12px;color:var(--muted)}
+.finance-group-head b{font-size:13px;color:var(--red)}
+.finance-group-body{display:none;padding:4px 13px 12px}
+.finance-group.open .finance-group-body{display:block}
+.finance-detail-line{display:grid;grid-template-columns:1fr auto auto auto;gap:9px;padding:9px 0;border-bottom:1px dashed var(--line);font-size:12px}
+.finance-detail-line:last-child{border-bottom:0}
+.finance-detail-line span:nth-child(n+2){text-align:right;color:var(--muted)}
+@media(max-width:760px){
+  .finance-group-head{grid-template-columns:1fr auto}
+  .finance-group-head .budget,.finance-group-head .rate{display:none}
+  .finance-detail-line{grid-template-columns:1fr auto}
+  .finance-detail-line .budget,.finance-detail-line .rate{display:none}
+}
+
+
+.finance-month-total{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  margin:10px 0 12px;padding:13px 15px;border-radius:14px;
+  background:#f7f4ef;border:1px solid var(--line);
+}
+.finance-month-total span{color:var(--muted);font-size:13px;font-weight:700}
+.finance-month-total b{color:var(--navy);font-size:21px}
+
+
+.visitor-attendance-box{margin:14px 0;padding:16px;border:2px solid #f0c36a;border-radius:16px;background:#fffaf0}
+.visitor-attendance-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.visitor-attendance-head h3{margin:0 0 4px}.visitor-attendance-head p{margin:0;color:var(--muted);font-size:13px}
+.visitor-total-badge{white-space:nowrap;padding:9px 12px;border-radius:999px;background:#fff;border:1px solid #efd28f;font-size:13px;font-weight:700}
+.visitor-total-badge b{font-size:20px;color:var(--navy)}
+.visitor-attendance-fields{display:grid;grid-template-columns:minmax(180px,1.2fr) 90px minmax(180px,1.4fr) auto;gap:10px;align-items:end;margin-top:14px}
+.visitor-attendance-fields label{display:flex;flex-direction:column;gap:6px;font-size:13px;font-weight:700}
+.visitor-attendance-fields input{width:100%;box-sizing:border-box}
+.visitor-list{display:grid;gap:8px;margin-top:12px}
+.visitor-row{display:grid;grid-template-columns:minmax(150px,1fr) 70px minmax(150px,1.4fr) auto;gap:10px;align-items:center;padding:11px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.visitor-row .visitor-name{font-weight:800}.visitor-row .visitor-count{text-align:center;font-weight:800;color:var(--navy)}
+.visitor-row .visitor-note{color:var(--muted);font-size:13px}.visitor-empty{padding:13px;text-align:center;color:var(--muted);background:#fff;border:1px dashed #d8c38f;border-radius:12px}
+.visitor-delete{border:0;border-radius:9px;padding:8px 10px;background:#fff0f0;color:#a62424;font-weight:700;cursor:pointer}
+.att-stat.visitor{background:#fff7e6}.att-stat.total-attendance{background:#eef8ff}
+@media(max-width:760px){
+ .visitor-attendance-head{align-items:flex-start;flex-direction:column}
+ .visitor-attendance-fields{grid-template-columns:1fr 100px}
+ .visitor-attendance-fields .visitor-memo-label{grid-column:1/-1}
+ .visitor-attendance-fields .action-btn{grid-column:1/-1;width:100%}
+ .visitor-row{grid-template-columns:1fr auto}
+ .visitor-row .visitor-note{grid-column:1/-1}.visitor-row .visitor-delete{grid-column:2;grid-row:1}
+}
+
+.service-type-help{grid-column:1/-1;margin-top:2px;color:var(--muted);font-size:12px;line-height:1.5}
+
+.stats-index-help{margin:10px 0 12px;padding:11px 13px;border-radius:12px;background:#f7f8fb;color:var(--muted);font-size:13px;line-height:1.6}
+
+/* GESMS V10.0 Alpha */
+:root{--gold:#d9a326;--deep-navy:#09244b;--sa-red:#d31324}
+.brand img{width:104px;height:104px;border-radius:50%;box-shadow:0 5px 18px rgba(9,36,75,.18)}
+.gesms-hero{display:flex;align-items:center;justify-content:space-between;gap:18px;background:linear-gradient(135deg,#09244b,#153f72 70%,#7d1224)}
+.gesms-hero img{width:150px;height:150px;border-radius:50%;background:#fff;box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.alpha-badge{display:inline-block;margin-bottom:10px;padding:6px 10px;border-radius:99px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.28);font-size:12px;font-weight:900;letter-spacing:.06em}
+.ministry-dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.ministry-card{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--line);border-radius:18px;padding:15px;box-shadow:var(--shadow)}
+.ministry-card.soul{border-top:4px solid var(--sa-red)}.ministry-card.prayer{border-top:4px solid var(--gold)}.ministry-card.contact{border-top:4px solid var(--deep-navy)}
+.ministry-icon{font-size:28px}.ministry-card span,.ministry-card small{display:block;color:var(--muted)}.ministry-card b{display:block;color:var(--navy);font-size:18px;margin:3px 0}.ministry-card small{font-size:11px;line-height:1.4}
+.alpha-notice{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#fff7df;border:1px solid #ead18f;border-radius:15px;padding:13px 15px;margin-bottom:15px;color:#654b0b}.alpha-notice span{font-size:13px}
+.evangelism-menu{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}.evangelism-tile{border:1px solid var(--line);background:#fff;border-radius:18px;padding:18px;text-align:left;cursor:pointer;box-shadow:var(--shadow)}.evangelism-tile span{display:block;font-size:28px}.evangelism-tile b{display:block;color:var(--navy);font-size:17px;margin:8px 0 3px}.evangelism-tile small{color:var(--muted)}.evangelism-tile.active{outline:3px solid rgba(211,19,36,.16);border-color:var(--sa-red)}
+.ev-panel{display:none}.ev-panel.active{display:block}.soul-kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}.soul-kpis div{background:#f7f8fa;border-radius:14px;padding:15px;text-align:center}.soul-kpis span{display:block;color:var(--muted);font-size:12px}.soul-kpis b{display:block;color:var(--navy);font-size:25px;margin-top:5px}.stage-flow{display:flex;align-items:center;justify-content:center;gap:7px;flex-wrap:wrap;margin:18px 0}.stage-flow span{background:#fff0f3;color:var(--red);padding:8px 10px;border-radius:99px;font-size:12px;font-weight:800}.stage-flow i{font-style:normal;color:var(--muted)}.alpha-copy{color:var(--muted);font-size:13px;line-height:1.6}.empty-state{text-align:center;padding:28px 10px;color:var(--muted)}.empty-state span{display:block;font-size:42px}.empty-state b{display:block;color:var(--navy);font-size:18px;margin:8px}.project-grid,.data-manager-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.project-grid div,.data-manager-grid div{background:#f7f8fa;border:1px solid #e5e9ee;border-radius:14px;padding:14px;font-weight:800;color:var(--navy)}.data-manager-grid span,.data-manager-grid b,.data-manager-grid small{display:block}.data-manager-grid span{font-size:25px}.data-manager-grid b{margin:7px 0 3px}.data-manager-grid small{color:var(--muted);font-weight:400}.data-manager-grid .new{background:#fff7df;border-color:#ead18f}.system-info{display:flex;align-items:center;gap:16px}.system-info img{width:100px;height:100px;border-radius:50%}.system-info p{margin:5px 0;color:var(--muted)}.system-info span{display:inline-block;background:#eef2f6;color:var(--navy);padding:5px 9px;border-radius:99px;font-size:12px;font-weight:800}
+.gesms-footer{text-align:center;padding:24px 12px 90px;color:var(--muted)}.gesms-footer b,.gesms-footer span,.gesms-footer small{display:block}.gesms-footer b{color:var(--navy)}.gesms-footer span{margin:4px 0;font-size:13px}.gesms-footer small{font-size:11px}
+@media(max-width:720px){.brand img{width:78px;height:78px}.brand h1{font-size:18px}.brand p{font-size:11px}.private{display:none}.gesms-hero img{width:92px;height:92px}.ministry-dashboard,.evangelism-menu{grid-template-columns:1fr}.soul-kpis{grid-template-columns:repeat(2,1fr)}.project-grid,.data-manager-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:440px){.gesms-hero{align-items:flex-start}.gesms-hero img{width:72px;height:72px}.gesms-hero h2{font-size:20px}.system-info img{width:72px;height:72px}}
+
+</style>
+</head>
+<body>
+<div class="app">
+<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.0 Alpha</h1><p>군포은혜영문 스마트 목양 시스템 V10.0</p></div><div class="private">🔒 교회 내부용</div></div></header>
+<main>
+<section class="page active" id="home">
+<div class="install-banner" id="installBanner">
+<b>📱 앱처럼 설치할 수 있습니다.</b>
+<p class="simple-help" style="margin:5px 0 8px">홈 화면에 추가하면 일반 앱처럼 바로 실행할 수 있습니다.</p>
+<button class="action-btn" id="installPwaBtn">앱 설치</button>
+</div>
+<div class="easy-panel">
+<h3>⚡ 빠른 실행</h3>
+<div class="quick-actions">
+<button class="primary" data-jump="attendancePage">✅ 출석 체크</button>
+<button data-jump="servicePage">🙏 예배·봉사 일정</button>
+<button data-jump="evangelismPage">❤️ 전도(영혼구원)</button>
+</div>
+</div>
+<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.0 Alpha</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
+<div class="ministry-dashboard">
+<div class="ministry-card soul"><div class="ministry-icon">❤️</div><div><span>영혼구원 진행</span><b>Alpha 준비중</b><small>Beta에서 기도대상자 Excel과 자동 연동됩니다.</small></div></div>
+<div class="ministry-card prayer"><div class="ministry-icon">🙏</div><div><span>오늘 기도대상</span><b>- 명</b><small>기도대상자 데이터 연동 준비</small></div></div>
+<div class="ministry-card contact"><div class="ministry-icon">📞</div><div><span>이번 주 연락대상</span><b>- 명</b><small>다음 연락일 자동 알림 준비</small></div></div>
+</div>
+<div class="kpis"><div class="kpi"><span>총 가정</span><b id="familyKpi">0</b></div><div class="kpi"><span>총 교인</span><b id="memberKpi">0</b></div><div class="kpi"><span>평균 가족원</span><b id="avgKpi">0</b></div><div class="kpi"><span>소속 모임</span><b id="groupKpi">0</b></div></div>
+<div class="card" style="margin-top:16px">
+<h3>📅 다가오는 교회 일정</h3>
+<div id="homeEvents"></div>
+</div>
+<div class="grid2"><div class="card"><h3>📢 최근 공지</h3><div id="homeNotices"></div></div><div class="card"><h3>📊 가족 규모 현황</h3><div class="chart" id="familySizeChart"></div></div></div>
+<div class="card" style="margin-top:16px"><h3>🎂 생일 알림</h3><div id="solarBirthdayHome"></div></div>
+<div class="card goal-card">
+<div class="goal-head">
+<div><h3 style="margin:0">🎯 올해 출석 목표</h3><p style="margin:5px 0 0;color:var(--muted);font-size:13px">성결예배 월평균 기준</p></div>
+<label>목표 <input id="attendanceGoal" min="1" type="number" value="60"/> 명</label>
+</div>
+<div class="goal-progress"><i id="attendanceGoalBar" style="width:0%"></i></div>
+<div class="goal-meta"><span id="attendanceGoalCurrent">현재 -명</span><span id="attendanceGoalRate">0%</span></div>
+</div>
+<div class="card home-attendance-chart">
+<h3>📊 월별 출석 인원</h3>
+<div class="home-chart-toolbar">
+<label>예배
+      <select id="homeAttendanceService">
+<option value="새벽기도">새벽기도</option>
+<option selected="" value="성결예배">성결예배</option>
+<option value="구령예배">구령예배</option>
+<option value="수요예배">수요예배</option>
+<option value="금요기도회">금요기도회</option>
+<option value="소그룹모임">소그룹모임</option>
+<option value="부흥집회">부흥집회</option>
+<option value="기타">기타</option>
+</select>
+</label>
+<button class="action-btn secondary" id="refreshHomeAttendance">그래프 새로고침</button>
+</div>
+<div class="remote-status" id="homeAttendanceStatus">올해 1월부터 현재 월까지 월평균 출석 인원과 올해 출석목표를 함께 표시합니다.</div>
+<div class="monthly-chart" id="homeMonthlyAttendanceChart"></div>
+<p class="home-chart-note">※ 1월부터 현재 월까지만 표시하고, 맨 오른쪽 목표 막대와 비교합니다. 현재 월은 강조 표시됩니다.</p>
+</div>
+<div class="easy-panel">
+<h3>💾 백업과 복원</h3>
+<div class="backup-box">
+<button class="action-btn" id="backupAll">전체 백업 저장</button>
+<button class="action-btn secondary" id="restoreAllBtn">백업 복원</button>
+<input accept=".json" hidden="" id="restoreAllInput" type="file"/>
+</div>
+<p class="simple-help">이 휴대폰에 저장된 출석 기록과 출석 목표를 한 파일로 보관합니다.</p>
+</div>
+<div class="easy-panel">
+<h3>👀 보기 설정</h3>
+<div class="backup-box">
+<button class="action-btn secondary" id="toggleLargeText">큰 글씨 켜기</button>
+<button class="action-btn danger" id="resetLocalData">이 기기 기록 초기화</button>
+</div>
+</div>
+</section>
+<section class="page" id="familiesPage"><h2 class="section-title">가족 명단</h2>
+<div class="toolbar"><input id="familySearch" placeholder="가족 대표자 또는 가족 구성원 검색"/><select id="familyGroup"><option value="">모든 소속</option></select><select id="familySize"><option value="">모든 가족 규모</option><option value="1">1인 가정</option><option value="2">2인 가정</option><option value="3">3인 가정</option><option value="4">4인 이상</option></select></div>
+<div class="result"><span id="familyCount"></span><span>가족카드를 누르면 구성원이 펼쳐집니다.</span></div><div class="families" id="families"></div></section>
+<section class="page" id="membersPage"><h2 class="section-title">개인 검색</h2>
+<div class="toolbar"><input id="memberSearch" placeholder="이름, 직분, 가족코드, 소속 검색"/><select id="positionFilter"><option value="">모든 직분</option></select><select id="memberGroup"><option value="">모든 소속</option></select></div>
+<div class="result"><span id="memberCount"></span><span>검색된 교인이 속한 가족도 함께 확인할 수 있습니다.</span></div><div class="member-grid" id="memberGrid"></div></section>
+<section class="page" id="statsPage"><h2 class="section-title">통계</h2>
+<div class="card" style="margin-bottom:16px">
+<h3>🗓 월간 전체 예배 출석현황</h3>
+<div class="stats-head">
+<label>조회 월 <input id="attendanceCalendarMonth" type="month"/></label>
+<button class="action-btn" id="refreshAllAttendanceStats">전체 통계 새로고침</button>
+<button class="action-btn secondary" id="refreshAttendanceCalendar">월간 출석 불러오기</button>
+<button class="action-btn secondary" id="scanGitHubAttendance">GitHub CSV 자동검색</button>
+</div>
+<div class="remote-status" id="attendanceCalendarStatus">GitHub 저장소의 출석 CSV를 자동으로 검색하여 선택한 달의 모든 예배 출석을 표시합니다.</div>
+<div class="stats-index-help">앞으로는 <b>출석 CSV만 GitHub에 업로드</b>하면 됩니다. 출석목록 JSON을 직접 만들거나 수정할 필요가 없습니다.</div>
+<div class="attendance-calendar" id="attendanceCalendar"></div>
+<div class="monthly-service-summary" id="attendanceMonthlySummary"></div>
+</div>
+<div class="card">
+<h3>📈 주간 출석 현황</h3>
+<div class="stats-head">
+<label>예배 <select id="statsService">
+<option value="새벽기도">새벽기도</option><option selected="" value="성결예배">성결예배</option><option value="구령예배">구령예배</option><option value="수요예배">수요예배</option><option value="금요기도회">금요기도회</option>
+<option value="소그룹모임">소그룹모임</option>
+<option value="부흥집회">부흥집회</option>
+<option value="기타">기타</option>
+</select></label>
+<label>기준일 <input id="statsDate" type="date"/></label>
+<button class="action-btn secondary" id="refreshStats">출석 통계 새로고침</button>
+</div>
+<div class="remote-status" id="statsLoadStatus">GitHub에 보관된 실제 날짜·예배별 출석 CSV를 기준으로 최근 출석을 분석합니다.</div>
+<div class="stats-kpis">
+<div class="stats-kpi"><span>이번 주간 참석</span><b id="statsCurrent">-</b></div>
+<div class="stats-kpi"><span>전 주간 대비</span><b id="statsPrev">-</b></div>
+<div class="stats-kpi"><span>전월 평균 대비</span><b id="statsMonth">-</b></div>
+<div class="stats-kpi"><span>최근 평균</span><b id="statsAverage">-</b></div>
+</div>
+<div class="stats-trend" id="attendanceTrend"></div>
+<p class="stats-note">※ 참석 인원은 ‘출석 + 온라인’을 합산합니다. GitHub에 해당 CSV가 없는 날짜는 그래프에서 제외됩니다.</p>
+</div>
+<div class="grid2" style="margin-top:16px"><div class="card"><h3>직분별 인원</h3><div class="chart" id="positionChart"></div></div><div class="card"><h3>소속별 인원</h3><div class="chart" id="groupChart"></div></div></div>
+<div class="card" style="margin-top:16px"><h3>월별 생일자 수</h3><div class="chart" id="birthdayChart"></div></div>
+<div class="card" style="margin-top:16px"><h3>🎂 월별 생일자 명단</h3><div class="birthday-tools"><select id="birthdayMonth"></select><span class="birthday-summary" id="birthdaySummary"></span></div><div class="birthday-list" id="birthdayList"></div></div>
+</section>
+<section class="page" id="servicePage"><h2 class="section-title">예배·봉사 일정</h2>
+<div class="service-tools"><select id="serviceMonth"><option value="">전체 월</option></select><input id="serviceSearch" placeholder="이름, 그룹, 행사 검색"/></div>
+<div class="service-grid" id="serviceGrid"></div></section>
+<section class="page" id="attendancePage"><h2 class="section-title">주일예배 출석부</h2>
+<div class="card" id="attendanceTodayService" style="margin-bottom:12px"></div>
+<div class="card" id="attendanceBirthdays" style="margin-bottom:12px"></div>
+<div class="local-note">💾 이 버전의 출석 기록은 소속1 그룹별로 출석을 체크하며, 현재 사용 중인 휴대폰·컴퓨터에 저장됩니다. 체크 결과는 날짜·예배별 CSV로 저장해 GitHub에 올리면 여러 사람이 확인할 수 있습니다.</div>
+<div class="attendance-tools">
+<label>예배일 <input id="attendanceDate" type="date"/></label>
+<label>예배 종류
+<select id="attendanceService">
+<option value="새벽기도">새벽기도</option>
+<option selected="" value="성결예배">성결예배</option>
+<option value="구령예배">구령예배</option>
+<option value="수요예배">수요예배</option>
+<option value="금요기도회">금요기도회</option>
+<option value="소그룹모임">소그룹모임</option>
+<option value="부흥집회">부흥집회</option>
+<option value="기타">기타</option>
+</select>
+</label>
+<input id="attendanceSearch" placeholder="이름 또는 가족 검색"/>
+<div class="service-type-help">예배 종류에 소그룹모임·부흥집회·기타가 추가되었습니다. 특별집회는 실제 진행 날짜를 선택해 출석을 기록하세요.</div>
+</div>
+<div class="attendance-summary">
+<div class="att-stat"><b id="attTotal">0</b><span>등록교인</span></div><div class="att-stat"><b id="attPresent">0</b><span>출석</span></div><div class="att-stat"><b id="attOnline">0</b><span>온라인</span></div><div class="att-stat visitor"><b id="attVisitors">0</b><span>방문자</span></div><div class="att-stat total-attendance"><b id="attActualTotal">0</b><span>전체 참석</span></div><div class="att-stat"><b id="attAbsent">0</b><span>불출석</span></div><div class="att-stat"><b id="attUnchecked">0</b><span>미체크</span></div><div class="att-stat"><b id="attRate">0%</b><span>교인 참석률</span></div>
+</div>
+<div class="visitor-attendance-box" id="visitorManager">
+  <div class="visitor-attendance-head">
+    <div>
+      <h3>👋 방문자 관리</h3>
+      <p>출석 메뉴 상단에서 교인명단에 없는 친척·지인·새가족을 추가합니다.</p>
+    </div>
+    <div class="visitor-total-badge">방문자 합계 <b id="visitorTotal">0</b>명</div>
+  </div>
+  <div class="visitor-attendance-fields">
+    <label>방문자 구분 또는 이름
+      <input id="visitorName" type="text" placeholder="예: 김○○ 집사 가족"/>
+    </label>
+    <label>인원
+      <input id="visitorCount" type="number" min="1" step="1" inputmode="numeric" value="1"/>
+    </label>
+    <label class="visitor-memo-label">메모
+      <input id="visitorMemo" type="text" placeholder="예: 친척 방문, 새가족, 서울 거주"/>
+    </label>
+    <button class="action-btn" id="addVisitor">+ 방문자 추가</button>
+  </div>
+  <div id="visitorList" class="visitor-list"></div>
+  <div class="remote-status" id="visitorStatus">방문자를 추가하면 선택한 날짜와 예배에 즉시 저장되고 전체 참석 인원과 통계에 포함됩니다.</div>
+</div>
+<div class="att-view-tabs">
+<button class="active" data-att-view="all">전체</button><button data-att-view="present">출석자</button><button data-att-view="online">온라인</button><button data-att-view="absent">불출석자</button><button data-att-view="unchecked">미체크</button>
+</div>
+<div class="att-list-summary">
+<h3 id="attendanceListTitle">전체 출석 현황</h3>
+<div id="attendanceCompactList"></div>
+</div>
+<div class="att-actions">
+<button class="action-btn" id="markAllPresent">전체 출석</button>
+<button class="action-btn danger" id="clearAttendance">당일 기록 초기화</button>
+<button class="action-btn secondary" id="loadGitHubAttendance">GitHub 출석 불러오기</button>
+<button class="action-btn secondary" id="exportAttendance">날짜별 CSV 저장</button>
+<button class="action-btn secondary" id="importAttendanceBtn">CSV 가져오기</button>
+<button class="action-btn" id="sharePresent">출석자 명단 공유</button>
+<button class="action-btn secondary" id="copyPresent">출석자 명단 복사</button>
+<button class="action-btn" id="shareAbsent">불출석 명단 공유</button>
+<button class="action-btn secondary" id="copyAbsent">불출석 명단 복사</button>
+<button class="action-btn secondary" id="exportAbsent">불출석 CSV 저장</button>
+<input accept=".csv" hidden="" id="importAttendance" type="file"/>
+</div>
+<div class="share-box" id="absentSharePreview" style="display:none"></div><div class="remote-status" id="remoteAttendanceStatus">예배일과 예배 종류를 선택하면 이 휴대폰의 저장 기록을 먼저 불러오고, 기록이 없으면 GitHub의 예배별 CSV를 확인합니다.</div>
+<div id="attendanceList"></div></section>
+<section class="page" id="carePage">
+<h2 class="section-title">돌봄 관리</h2>
+<div class="card">
+<h3>📞 연속 불출석 확인</h3>
+<div class="care-tools">
+<label>예배
+      <select id="careService">
+<option value="새벽기도">새벽기도</option>
+<option selected="" value="성결예배">성결예배</option>
+<option value="구령예배">구령예배</option>
+<option value="수요예배">수요예배</option>
+<option value="금요기도회">금요기도회</option>
+<option value="소그룹모임">소그룹모임</option>
+<option value="부흥집회">부흥집회</option>
+<option value="기타">기타</option>
+</select>
+</label>
+<label>기준일 <input id="careDate" type="date"/></label>
+<button class="action-btn secondary" id="refreshCare">돌봄 대상 확인</button>
+</div>
+<div class="remote-status" id="careStatus">최근 3회의 출석 CSV를 읽어 연속 불출석자를 분류합니다.</div>
+<div class="care-grid">
+<div class="care-card red"><h3>🔴 3회 연속 불출석</h3><div id="care3"></div></div>
+<div class="care-card orange"><h3>🟠 2회 연속 불출석</h3><div id="care2"></div></div>
+<div class="care-card green"><h3>🟢 이번 회차 불출석</h3><div id="care1"></div></div>
+</div>
+<div class="care-share">
+<button class="action-btn" id="shareCare">카카오톡 공유</button>
+<button class="action-btn secondary" id="copyCare">명단 복사</button>
+</div>
+<div class="share-box" id="carePreview" style="display:none;margin-top:12px"></div>
+</div>
+</section>
+<section class="page" id="financePage">
+<h2 class="section-title">재정</h2>
+<div class="finance-head card">
+<div>
+<h3 style="margin:0">💰 <span id="financePeriod">2026년 6월 재정현황(누적)</span></h3>
+<p class="finance-note">장년부 재정보고서 기준</p>
+</div>
+<label class="finance-month-select">조회 월 <select id="financeMonth"></select></label>
+</div>
+<div class="finance-kpis">
+<div class="finance-kpi"><span>총수입</span><b id="financeIncome">0원</b><small id="financeIncomeBudget"></small><em id="financeIncomeRate"></em></div>
+<div class="finance-kpi"><span>총지출</span><b id="financeExpense">0원</b><small id="financeExpenseBudget"></small><em id="financeExpenseRate"></em></div>
+<div class="finance-kpi"><span>잔액</span><b id="financeBalance">0원</b><small>수입 - 지출</small></div>
+<div class="finance-kpi"><span>총예산</span><b id="financeBudget">0원</b><small>연간 예산</small></div>
+</div>
+<div class="card">
+<h3>📥 장년부 재정수입</h3>
+<div class="finance-month-total"><span>이번 달 총 수입</span><b id="financeMonthlyIncome">0원</b></div>
+<p class="finance-note">항목을 누르면 세부항목이 펼쳐집니다.</p>
+<div class="finance-accordion" id="financeIncomeGroups"></div>
+</div>
+<div class="card" style="margin-top:16px">
+<h3>📤 장년부 재정지출</h3>
+<div class="finance-month-total"><span>이번 달 총 지출</span><b id="financeMonthlyExpense">0원</b></div>
+<p class="finance-note">항목을 누르면 세부항목이 펼쳐집니다.</p>
+<div class="finance-accordion" id="financeExpenseGroups"></div>
+</div>
+<div class="finance-warning">재정 자료는 민감한 정보입니다. 공개 GitHub Pages를 사용하는 경우 열람 범위를 신중히 관리하세요.</div>
+</section>
+<section class="page" id="noticePage"><h2 class="section-title">공지사항</h2><div class="card"><div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:12px"><button class="btn" id="refreshOfficeExcel">최신 공지·일정 불러오기</button><small id="officeUpdateStatus">Excel 최신 파일을 확인합니다.</small></div><div id="allNotices"></div></div></section>
+<section class="page" id="eventsPage"><h2 class="section-title">교회 일정</h2><div class="schedule" id="events"></div></section>
+<section class="page" id="evangelismPage">
+<h2 class="section-title">❤️ 전도(영혼구원)</h2>
+<div class="alpha-notice"><b>GESMS V10.0 Alpha</b><span>새로운 전도·영혼관리 모듈의 메뉴와 화면 구조를 먼저 적용한 버전입니다.</span></div>
+<div class="evangelism-menu">
+<button class="evangelism-tile" data-ev-tab="evStatus"><span>📈</span><b>전도현황</b><small>목표·현재·단계별 현황</small></button>
+<button class="evangelism-tile" data-ev-tab="prayerTargets"><span>🙏</span><b>기도대상자관리</b><small>Excel 연동 예정</small></button>
+<button class="evangelism-tile" data-ev-tab="tenThousand"><span>🌱</span><b>일만상상 프로젝트</b><small>전도·돌봄·봉사 활동</small></button>
+</div>
+<div class="ev-panel active" id="evStatus"><div class="card"><h3>📈 전도현황</h3><div class="soul-kpis"><div><span>연간 목표</span><b>-</b></div><div><span>현재 대상자</span><b>-</b></div><div><span>교회 방문</span><b>-</b></div><div><span>새가족</span><b>-</b></div></div><div class="stage-flow"><span>기도중</span><i>→</i><span>첫만남</span><i>→</i><span>초청</span><i>→</i><span>교회방문</span><i>→</i><span>새가족</span><i>→</i><span>등록</span></div><p class="alpha-copy">Beta 버전에서 <b>기도대상자관리_표준양식_V2.0.xlsx</b>를 읽어 자동 집계합니다.</p></div></div>
+<div class="ev-panel" id="prayerTargets"><div class="card"><h3>🙏 기도대상자관리</h3><div class="empty-state"><span>📄</span><b>Excel 자동연동 준비중</b><p>대상자 검색, 담당자·소그룹 필터, 다음 연락일과 영혼관리 카드를 Beta에서 구현합니다.</p></div></div></div>
+<div class="ev-panel" id="tenThousand"><div class="card"><h3>🌱 일만상상 프로젝트</h3><div class="project-grid"><div>📣 전도</div><div>🏠 심방</div><div>🤲 돌봄</div><div>🧹 봉사</div><div>👵 경로당</div><div>❤️ 독거노인</div></div><p class="alpha-copy">활동 입력과 월별·연간 자동통계는 후속 버전에 적용합니다.</p></div></div>
+</section>
+<section class="page" id="settingsPage">
+<h2 class="section-title">⚙ 설정</h2>
+<div class="card"><h3>📂 Excel 데이터 관리</h3><div class="data-manager-grid"><div><span>👨‍👩‍👧</span><b>교인명단</b><small>data.js / 원본 Excel</small></div><div><span>✅</span><b>출석</b><small>날짜별 CSV</small></div><div><span>📢</span><b>공지</b><small>공지사항.xlsx</small></div><div><span>📅</span><b>일정</b><small>교회일정.xlsx</small></div><div class="new"><span>🙏</span><b>기도대상자</b><small>Beta 연동 예정</small></div><div class="new"><span>🌱</span><b>일만상상</b><small>후속 연동 예정</small></div></div></div>
+<div class="card" style="margin-top:16px"><h3>ℹ 시스템 정보</h3><div class="system-info"><img src="logo.png" alt="GESMS 로고"><div><b>GunpoEunhye Smart Ministry System</b><p>군포은혜영문 스마트 목양 시스템</p><span>GESMS V10.0 Alpha</span></div></div></div>
+</section>
+<section class="page" id="morePage"><h2 class="section-title">이용 안내</h2><div class="info"><b>📱 앱처럼 설치</b><br/>안드로이드 Chrome: ⋮ → 앱 설치 또는 홈 화면에 추가<br/>아이폰 Safari: 공유 □↑ → 홈 화면에 추가<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔄 데이터 업데이트</b><br/>명단 또는 시스템 파일이 변경되면 GitHub 저장소에 업로드하여 같은 주소에서 최신 자료를 사용할 수 있습니다.<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔐 개인정보 보호</b><br/>교회 내부에서만 사용하고 외부 전송이나 공개 게시를 삼가 주세요.</div></section>
+</main>
+<footer class="gesms-footer"><b>GESMS V10.0 Alpha</b><span>GunpoEunhye Smart Ministry System</span><small>© 2026 Salvation Army Gunpo Eunhye Corps</small></footer>
+<nav class="bottom"><div class="nav" style="grid-template-columns:repeat(12,1fr)">
+<button class="active" data-page="home"><span>🏠</span>홈</button>
+<button data-page="familiesPage"><span>👨‍👩‍👧</span>가족</button>
+<button data-page="membersPage"><span>👤</span>개인</button>
+<button data-page="evangelismPage"><span>❤️</span>전도</button>
+<button data-page="servicePage"><span>🙏</span>봉사</button>
+<button data-page="attendancePage"><span>✅</span>출석</button>
+<button data-page="statsPage"><span>📊</span>통계</button><button data-page="carePage"><span>📞</span>돌봄</button><button data-page="financePage"><span>💰</span>재정</button>
+<button data-page="noticePage"><span>📢</span>공지</button>
+<button data-page="eventsPage"><span>📅</span>일정</button>
+<button data-page="settingsPage"><span>⚙️</span>설정</button>
+</div></nav>
+</div>
+<script src="data.js"></script>
+<script src="service-data.js"></script>
+<script src="office-data.js"></script>
+<script src="jszip.min.js"></script>
+<script src="office-excel.js"></script>
+<script src="finance-data.js"></script>
+<script>
+const D=window.APP_DATA,$=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mask=p=>p?p.replace(/(\d{3})-(\d{3,4})-(\d{4})/,'$1-$2-****'):'미기재';
+const allGroups=Object.keys(D.stats.groups).sort((a,b)=>a.localeCompare(b,'ko'));
+const allPositions=Object.keys(D.stats.positions).filter(x=>x!=='미기재').sort((a,b)=>a.localeCompare(b,'ko'));
+function chart(el,obj,limit=30){const a=Object.entries(obj).sort((x,y)=>y[1]-x[1]).slice(0,limit),m=Math.max(1,...a.map(x=>x[1]));el.innerHTML=a.map(([k,v])=>`<div class="barrow"><span>${esc(k)}</span><div class="track"><div class="fill" style="width:${v/m*100}%"></div></div><b>${v}</b></div>`).join('')}
+function noticeHtml(){return D.notices.map(n=>`<article class="notice"><time>${esc(n.date)}</time><strong>${esc(n.title)}</strong><p>${esc(n.body)}</p></article>`).join('')}
+function personHtml(m){const tg=[m.group1,m.group2,m.group3,m.group4].filter(Boolean).map(g=>`<span class="tag">${esc(g)}</span>`).join('');return `<div class="person"><div class="avatar">${esc(m.name.slice(0,1))}</div><div><h5>${esc(m.name)}</h5><div class="meta">${esc(m.position||'직분 미기재')} · ${esc(m.birthday||'생일 미기재')}<br><span class="phoneText">${esc(mask(m.phone))}</span>${m.note?`<br>비고: ${esc(m.note)}`:''}</div><div class="tags">${tg}</div></div><button class="phone" data-phone="${esc(m.phone)}">연락처</button></div>`}
+function bindPhones(root){root.querySelectorAll('.phone').forEach(b=>b.onclick=()=>{const p=b.dataset.phone;if(!p){alert('등록된 연락처가 없습니다.');return}const t=b.closest('.person').querySelector('.phoneText'),show=b.textContent==='연락처';t.textContent=show?p:mask(p);b.textContent=show?'가리기':'연락처'})}
+
+function phoneLink(phone){
+  const p=String(phone||'').trim();
+  if(!p)return '☎ 전화번호 미기재';
+  const tel=p.replace(/[^0-9+]/g,'');
+  return `<a href="tel:${tel}" style="color:inherit;text-decoration:none;font-weight:700">☎ ${esc(p)}</a>`;
+}
+
+function renderFamilies(){const q=$('#familySearch').value.trim().toLowerCase(),g=$('#familyGroup').value,s=$('#familySize').value;const arr=D.families.filter(f=>{const hay=(f.label+' '+f.code+' '+f.members.map(m=>[m.name,m.position,m.group1,m.group2,m.group3,m.group4].join(' ')).join(' ')).toLowerCase();const gm=!g||f.groups.includes(g);const sm=!s||(s==='4'?f.size>=4:f.size===Number(s));return(!q||hay.includes(q))&&gm&&sm});$('#familyCount').textContent=`검색 결과 ${arr.length}가정`;const root=$('#families');if(!arr.length){root.innerHTML='<div class="empty">검색 결과가 없습니다.</div>';return}root.innerHTML=arr.map(f=>`<article class="family"><div class="family-head"><div class="family-icon">👨‍👩‍👧</div><div class="family-title"><h4>${esc(f.label)}</h4><small>가족코드 ${esc(f.code)} · ${f.size}명${f.groups.length?' · '+esc(f.groups.join(', ')):''}</small></div><div class="chev">⌄</div></div><div class="family-body">${f.members.map(personHtml).join('')}</div></article>`).join('');root.querySelectorAll('.family-head').forEach(h=>h.onclick=()=>h.parentElement.classList.toggle('open'));bindPhones(root)}
+function renderMembers(){const q=$('#memberSearch').value.trim().toLowerCase(),p=$('#positionFilter').value,g=$('#memberGroup').value;const arr=D.members.filter(m=>{const hay=[m.name,m.family,m.position,m.group1,m.group2,m.group3,m.group4,m.birthday,m.note].join(' ').toLowerCase();return(!q||hay.includes(q))&&(!p||m.position===p)&&(!g||[m.group1,m.group2,m.group3,m.group4].includes(g))}).sort((a,b)=>a.name.localeCompare(b.name,'ko'));$('#memberCount').textContent=`검색 결과 ${arr.length}명`;$('#memberGrid').innerHTML=arr.length?arr.map(m=>`<article class="member-card"><div class="avatar">${esc(m.name.slice(0,1))}</div><div><h4>${esc(m.name)}</h4><div class="meta">${esc(m.position||'직분 미기재')} · 가족코드 ${esc(m.family||'-')}<br>${esc(m.birthday||'생일 미기재')}<br>${phoneLink(m.phone)}</div><div class="tags">${[m.group1,m.group2,m.group3,m.group4].filter(Boolean).map(x=>`<span class="tag">${esc(x)}</span>`).join('')}</div></div></article>`).join(''):'<div class="empty">검색 결과가 없습니다.</div>'}
+
+function birthdayInfo(text){
+  const b=parseSolarBirthday(text);
+  return b?{month:b.month,day:b.day,label:String(text||'')}:null;
+}
+function renderBirthdayList(){
+  const month=Number($('#birthdayMonth').value);
+  const arr=D.members.map(member=>({member,b:parseSolarBirthday(member.birthday)}))
+    .filter(x=>x.b&&x.b.month===month)
+    .sort((a,b)=>a.b.day-b.b.day||a.member.name.localeCompare(b.member.name,'ko'));
+  $('#birthdaySummary').textContent=`${month}월 생일자 ${arr.length}명`;
+  const root=$('#birthdayList');
+  if(!arr.length){root.innerHTML='<div class="empty">해당 월에 등록된 생일자가 없습니다.</div>';return}
+  root.innerHTML=arr.map(x=>`<article class="birthday-card"><div class="cake">🎂</div><div><h4>${String(x.b.month).padStart(2,'0')}월 ${String(x.b.day).padStart(2,'0')}일 · ${esc(x.member.name)}</h4><p>${esc(x.member.position||'직분 미기재')} · ${esc(familyLabelFor(x.member))}<br>소속1 ${esc(x.member.group1||'소속 미지정')}</p></div></article>`).join('');
+}
+
+const S=window.SERVICE_DATA||[];
+function displayDate(iso){
+  if(!iso)return '';
+  const d=new Date(iso+'T00:00:00');
+  if(isNaN(d))return iso;
+  return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} (${['일','월','화','수','목','금','토'][d.getDay()]})`;
+}
+function renderServices(){
+  const month=$('#serviceMonth').value, q=$('#serviceSearch').value.trim().toLowerCase();
+  const today=new Date().toISOString().slice(0,10);
+  const arr=S.filter(x=>{
+    const mon=x.date.slice(5,7);
+    const hay=Object.values(x).join(' ').toLowerCase();
+    return(!month||mon===month)&&(!q||hay.includes(q));
+  }).sort((a,b)=>a.date.localeCompare(b.date));
+  const root=$('#serviceGrid');
+  root.innerHTML=arr.length?arr.map(x=>`<article class="service-card ${x.date===today?'today':''}">
+    <h4>${esc(x.event||'주일예배')}</h4><div class="service-date">${displayDate(x.date)}</div>
+    <div class="duty-grid">
+      <div class="duty"><b>사회</b>${esc(x.leader||'-')}</div><div class="duty"><b>기도</b>${esc(x.prayer||'-')}</div>
+      <div class="duty"><b>안내</b>${esc(x.guide||'-')}</div><div class="duty"><b>식사</b>${esc(x.meal||'-')}</div>
+      <div class="duty"><b>청소</b>${esc(x.cleaning||'-')}</div><div class="duty"><b>전도</b>${esc(x.evangelism||'-')}</div>
+    </div></article>`).join(''):'<div class="empty">해당 일정이 없습니다.</div>';
+}
+
+function nearestService(date){
+  if(!S.length)return null;
+  return S.slice().sort((a,b)=>Math.abs(new Date(a.date)-new Date(date))-Math.abs(new Date(b.date)-new Date(date)))[0];
+}
+function renderAttendanceExtras(){
+  const date=$('#attendanceDate').value,svc=nearestService(date);
+  $('#attendanceTodayService').innerHTML=svc?`<h3>🙏 선택일 예배·봉사</h3><p style="margin:0;line-height:1.7"><b>${displayDate(svc.date)} ${esc(svc.event||'주일예배')}</b><br>사회 ${esc(svc.leader||'-')} · 기도 ${esc(svc.prayer||'-')}<br>안내 ${esc(svc.guide||'-')} · 식사 ${esc(svc.meal||'-')} · 전도 ${esc(svc.evangelism||'-')}</p>`:'<h3>🙏 선택일 예배·봉사</h3><p>등록된 일정이 없습니다.</p>';
+  const d=new Date(date+'T00:00:00'),start=new Date(d),end=new Date(d);start.setDate(d.getDate()-3);end.setDate(d.getDate()+3);
+  const list=D.members.filter(m=>{const x=birthdayInfo(m.birthday);if(!x)return false;const bd=new Date(d.getFullYear(),x.month-1,x.day);return bd>=start&&bd<=end}).sort((a,b)=>birthdayInfo(a.birthday).day-birthdayInfo(b.birthday).day);
+  $('#attendanceBirthdays').innerHTML=`<h3>🎂 선택일 전후 1주 생일자</h3>${list.length?'<p style="margin:0;line-height:1.8">'+list.map(m=>`${esc(m.name)} (${esc(m.birthday)})`).join('<br>')+'</p>':'<p style="margin:0;color:var(--muted)">해당 기간 생일자가 없습니다.</p>'}`;
+}
+
+
+function parseSolarBirthday(text){
+  const s=String(text||'').trim().replace(/\s+/g,'');
+  let m=s.match(/^(\d{1,2})월(\d{1,2})일$/);
+  if(!m)m=s.match(/^(\d{1,2})[.\/-](\d{1,2})$/);
+  if(!m)return null;
+  const month=Number(m[1]),day=Number(m[2]);
+  if(month<1||month>12||day<1||day>31)return null;
+  return {month,day};
+}
+function familyLabelFor(member){
+  const family=D.families.find(x=>x.code===member.family);
+  return family?family.label:(member.family||'개인');
+}
+function birthdayDisplay(item){
+  const mm=String(item.b.month).padStart(2,'0');
+  const dd=String(item.b.day).padStart(2,'0');
+  const pos=item.member.position?` · ${esc(item.member.position)}`:'';
+  return `${mm}월 ${dd}일 · ${esc(item.member.name)}${pos} · ${esc(familyLabelFor(item.member))}`;
+}
+function renderSolarBirthdayHome(){
+  const root=$('#solarBirthdayHome'); if(!root)return;
+  const now=new Date(),year=now.getFullYear(),today=new Date(year,now.getMonth(),now.getDate()),items=[];
+  D.members.forEach(member=>{
+    const b=parseSolarBirthday(member.birthday); if(!b)return;
+    let date=new Date(year,b.month-1,b.day);
+    if(date<today)date=new Date(year+1,b.month-1,b.day);
+    items.push({member,b,date,days:Math.round((date-today)/86400000)});
+  });
+  const byDateName=(a,b)=>a.b.month-b.b.month||a.b.day-b.b.day||a.member.name.localeCompare(b.member.name,'ko');
+  const todayList=items.filter(x=>x.days===0).sort(byDateName);
+  const next7=items.filter(x=>x.days>0&&x.days<=7).sort(byDateName);
+  const thisMonth=D.members.map(member=>({member,b:parseSolarBirthday(member.birthday)}))
+    .filter(x=>x.b&&x.b.month===now.getMonth()+1)
+    .sort(byDateName);
+  const sec=(title,list)=>`<div class="notice"><strong>${title}</strong><p>${list.length?list.map(birthdayDisplay).join('<br>'):'해당자가 없습니다.'}</p></div>`;
+  root.innerHTML=sec('오늘 생일',todayList)+sec('이번 달 생일',thisMonth);
+}
+
+function attendanceKey(date){return 'gunpoAttendance:'+date+':'+currentServiceType()}
+function getAttendance(){
+  try{return JSON.parse(localStorage.getItem(attendanceKey($('#attendanceDate').value))||'{}')}catch(e){return{}}
+}
+function saveAttendance(obj){localStorage.setItem(attendanceKey($('#attendanceDate').value),JSON.stringify(obj))}
+function visitorKey(date,service=currentServiceType()){return 'gunpoVisitors:'+date+':'+service}
+function normalizeVisitorEntries(entries){
+  return (Array.isArray(entries)?entries:[]).map((x,i)=>({
+    id:String(x.id||Date.now()+'-'+i+'-'+Math.random().toString(36).slice(2,7)),
+    name:String(x.name||x.label||'방문자').trim()||'방문자',
+    count:Math.max(1,Math.floor(Number(x.count)||1)),
+    memo:String(x.memo||'').trim()
+  })).filter(x=>x.count>0);
+}
+function getVisitorEntries(date=$('#attendanceDate').value,service=currentServiceType()){
+  try{
+    const raw=localStorage.getItem(visitorKey(date,service));
+    if(!raw)return [];
+    const data=JSON.parse(raw);
+    if(Array.isArray(data))return normalizeVisitorEntries(data);
+    if(Array.isArray(data.entries))return normalizeVisitorEntries(data.entries);
+    const legacyCount=Math.max(0,Math.floor(Number(data.count)||0));
+    return legacyCount?[{id:'legacy',name:String(data.memo||'방문자').trim()||'방문자',count:legacyCount,memo:''}]:[];
+  }catch(e){return []}
+}
+function saveVisitorEntries(entries,date=$('#attendanceDate').value,service=currentServiceType()){
+  const normalized=normalizeVisitorEntries(entries);
+  localStorage.setItem(visitorKey(date,service),JSON.stringify({entries:normalized}));
+  return normalized;
+}
+function getVisitorData(date=$('#attendanceDate').value,service=currentServiceType()){
+  const entries=getVisitorEntries(date,service);
+  return {
+    count:entries.reduce((sum,x)=>sum+x.count,0),
+    memo:entries.map(x=>`${x.name} ${x.count}명${x.memo?' ('+x.memo+')':''}`).join(' / '),
+    entries
+  };
+}
+function saveVisitorData(data,date=$('#attendanceDate').value,service=currentServiceType()){
+  if(Array.isArray(data.entries))return saveVisitorEntries(data.entries,date,service);
+  const count=Math.max(0,Math.floor(Number(data.count)||0));
+  return saveVisitorEntries(count?[{name:String(data.name||data.memo||'방문자'),count,memo:String(data.note||'')}]:[],date,service);
+}
+function renderVisitorList(){
+  const root=$('#visitorList');if(!root)return;
+  const entries=getVisitorEntries();
+  const total=entries.reduce((sum,x)=>sum+x.count,0);
+  $('#visitorTotal').textContent=total;
+  root.innerHTML=entries.length?entries.map((x,i)=>`<div class="visitor-row">
+    <div class="visitor-name">${esc(x.name)}</div>
+    <div class="visitor-count">${x.count}명</div>
+    <div class="visitor-note">${esc(x.memo||'메모 없음')}</div>
+    <button class="visitor-delete" type="button" onclick="removeVisitor(${i})">삭제</button>
+  </div>`).join(''):'<div class="visitor-empty">등록된 방문자가 없습니다. 위 입력란에서 방문자를 추가해 주세요.</div>';
+}
+function syncVisitorInputs(){
+  const countEl=$('#visitorCount'),nameEl=$('#visitorName'),memoEl=$('#visitorMemo');
+  if(countEl)countEl.value=1;
+  if(nameEl)nameEl.value='';
+  if(memoEl)memoEl.value='';
+  renderVisitorList();
+}
+function addVisitorFromForm(){
+  const name=String($('#visitorName').value||'').trim();
+  const count=Math.max(1,Math.floor(Number($('#visitorCount').value)||1));
+  const memo=String($('#visitorMemo').value||'').trim();
+  if(!name){alert('방문자 구분 또는 이름을 입력해 주세요.');$('#visitorName').focus();return}
+  const entries=getVisitorEntries();
+  entries.push({id:Date.now().toString(36),name,count,memo});
+  saveVisitorEntries(entries);
+  syncVisitorInputs();
+  const status=$('#visitorStatus');
+  status.className='remote-status ok';
+  status.textContent=`${$('#attendanceDate').value} ${currentServiceType()}에 ${name} ${count}명을 추가했습니다.`;
+  renderAttendance();
+}
+function removeVisitor(index){
+  const entries=getVisitorEntries();
+  const target=entries[index];if(!target)return;
+  if(!confirm(`${target.name} ${target.count}명을 방문자 명단에서 삭제할까요?`))return;
+  entries.splice(index,1);saveVisitorEntries(entries);renderVisitorList();renderAttendance();
+  const status=$('#visitorStatus');status.className='remote-status';status.textContent='방문자 기록을 삭제했습니다.';
+}
+function setAttendance(name,status){
+  const obj=getAttendance();
+  if(status)obj[name]=status;else delete obj[name];
+  saveAttendance(obj);renderAttendance();
+}
+function attendanceGroups(){
+  const map=new Map();
+  D.members.forEach(m=>{
+    const g=(m.group1||'소속 미지정').trim()||'소속 미지정';
+    if(!map.has(g))map.set(g,[]);
+    map.get(g).push(m);
+  });
+  return [...map.entries()].sort((a,b)=>{
+    if(a[0]==='소속 미지정')return 1;if(b[0]==='소속 미지정')return -1;
+    return a[0].localeCompare(b[0],'ko');
+  });
+}
+function markGroup(group,status){
+  const obj=getAttendance();
+  D.members.filter(m=>((m.group1||'소속 미지정').trim()||'소속 미지정')===group).forEach(m=>obj[m.name]=status);
+  saveAttendance(obj);renderAttendance();
+}
+function renderAttendance(){
+  const q=$('#attendanceSearch').value.trim().toLowerCase(),obj=getAttendance();
+  let total=0,present=0,online=0,absent=0;
+  const cards=[];
+  attendanceGroups().forEach(([group,ms])=>{
+    const filtered=ms.filter(m=>(group+' '+m.name+' '+m.position+' '+m.family).toLowerCase().includes(q));
+    if(q&&!filtered.length)return;
+    let gp=0,go=0,ga=0;
+    const rows=filtered.map(m=>{
+      total++;const st=obj[m.name]||'';
+      if(st==='present'){present++;gp++}
+      if(st==='online'){online++;go++}
+      if(st==='absent'){absent++;ga++}
+      return `<div class="att-row"><div class="att-name"><b>${esc(m.name)}</b><small>${esc(m.position||'직분 미기재')} · 가족코드 ${esc(m.family||'-')}</small></div>
+      <div class="att-options">
+       <button class="${st==='present'?'active present':''}" onclick="setAttendance('${esc(m.name)}','present')">출석</button>
+       <button class="${st==='online'?'active online':''}" onclick="setAttendance('${esc(m.name)}','online')">온라인</button>
+       <button class="${st==='absent'?'active absent':''}" onclick="setAttendance('${esc(m.name)}','absent')">결석</button>
+      </div></div>`;
+    }).join('');
+    const checked=gp+go+ga,rate=filtered.length?Math.round((gp+go)/filtered.length*100):0;
+    cards.push(`<article class="att-group open">
+      <div class="att-group-head">
+        <div class="att-group-title"><h4>${esc(group)}</h4><small>${filtered.length}명 · 출석 ${gp} · 온라인 ${go} · 결석 ${ga} · 미체크 ${Math.max(0,filtered.length-checked)}</small></div>
+        <div class="group-rate">${rate}%</div><div class="chev">⌄</div>
+      </div>
+      <div class="att-group-body">
+        <div class="att-group-actions" style="padding:10px 15px;border-bottom:1px solid var(--line)">
+          <button class="mini-btn present" onclick="markGroup('${esc(group)}','present')">그룹 전체 출석</button>
+          <button class="mini-btn online" onclick="markGroup('${esc(group)}','online')">그룹 전체 온라인</button>
+          <button class="mini-btn absent" onclick="markGroup('${esc(group)}','absent')">그룹 전체 결석</button>
+        </div>${rows}
+      </div></article>`);
+  });
+  $('#attendanceList').innerHTML=cards.join('')||'<div class="empty">검색 결과가 없습니다.</div>';
+  $('#attTotal').textContent=total;$('#attPresent').textContent=present;$('#attOnline').textContent=online;
+  $('#attRate').textContent=total?Math.round((present+online)/total*100)+'%':'0%';
+  document.querySelectorAll('.att-group-head').forEach(h=>h.onclick=e=>{if(e.target.closest('button'))return;h.parentElement.classList.toggle('open')});
+}
+
+
+function currentServiceType(){
+  return ($('#attendanceService').value||'성결예배').trim();
+}
+function safeServiceName(name){
+  return String(name||'예배').replace(/[\\/:*?"<>|]/g,'_').replace(/\s+/g,'');
+}
+
+function attendanceCsvFilename(date){
+  return `attendance-${date}-${safeServiceName(currentServiceType())}.csv`;
+}
+function parseCsvLine(line){
+  const cols=[];let cur='',quote=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c==='"'&&line[i+1]==='"'){cur+='"';i++}
+    else if(c==='"'){quote=!quote}
+    else if(c===','&&!quote){cols.push(cur);cur=''}
+    else cur+=c;
+  }
+  cols.push(cur);return cols;
+}
+function parseAttendanceCsvData(text){
+  const lines=String(text||'').replace(/^\ufeff/,'').split(/\r?\n/).filter(Boolean);
+  const attendance={},visitorEntries=[];
+  lines.slice(1).forEach(line=>{
+    const cols=parseCsvLine(line);
+    const name=cols[5]||cols[4]||cols[3]||'';
+    const status=cols[7]||cols[6]||cols[5]||'';
+    if(status==='방문자'||cols[2]==='방문자'){
+      const count=Math.max(0,Number(cols[3])||0);
+      const visitorName=String(cols[5]||'방문자').trim()||'방문자';
+      const visitorMemo=String(cols[6]||'').trim();
+      if(count)visitorEntries.push({name:visitorName,count,memo:visitorMemo});
+      return;
+    }
+    const mapped={'출석':'present','온라인':'online','결석':'absent','불출석':'absent','present':'present','online':'online','absent':'absent'}[status];
+    if(name&&mapped)attendance[name]=mapped;
+  });
+  return {
+    attendance,
+    visitorEntries:normalizeVisitorEntries(visitorEntries),
+    visitorCount:visitorEntries.reduce((sum,x)=>sum+x.count,0),
+    visitorMemo:visitorEntries.map(x=>x.name).join(' / ')
+  };
+}
+function parseAttendanceCsvText(text){return parseAttendanceCsvData(text).attendance}
+async function loadGitHubAttendance(force=false){
+  const date=$('#attendanceDate').value;
+  const statusEl=$('#remoteAttendanceStatus');
+  const local=getAttendance();
+  if(!force&&Object.keys(local).length){
+    statusEl.className='remote-status ok';
+    statusEl.textContent=`${date} ${currentServiceType()} 출석 기록을 이 기기에서 불러왔습니다.`;
+    renderAttendance();
+    return;
+  }
+  statusEl.className='remote-status';
+  statusEl.textContent=`GitHub에서 ${attendanceCsvFilename(date)} 파일을 확인하는 중입니다...`;
+  try{
+    const response=await fetch(`./${attendanceCsvFilename(date)}?v=${Date.now()}`,{cache:'no-store'});
+    if(!response.ok)throw new Error('not found');
+    const parsed=parseAttendanceCsvData(await response.text());
+    saveAttendance(parsed.attendance);
+    saveVisitorEntries(parsed.visitorEntries||[]);
+    syncVisitorInputs();
+    renderAttendance();
+    statusEl.className='remote-status ok';
+    statusEl.textContent=`GitHub의 ${date} ${currentServiceType()} 출석 기록을 불러왔습니다.`;
+  }catch(e){
+    if(force){
+      statusEl.className='remote-status warn';
+      statusEl.textContent=`GitHub에 ${date} ${currentServiceType()} 출석 파일이 없습니다. 새로 체크해 주세요.`;
+    }else{
+      statusEl.className='remote-status';
+      statusEl.textContent=`저장된 출석 기록이 없어 빈 출석부로 시작합니다. 체크 후 날짜별 CSV를 저장해 GitHub에 올리세요.`;
+    }
+    renderAttendance();
+  }
+}
+
+function exportAttendanceCsv(){
+  const date=$('#attendanceDate').value,obj=getAttendance();
+  registerAttendanceIndexRecord(date,currentServiceType());
+  const lines=[['예배일','예배종류','소속1','가족코드','가정','성명','직분','상태']];
+  D.families.forEach(f=>f.members.forEach(m=>lines.push([date,currentServiceType(),m.group1||'소속 미지정',f.code,f.label,m.name,m.position||'',({present:'출석',online:'온라인',absent:'결석'}[obj[m.name]]||'미체크')])));
+  getVisitorEntries().forEach(v=>lines.push([date,currentServiceType(),'방문자',v.count,'방문자',v.name,v.memo,'방문자']));
+  const csv='\ufeff'+lines.map(r=>r.map(v=>'"'+String(v).replace(/"/g,'""')+'"').join(',')).join('\n');
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=attendanceCsvFilename(date);a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function importAttendanceCsv(file){
+  const reader=new FileReader();
+  reader.onload=()=>{
+    const parsed=parseAttendanceCsvData(reader.result);
+    saveAttendance(parsed.attendance);
+    saveVisitorEntries(parsed.visitorEntries||[]);
+    syncVisitorInputs();
+    renderAttendance();
+    const statusEl=$('#remoteAttendanceStatus');
+    statusEl.className='remote-status ok';
+    statusEl.textContent=`CSV 파일을 ${$('#attendanceDate').value} ${currentServiceType()} 출석 기록으로 가져왔습니다.`;
+    alert('출석 기록을 가져왔습니다.');
+  };
+  reader.readAsText(file,'utf-8');
+}
+
+
+let attendanceView='all';
+
+function renderSolarBirthdayHome(){
+  const root=$('#solarBirthdayHome'); if(!root)return;
+  const now=new Date(),month=now.getMonth()+1,day=now.getDate();
+  const items=D.members.map(member=>({member,b:parseSolarBirthday(member.birthday)})).filter(x=>x.b);
+  const byDayName=(a,b)=>a.b.day-b.b.day||a.member.name.localeCompare(b.member.name,'ko');
+  const today=items.filter(x=>x.b.month===month&&x.b.day===day).sort(byDayName);
+  const thisMonth=items.filter(x=>x.b.month===month).sort(byDayName);
+  const sec=(title,list)=>`<div class="notice"><strong>${title}</strong><p>${list.map(birthdayDisplay).join('<br>')}</p></div>`;
+  root.innerHTML=(today.length?sec('오늘 생일',today):'')+sec('이번 달 생일',thisMonth);
+}
+
+function currentAttendanceRows(){
+  const obj=getAttendance();
+  return D.members.map(member=>({member,status:obj[member.name]||'unchecked'}));
+}
+function attendanceStatusLabel(s){return {present:'출석',online:'온라인',absent:'불출석',unchecked:'미체크'}[s]||s}
+function serviceUsesOnline(service){
+  const name=String(service||'').replace(/\s+/g,'');
+  return name.includes('수요예배')||name.includes('금요기도');
+}
+function groupAttendanceRows(rows){
+  const map=new Map();
+  rows.forEach(x=>{const g=(x.member.group1||'소속 미지정').trim()||'소속 미지정';if(!map.has(g))map.set(g,[]);map.get(g).push(x)});
+  return [...map.entries()].sort((a,b)=>a[0].localeCompare(b[0],'ko'));
+}
+function renderCompactAttendance(){
+  const all=currentAttendanceRows();
+  const filtered=attendanceView==='all'?all:all.filter(x=>x.status===attendanceView);
+  const title={all:'전체 출석 현황',present:'출석자 명단',online:'온라인 참석자',absent:'불출석자 명단',unchecked:'미체크 명단'}[attendanceView];
+  $('#attendanceListTitle').textContent=`${title} · ${filtered.length}명`;
+  const groups=groupAttendanceRows(filtered);
+  $('#attendanceCompactList').innerHTML=groups.length?groups.map(([g,rows])=>`<div class="notice"><strong>${esc(g)} (${rows.length}명)</strong><p>${rows.map(x=>`${esc(x.member.name)} · ${esc(x.member.position||'직분 미기재')}${attendanceView==='all'?' · '+attendanceStatusLabel(x.status):''}`).join('<br>')}</p></div>`).join(''):'<div class="empty">해당 명단이 없습니다.</div>';
+  document.querySelectorAll('[data-att-view]').forEach(b=>b.classList.toggle('active',b.dataset.attView===attendanceView));
+}
+function renderAttendance(){
+  const q=$('#attendanceSearch').value.trim().toLowerCase(),obj=getAttendance();
+  let total=0,present=0,online=0,absent=0,unchecked=0;
+  const cards=[];
+  attendanceGroups().forEach(([group,ms])=>{
+    const filtered=ms.filter(m=>(group+' '+m.name+' '+m.position+' '+m.family).toLowerCase().includes(q));
+    if(q&&!filtered.length)return;
+    let gp=0,go=0,ga=0,gu=0;
+    const rows=filtered.map(m=>{
+      total++;const st=obj[m.name]||'unchecked';
+      if(st==='present'){present++;gp++}else if(st==='online'){online++;go++}else if(st==='absent'){absent++;ga++}else{unchecked++;gu++}
+      return `<div class="att-row"><div class="att-name"><b>${esc(m.name)}</b><small>${esc(m.position||'직분 미기재')} · 가족코드 ${esc(m.family||'-')}</small></div><div class="att-options"><button class="${st==='present'?'active present':''}" onclick="setAttendance('${esc(m.name)}','present')">출석</button><button class="${st==='online'?'active online':''}" onclick="setAttendance('${esc(m.name)}','online')">온라인</button><button class="${st==='absent'?'active absent':''}" onclick="setAttendance('${esc(m.name)}','absent')">불출석</button></div></div>`;
+    }).join('');
+    const rate=filtered.length?Math.round((gp+go)/filtered.length*100):0;
+    cards.push(`<article class="att-group open"><div class="att-group-head"><div class="att-group-title"><h4>${esc(group)}</h4><small>${filtered.length}명 · 출석 ${gp} · 온라인 ${go} · 불출석 ${ga} · 미체크 ${gu}</small></div><div class="group-rate">${rate}%</div><div class="chev">⌄</div></div><div class="att-group-body"><div class="att-group-actions" style="padding:10px 15px;border-bottom:1px solid var(--line)"><button class="mini-btn present" onclick="markGroup('${esc(group)}','present')">그룹 전체 출석</button><button class="mini-btn online" onclick="markGroup('${esc(group)}','online')">그룹 전체 온라인</button><button class="mini-btn absent" onclick="markGroup('${esc(group)}','absent')">그룹 전체 불출석</button></div>${rows}</div></article>`);
+  });
+  $('#attendanceList').innerHTML=cards.join('')||'<div class="empty">검색 결과가 없습니다.</div>';
+  const visitor=getVisitorData();
+  $('#attTotal').textContent=total;$('#attPresent').textContent=present;$('#attOnline').textContent=online;$('#attVisitors').textContent=visitor.count;$('#attActualTotal').textContent=present+online+visitor.count;$('#attAbsent').textContent=absent;$('#attUnchecked').textContent=unchecked;$('#attRate').textContent=total?Math.round((present+online)/total*100)+'%':'0%';
+  document.querySelectorAll('.att-group-head').forEach(h=>h.onclick=e=>{if(e.target.closest('button'))return;h.parentElement.classList.toggle('open')});
+  renderCompactAttendance();
+}
+
+function presentShareText(){
+  const date=$('#attendanceDate').value,service=currentServiceType();
+  const rows=currentAttendanceRows().filter(x=>x.status==='present'||x.status==='online');
+  const groups=groupAttendanceRows(rows);
+  let text=`[${date} ${service} 출석자]\n\n`;
+  if(!groups.length)return text+'출석자로 체크된 성도가 없습니다.';
+  groups.forEach(([g,list])=>{
+    const present=list.filter(x=>x.status==='present').map(x=>x.member.name);
+    const online=list.filter(x=>x.status==='online').map(x=>x.member.name);
+    text+=`${g}\n`;
+    if(present.length)text+=`출석: ${present.join(', ')}\n`;
+    if(online.length)text+=`온라인: ${online.join(', ')}\n`;
+    text+='\n';
+  });
+  const presentCount=rows.filter(x=>x.status==='present').length;
+  const onlineCount=rows.filter(x=>x.status==='online').length;
+  const visitor=getVisitorData();
+  text+=`합계: 교인 출석 ${presentCount}명`;
+  if(onlineCount)text+=`, 온라인 ${onlineCount}명`;
+  if(visitor.count)text+=`, 방문자 ${visitor.count}명`;
+  text+=`\n전체 참석: ${presentCount+onlineCount+visitor.count}명`;
+  if(visitor.memo)text+=`\n방문자 메모: ${visitor.memo}`;
+  return text;
+}
+async function sharePresentList(){
+  const text=presentShareText();
+  $('#absentSharePreview').style.display='block';
+  $('#absentSharePreview').textContent=text;
+  try{
+    if(navigator.share){
+      await navigator.share({title:'출석자 명단',text});
+    }else{
+      await navigator.clipboard.writeText(text);
+      alert('공유 기능을 지원하지 않아 명단을 복사했습니다. 카카오톡에 붙여넣으세요.');
+    }
+  }catch(e){}
+}
+async function copyPresentList(){
+  const text=presentShareText();
+  $('#absentSharePreview').style.display='block';
+  $('#absentSharePreview').textContent=text;
+  try{
+    await navigator.clipboard.writeText(text);
+    alert('출석자 명단을 복사했습니다. 카카오톡에 붙여넣으세요.');
+  }catch(e){
+    prompt('아래 내용을 복사하세요.',text);
+  }
+}
+
+function absentShareText(){
+  const date=$('#attendanceDate').value,service=currentServiceType();
+  const rows=currentAttendanceRows().filter(x=>x.status==='absent');
+  const groups=groupAttendanceRows(rows);
+  let text=`[${date} ${service} 불출석자]\n\n`;
+  if(!groups.length)return text+'불출석자로 체크된 성도가 없습니다.';
+  groups.forEach(([g,list])=>{text+=`${g}\n${list.map(x=>x.member.name).join(', ')}\n\n`});
+  text+='각 소그룹장님께서는 확인 후 전화와 돌봄을 부탁드립니다.';
+  return text;
+}
+async function shareAbsentList(){
+  const text=absentShareText();$('#absentSharePreview').style.display='block';$('#absentSharePreview').textContent=text;
+  try{if(navigator.share){await navigator.share({title:'불출석자 명단',text})}else{await navigator.clipboard.writeText(text);alert('공유 기능을 지원하지 않아 명단을 복사했습니다. 카카오톡에 붙여넣으세요.')}}catch(e){}
+}
+async function copyAbsentList(){
+  const text=absentShareText();$('#absentSharePreview').style.display='block';$('#absentSharePreview').textContent=text;
+  try{await navigator.clipboard.writeText(text);alert('불출석자 명단을 복사했습니다. 카카오톡에 붙여넣으세요.')}catch(e){prompt('아래 내용을 복사하세요.',text)}
+}
+function exportAbsentCsv(){
+  const date=$('#attendanceDate').value,service=currentServiceType();
+  const rows=currentAttendanceRows().filter(x=>x.status==='absent');
+  const data=[['예배일','예배종류','소속1','성명','직분']];
+  rows.forEach(x=>data.push([date,service,x.member.group1||'소속 미지정',x.member.name,x.member.position||'']));
+  const csv='\ufeff'+data.map(r=>r.map(v=>`"${String(v).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8'}));a.download=`absent-${date}-${safeServiceName(service)}.csv`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+
+function serviceWeekday(service){return {'새벽기도':0,'성결예배':0,'구령예배':0,'수요예배':3,'금요기도회':5,'소그룹모임':0,'부흥집회':0,'기타':0}[service]??0}
+function isoDate(d){return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}
+function occurrenceDates(base,service,count=12){
+  const d=new Date(base+'T12:00:00'),wd=serviceWeekday(service);
+  d.setDate(d.getDate()-((d.getDay()-wd+7)%7));
+  const arr=[];for(let i=0;i<count;i++){arr.push(isoDate(d));d.setDate(d.getDate()-7)}return arr;
+}
+async function fetchAttendanceCount(date,service){
+  if(date>appTodayISO())return null;
+  const key='gunpoAttendance:'+date+':'+service;
+  try{
+    const local=JSON.parse(localStorage.getItem(key)||'{}');
+    const visitor=getVisitorData(date,service).count;
+    if(Object.keys(local).length||visitor)return Object.values(local).filter(x=>x==='present'||x==='online').length+visitor;
+  }catch(e){}
+  try{
+    const r=await fetch(`./attendance-${date}-${safeServiceName(service)}.csv?v=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)return null;
+    const parsed=parseAttendanceCsvData(await r.text());
+    return Object.values(parsed.attendance).filter(x=>x==='present'||x==='online').length+parsed.visitorCount;
+  }catch(e){return null}
+}
+async function loadAttendanceStats(){
+  const service=$('#statsService').value,base=$('#statsDate').value,status=$('#statsLoadStatus');
+  status.className='remote-status';status.textContent='최근 출석 CSV를 불러오는 중입니다...';
+  const dates=occurrenceDates(base,service,12),values=[];
+  for(const date of dates){const count=await fetchAttendanceCount(date,service);if(count!==null)values.push({date,count})}
+  values.sort((a,b)=>a.date.localeCompare(b.date));
+  if(!values.length){status.className='remote-status warn';status.textContent='분석할 출석 CSV가 없습니다. 날짜·예배별 CSV를 GitHub에 올린 후 다시 시도하세요.';$('#attendanceTrend').innerHTML='';['statsCurrent','statsPrev','statsMonth','statsAverage'].forEach(id=>$('#'+id).textContent='-');return}
+  const current=values[values.length-1],prev=values.length>1?values[values.length-2]:null;
+  const currentMonth=current.date.slice(0,7);const prevMonthDate=new Date(current.date+'T12:00:00');prevMonthDate.setMonth(prevMonthDate.getMonth()-1);const prevMonth=`${prevMonthDate.getFullYear()}-${String(prevMonthDate.getMonth()+1).padStart(2,'0')}`;
+  const prevMonthVals=values.filter(x=>x.date.startsWith(prevMonth));const prevMonthAvg=prevMonthVals.length?prevMonthVals.reduce((s,x)=>s+x.count,0)/prevMonthVals.length:null;
+  const avg=values.reduce((s,x)=>s+x.count,0)/values.length;
+  $('#statsCurrent').textContent=current.count+'명';$('#statsPrev').textContent=prev?(current.count-prev.count>=0?'+':'')+(current.count-prev.count)+'명':'-';$('#statsMonth').textContent=prevMonthAvg!==null?(current.count-prevMonthAvg>=0?'+':'')+(current.count-prevMonthAvg).toFixed(1)+'명':'-';$('#statsAverage').textContent=avg.toFixed(1)+'명';
+  const max=Math.max(...values.map(x=>x.count),1);$('#attendanceTrend').innerHTML=values.map(x=>`<div class="stats-row"><span>${x.date.slice(5).replace('-','/')}</span><div class="stats-bar"><i style="width:${x.count/max*100}%"></i></div><b>${x.count}명</b></div>`).join('');
+  status.className='remote-status ok';status.textContent=`${service} 최근 ${values.length}회 출석을 분석했습니다. 기준 회차: ${current.date}`;
+}
+
+
+function monthKey(date){
+  return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}`;
+}
+function currentYearMonths(){
+  const now=new Date(),year=now.getFullYear(),currentMonth=now.getMonth()+1,arr=[];
+  for(let month=1;month<=currentMonth;month++)arr.push({key:`${year}-${String(month).padStart(2,'0')}`,label:`${month}월`,year,month,current:month===currentMonth});
+  return arr;
+}
+function serviceDatesInMonth(year,month,service){
+  const weekday=serviceWeekday(service),dates=[],d=new Date(year,month-1,1,12);
+  while(d.getMonth()===month-1){
+    if(d.getDay()===weekday)dates.push(isoDate(d));
+    d.setDate(d.getDate()+1);
+  }
+  return dates;
+}
+async function loadHomeMonthlyAttendance(){
+  const service=$('#homeAttendanceService').value;
+  const status=$('#homeAttendanceStatus'),root=$('#homeMonthlyAttendanceChart');
+  const year=new Date().getFullYear(),goal=getGoal(),currentMonth=new Date().getMonth()+1;
+  status.className='remote-status';
+  status.textContent=`${year}년 ${service} 월별 출석 자료를 불러오는 중입니다...`;
+  root.classList.add('compact');
+  root.innerHTML='';
+  const months=currentYearMonths(),result=[];
+  for(const item of months){
+    const dates=serviceDatesInMonth(item.year,item.month,service),counts=[];
+    for(const date of dates){
+      const count=await fetchAttendanceCount(date,service);
+      if(count!==null)counts.push(count);
+    }
+    result.push({...item,avg:counts.length?counts.reduce((a,b)=>a+b,0)/counts.length:null,count:counts.length});
+  }
+  const available=result.filter(x=>x.avg!==null);
+  const max=Math.max(goal,...available.map(x=>x.avg),1);
+  root.innerHTML=result.map(x=>{
+    const height=x.avg===null?3:Math.max(8,x.avg/max*100);
+    const value=x.avg===null?'-':x.avg.toFixed(1);
+    return `<div class="month-col ${x.current?'current-month':''}"><div class="month-bar-wrap"><div class="month-bar" style="height:${height}%;opacity:${x.avg===null?.18:1}"><span>${value}</span></div></div><div class="month-label">${x.label}</div></div>`;
+  }).join('')+`<div class="month-col goal-col"><div class="month-bar-wrap"><div class="month-bar" style="height:${Math.max(8,goal/max*100)}%"><span>${goal}</span></div></div><div class="month-label">올해 목표</div></div>`;
+  if(!available.length){
+    status.className='remote-status warn';
+    status.textContent=`${year}년 출석 CSV가 아직 없습니다. 목표 ${goal}명만 표시합니다.`;
+  }else{
+    status.className='remote-status ok';
+    status.textContent=`${year}년 1월부터 ${currentMonth}월까지의 ${service} 월평균 출석과 목표 ${goal}명을 비교합니다.`;
+  }
+}
+
+
+function getGoal(){return Number(localStorage.getItem('gunpoAttendanceGoal')||60)}
+function setGoal(value){localStorage.setItem('gunpoAttendanceGoal',String(value))}
+async function updateAttendanceGoal(){
+  const goal=getGoal(),dates=occurrenceDates(isoDate(new Date()),'성결예배',1);
+  const current=await fetchAttendanceCount(dates[0],'성결예배');
+  const count=current===null?0:current,rate=goal?Math.round(count/goal*100):0;
+  $('#attendanceGoal').value=goal;
+  $('#attendanceGoalCurrent').textContent=current===null?'최근 출석 자료 없음':`최근 출석 ${count}명`;
+  $('#attendanceGoalRate').textContent=`목표 대비 ${rate}%`;
+  $('#attendanceGoalBar').style.width=Math.min(rate,100)+'%';
+}
+
+async function fetchAttendanceObject(date,service){
+  const key='gunpoAttendance:'+date+':'+service;
+  try{
+    const local=JSON.parse(localStorage.getItem(key)||'{}');
+    if(Object.keys(local).length)return local;
+  }catch(e){}
+  try{
+    const r=await fetch(`./attendance-${date}-${safeServiceName(service)}.csv?v=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)return null;
+    return parseAttendanceCsvText(await r.text());
+  }catch(e){return null}
+}
+function personGroup(member){return (member.group1||'소속 미지정').trim()||'소속 미지정'}
+function renderCareList(el,items){
+  el.innerHTML=items.length?items.map(x=>`<div class="care-person"><b>${esc(x.member.name)}</b><small>${esc(personGroup(x.member))} · ${esc(x.member.position||'직분 미기재')}</small></div>`).join(''):'<div class="empty" style="padding:20px">해당자가 없습니다.</div>';
+}
+let latestCare={three:[],two:[],one:[],dates:[],service:''};
+async function loadCareManagement(){
+  const service=$('#careService').value,base=$('#careDate').value,status=$('#careStatus');
+  status.className='remote-status';status.textContent='최근 3회 출석 자료를 확인하는 중입니다...';
+  const dates=occurrenceDates(base,service,3).reverse(),records=[];
+  for(const date of dates)records.push({date,obj:await fetchAttendanceObject(date,service)});
+  const valid=records.filter(x=>x.obj);
+  if(!valid.length){
+    status.className='remote-status warn';status.textContent='분석할 출석 CSV가 없습니다.';
+    renderCareList($('#care3'),[]);renderCareList($('#care2'),[]);renderCareList($('#care1'),[]);return;
+  }
+  const three=[],two=[],one=[];
+  D.members.forEach(member=>{
+    const states=records.map(r=>r.obj?(r.obj[member.name]||'unchecked'):'missing');
+    const absent=states.map(s=>s==='absent');
+    if(absent.length>=3&&absent.slice(-3).every(Boolean))three.push({member});
+    else if(absent.length>=2&&absent.slice(-2).every(Boolean))two.push({member});
+    else if(absent[absent.length-1])one.push({member});
+  });
+  const sorter=(a,b)=>personGroup(a.member).localeCompare(personGroup(b.member),'ko')||a.member.name.localeCompare(b.member.name,'ko');
+  three.sort(sorter);two.sort(sorter);one.sort(sorter);
+  latestCare={three,two,one,dates,service};
+  renderCareList($('#care3'),three);renderCareList($('#care2'),two);renderCareList($('#care1'),one);
+  status.className='remote-status ok';status.textContent=`${service} ${dates.join(', ')} 자료를 기준으로 분류했습니다.`;
+}
+function careShareText(){
+  const {three,two,one,dates,service}=latestCare;
+  const groupText=(title,items)=>{
+    if(!items.length)return `${title}\n없음\n\n`;
+    const groups=new Map();
+    items.forEach(x=>{const g=personGroup(x.member);if(!groups.has(g))groups.set(g,[]);groups.get(g).push(x.member.name)});
+    let t=title+'\n';groups.forEach((names,g)=>{t+=`${g}: ${names.join(', ')}\n`});return t+'\n';
+  };
+  return `[${service} 돌봄 대상]\n기준: ${dates.join(', ')}\n\n`+
+    groupText('3회 연속 불출석',three)+groupText('2회 연속 불출석',two)+groupText('이번 회차 불출석',one)+
+    '각 소그룹장님께서는 확인 후 전화와 돌봄을 부탁드립니다.';
+}
+async function shareCareList(){
+  const text=careShareText();$('#carePreview').style.display='block';$('#carePreview').textContent=text;
+  try{if(navigator.share)await navigator.share({title:'돌봄 대상 명단',text});else{await navigator.clipboard.writeText(text);alert('명단을 복사했습니다. 카카오톡에 붙여넣으세요.')}}catch(e){}
+}
+async function copyCareList(){
+  const text=careShareText();$('#carePreview').style.display='block';$('#carePreview').textContent=text;
+  try{await navigator.clipboard.writeText(text);alert('돌봄 대상 명단을 복사했습니다.')}catch(e){prompt('아래 내용을 복사하세요.',text)}
+}
+
+
+let deferredInstallPrompt=null;
+window.addEventListener('beforeinstallprompt',e=>{
+  e.preventDefault();deferredInstallPrompt=e;
+  const banner=$('#installBanner');if(banner)banner.classList.add('show');
+});
+async function installPwa(){
+  if(!deferredInstallPrompt){alert('브라우저 메뉴에서 “홈 화면에 추가” 또는 “앱 설치”를 선택해 주세요.');return}
+  deferredInstallPrompt.prompt();await deferredInstallPrompt.userChoice;deferredInstallPrompt=null;
+  $('#installBanner')?.classList.remove('show');
+}
+function allAttendanceLocalStorage(){
+  const data={};
+  for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('gunpoAttendance:'))data[k]=localStorage.getItem(k)}
+  return data;
+}
+function backupAllData(){
+  const payload={version:'6.0',createdAt:new Date().toISOString(),attendance:allAttendanceLocalStorage(),goal:localStorage.getItem('gunpoAttendanceGoal')||'60',largeText:localStorage.getItem('gunpoLargeText')||'false'};
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}),a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);a.download=`gunpo-eunhye-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function restoreAllData(file){
+  const reader=new FileReader();
+  reader.onload=()=>{try{const p=JSON.parse(reader.result);Object.entries(p.attendance||{}).forEach(([k,v])=>localStorage.setItem(k,v));if(p.goal!=null)localStorage.setItem('gunpoAttendanceGoal',String(p.goal));if(p.largeText!=null)localStorage.setItem('gunpoLargeText',String(p.largeText));applyLargeText();renderFinanceDashboard();updateAttendanceGoal();renderAttendance();alert('백업 복원이 완료되었습니다.')}catch(e){alert('올바른 백업 파일이 아닙니다.')}};
+  reader.readAsText(file,'utf-8');
+}
+function applyLargeText(){
+  const on=localStorage.getItem('gunpoLargeText')==='true';document.documentElement.classList.toggle('large-mode',on);
+  const b=$('#toggleLargeText');if(b)b.textContent=on?'큰 글씨 끄기':'큰 글씨 켜기';
+}
+function toggleLargeText(){localStorage.setItem('gunpoLargeText',localStorage.getItem('gunpoLargeText')==='true'?'false':'true');applyLargeText()}
+function resetLocalRecords(){
+  if(!confirm('이 휴대폰에 저장된 출석 기록과 설정을 모두 지울까요? GitHub CSV는 삭제되지 않습니다.'))return;
+  const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('gunpo'))keys.push(k)}keys.forEach(k=>localStorage.removeItem(k));
+  applyLargeText();renderAttendance();updateAttendanceGoal();alert('이 기기의 저장 기록을 초기화했습니다.');
+}
+function jumpToPage(page){
+  document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.bottom button').forEach(x=>x.classList.remove('active'));
+  $('#'+page)?.classList.add('active');document.querySelector(`.bottom button[data-page="${page}"]`)?.classList.add('active');
+  if(page==='statsPage')loadAttendanceStats();if(page==='carePage')loadCareManagement();if(page==='financePage')renderFinanceDashboard();scrollTo(0,0);
+}
+
+
+let NOTICE_DATA=window.NOTICE_DATA||[];
+let EVENT_DATA=window.EVENT_DATA||[];
+function appTodayISO(){return isoDate(new Date())}
+function appFormatDate(iso){
+  const m=String(iso||'').match(/^(\d{4})-(\d{2})-(\d{2})$/);
+  return m?`${Number(m[2])}월 ${Number(m[3])}일`:String(iso||'');
+}
+function activeNoticeData(){
+  const today=appTodayISO();
+  return NOTICE_DATA.filter(n=>(!n.start||n.start<=today)&&(!n.end||n.end>=today))
+    .sort((a,b)=>(b.important==='Y')-(a.important==='Y')||String(a.start).localeCompare(String(b.start)));
+}
+function upcomingEventData(){
+  const today=appTodayISO();
+  return EVENT_DATA.filter(e=>!e.date||e.date>=today)
+    .sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.time).localeCompare(String(b.time)));
+}
+function appNoticeHtml(limit){
+  const arr=activeNoticeData();
+  const data=limit?arr.slice(0,limit):arr;
+  return data.length?data.map(n=>{
+    const period=n.start&&n.end&&n.start!==n.end?`${appFormatDate(n.start)} ~ ${appFormatDate(n.end)}`:appFormatDate(n.start||n.end);
+    return `<article class="notice ${n.important==='Y'?'important':''}"><time>${esc(period)}</time><strong>${n.important==='Y'?'<span class="notice-badge">중요</span>':''}${esc(n.title)}</strong><p>${esc(n.body)}</p></article>`;
+  }).join(''):'<div class="empty">현재 표시할 공지사항이 없습니다.</div>';
+}
+function appEventHtml(e){
+  return `<article class="event-card"><span class="event-badge">${esc(e.category||'일정')}</span><time>${esc(appFormatDate(e.date))}${e.time?' · '+esc(e.time):''}</time><h4>${esc(e.title)}</h4><p>${e.location?'장소: '+esc(e.location)+'<br>':''}${e.owner?'담당: '+esc(e.owner)+'<br>':''}${esc(e.note||'')}</p></article>`;
+}
+function refreshOfficeDataFromExcel(){NOTICE_DATA=window.NOTICE_DATA||NOTICE_DATA;EVENT_DATA=window.EVENT_DATA||EVENT_DATA;renderOfficeData()}
+window.refreshOfficeDataFromExcel=refreshOfficeDataFromExcel;
+function renderOfficeData(){
+  $('#homeNotices').innerHTML=appNoticeHtml(3);
+  $('#allNotices').innerHTML=appNoticeHtml();
+  const events=upcomingEventData();
+  const home=$('#homeEvents');
+  if(home)home.innerHTML=events.length?events.slice(0,5).map(appEventHtml).join(''):'<div class="empty">다가오는 일정이 없습니다.</div>';
+  $('#events').innerHTML=events.length?events.map(appEventHtml).join(''):'<div class="empty">등록된 교회 일정이 없습니다.</div>';
+}
+
+
+function bindClick(selector,handler){const el=$(selector);if(el)el.onclick=handler}
+function bindChange(selector,handler){const el=$(selector);if(el)el.onchange=handler}
+
+
+const FINANCE_MONTHS=window.FINANCE_MONTHS||{};
+let currentFinanceKey='';
+
+function money(value){return Number(value||0).toLocaleString('ko-KR')+'원'}
+
+function financeMonthLabel(key){
+  const [y,m]=String(key).split('-');
+  return `${y}년 ${Number(m)}월`;
+}
+
+function setupFinanceMonthOptions(){
+  const select=$('#financeMonth');
+  if(!select)return;
+  const keys=Object.keys(FINANCE_MONTHS).sort().reverse();
+  select.innerHTML=keys.map(k=>`<option value="${k}">${financeMonthLabel(k)}</option>`).join('');
+  if(keys.length){
+    currentFinanceKey=keys[0];
+    select.value=currentFinanceKey;
+  }
+  select.onchange=()=>{currentFinanceKey=select.value;renderFinanceDashboard()};
+}
+
+function renderFinanceBarRows(items,rootId){
+  const root=$('#'+rootId);
+  if(!root)return;
+  const max=Math.max(...items.map(x=>x.amount),1);
+  root.innerHTML=items.map(x=>`<div class="finance-bar-row"><span>${esc(x.name)}</span><div class="finance-bar"><i style="width:${x.amount/max*100}%"></i></div><b>${money(x.amount)}</b></div>`).join('');
+}
+
+function renderFinanceDetailList(items,rootId,limit=12){
+  const root=$('#'+rootId);
+  if(!root)return;
+  root.innerHTML=items.slice(0,limit).map(x=>{
+    const budget=Number(x.budget||0);
+    const rate=budget?Number(x.rate||x.amount/budget*100):0;
+    return `<div class="finance-detail-row">
+      <div class="finance-detail-top"><span>${esc(x.name)}</span><b>${money(x.amount)}</b></div>
+      <div class="finance-detail-sub"><span>예산 ${budget?money(budget):'미입력'}</span><span>집행률 ${budget?rate.toFixed(2)+'%':'-'}</span></div>
+      <div class="finance-detail-progress"><i style="width:${budget?Math.min(rate,100):0}%"></i></div>
+    </div>`;
+  }).join('');
+}
+
+
+function setTextSafe(selector,value){
+  const el=$(selector);
+  if(el)el.textContent=value;
+}
+
+
+function renderFinanceGroupAccordion(groups,rootId){
+  const root=$('#'+rootId);
+  if(!root)return;
+  root.innerHTML=(groups||[]).map(g=>`<div class="finance-group"><div class="finance-group-head"><strong>▸ ${esc(g.name)}</strong><span>${money(g.actual)}</span><span class="budget">예산 ${money(g.budget)}</span><b class="rate">${Number(g.rate||0).toFixed(2)}%</b></div><div class="finance-group-body">${(g.details||[]).map(d=>`<div class="finance-detail-line"><strong>${esc(d.name)}</strong><span>${money(d.actual)}</span><span class="budget">예산 ${money(d.budget)}</span><span class="rate">${d.budget?Number(d.rate||0).toFixed(2)+'%':'-'}</span></div>`).join('')}</div></div>`).join('');
+  root.querySelectorAll('.finance-group-head').forEach(h=>h.onclick=()=>{
+    const box=h.parentElement;
+    box.classList.toggle('open');
+    const title=h.querySelector('strong');
+    title.textContent=(box.classList.contains('open')?'▾ ':'▸ ')+title.textContent.replace(/^[▸▾]\s*/,'');
+  });
+}
+function renderFinanceDashboard(){
+  const keys=Object.keys(FINANCE_MONTHS).sort().reverse();
+  if(!currentFinanceKey&&keys.length)currentFinanceKey=keys[0];
+  const FDATA=FINANCE_MONTHS[currentFinanceKey];
+  if(!FDATA)return;
+  const s=FDATA.summary;
+  setTextSafe('#financePeriod',financeMonthLabel(currentFinanceKey)+' 재정현황(누적)');
+  setTextSafe('#financeIncome',money(s.income));
+  setTextSafe('#financeIncomeBudget',`예산 ${money(s.budget)}`);
+  setTextSafe('#financeIncomeRate',`집행률 ${Number(s.incomeExecutionRate).toFixed(2)}%`);
+  setTextSafe('#financeExpense',money(s.expense));
+  setTextSafe('#financeExpenseBudget',`예산 ${money(s.budget)}`);
+  setTextSafe('#financeExpenseRate',`집행률 ${Number(s.expenseExecutionRate).toFixed(2)}%`);
+  setTextSafe('#financeBalance',money(s.balance));
+  setTextSafe('#financeBudget',money(s.budget));
+  setTextSafe('#financeMonthlyIncome',money(s.monthlyIncome||0));
+  setTextSafe('#financeMonthlyExpense',money(s.monthlyExpense||0));
+  renderFinanceGroupAccordion(FDATA.incomeGroups,'financeIncomeGroups');
+  renderFinanceGroupAccordion(FDATA.expenseGroups,'financeExpenseGroups');
+}
+
+
+
+const ALL_SERVICES=['새벽기도','성결예배','구령예배','수요예배','금요기도회','소그룹모임','부흥집회','기타'];
+
+
+function attendanceIndexLocalKey(){return 'gunpoAttendanceIndex'}
+function normalizeAttendanceIndex(data){
+  const arr=Array.isArray(data)?data:(Array.isArray(data.records)?data.records:[]);
+  const seen=new Set();
+  return arr.map(x=>({
+    date:String(x.date||'').slice(0,10),
+    service:String(x.service||'').trim(),
+    file:String(x.file||'').trim()
+  })).filter(x=>{
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(x.date)||!x.service)return false;
+    if(!x.file)x.file=`attendance-${x.date}-${safeServiceName(x.service)}.csv`;
+    const key=x.date+'|'+x.service;
+    if(seen.has(key))return false;seen.add(key);return true;
+  }).sort((a,b)=>a.date.localeCompare(b.date)||a.service.localeCompare(b.service,'ko'));
+}
+function getLocalAttendanceIndex(){
+  try{return normalizeAttendanceIndex(JSON.parse(localStorage.getItem(attendanceIndexLocalKey())||'[]'))}catch(e){return []}
+}
+function saveLocalAttendanceIndex(records){
+  const normalized=normalizeAttendanceIndex(records);
+  localStorage.setItem(attendanceIndexLocalKey(),JSON.stringify(normalized));
+  return normalized;
+}
+function registerAttendanceIndexRecord(date,service){
+  const records=getLocalAttendanceIndex();
+  const file=`attendance-${date}-${safeServiceName(service)}.csv`;
+  const found=records.find(x=>x.date===date&&x.service===service);
+  if(found)found.file=file;else records.push({date,service,file});
+  return saveLocalAttendanceIndex(records);
+}
+const GITHUB_REPO_OWNER='cjy3757-stack';
+const GITHUB_REPO_NAME='gunpo-family';
+const GITHUB_BRANCHES=['main','master'];
+
+function attendanceRecordFromPath(path){
+  const clean=String(path||'').replace(/^\.\//,'');
+  const name=clean.split('/').pop();
+  const match=name.match(/^attendance-(\d{4}-\d{2}-\d{2})-(.+)\.csv$/i);
+  if(!match)return null;
+  const serviceSafe=decodeURIComponent(match[2]);
+  const service=ALL_SERVICES.find(x=>safeServiceName(x)===serviceSafe)||serviceSafe;
+  return {date:match[1],service,file:clean};
+}
+async function fetchGitHubAttendanceFiles(){
+  let lastError=null;
+  for(const branch of GITHUB_BRANCHES){
+    try{
+      const api=`https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/git/trees/${branch}?recursive=1&t=${Date.now()}`;
+      const r=await fetch(api,{cache:'no-store',headers:{'Accept':'application/vnd.github+json'}});
+      if(!r.ok){lastError=new Error(`GitHub API ${r.status}`);continue}
+      const data=await r.json();
+      const records=normalizeAttendanceIndex((data.tree||[])
+        .filter(x=>x.type==='blob')
+        .map(x=>attendanceRecordFromPath(x.path))
+        .filter(Boolean));
+      if(records.length){saveLocalAttendanceIndex(records);return records}
+      return [];
+    }catch(e){lastError=e}
+  }
+  throw lastError||new Error('GitHub CSV 목록을 불러오지 못했습니다.');
+}
+async function fetchLegacyAttendanceIndex(){
+  try{
+    const r=await fetch(`./attendance-index.json?v=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)throw new Error('index not found');
+    return normalizeAttendanceIndex(await r.json());
+  }catch(e){return []}
+}
+async function fetchRemoteAttendanceIndex(){
+  try{
+    return await fetchGitHubAttendanceFiles();
+  }catch(e){
+    const legacy=await fetchLegacyAttendanceIndex();
+    if(legacy.length){saveLocalAttendanceIndex(legacy);return legacy}
+    return getLocalAttendanceIndex();
+  }
+}
+async function scanGitHubAttendanceFiles(){
+  const note=$('#attendanceCalendarStatus');
+  note.className='remote-status';
+  note.textContent='GitHub 저장소에서 출석 CSV 파일을 자동 검색하는 중입니다...';
+  try{
+    const records=await fetchGitHubAttendanceFiles();
+    note.className=records.length?'remote-status ok':'remote-status warn';
+    note.textContent=records.length
+      ?`GitHub에서 출석 CSV ${records.length}개를 찾았습니다. 선택한 달의 통계를 불러옵니다.`
+      :'GitHub에서 attendance-날짜-예배명.csv 형식의 출석파일을 찾지 못했습니다.';
+    await loadMonthlyAttendanceCalendar();
+    await loadAttendanceStats();
+  }catch(e){
+    note.className='remote-status warn';
+    note.textContent='GitHub CSV 자동검색에 실패했습니다. 인터넷 연결과 저장소 공개 상태를 확인해 주세요.';
+  }
+}
+async function fetchIndexedAttendanceRecord(record){
+  try{
+    const r=await fetch(`${encodeURI('./'+record.file)}?v=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)return null;
+    const parsed=parseAttendanceCsvData(await r.text());
+    const statuses=Object.values(parsed.attendance);
+    const presentCount=statuses.filter(x=>x==='present').length;
+    const onlineCount=statuses.filter(x=>x==='online').length;
+    const visitorCount=parsed.visitorCount;
+    return {
+      date:record.date,service:record.service,
+      presentCount,onlineCount,visitorCount,
+      count:presentCount+onlineCount+visitorCount
+    };
+  }catch(e){return null}
+}
+async function probeMonthlyAttendanceFiles(year,mon,note){
+  const days=new Date(year,mon,0).getDate();
+  const candidates=[];
+  for(let day=1;day<=days;day++){
+    const date=`${year}-${String(mon).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+    ALL_SERVICES.forEach(service=>candidates.push({date,service,file:`attendance-${date}-${safeServiceName(service)}.csv`}));
+  }
+  const found=[];
+  const concurrency=12;
+  let cursor=0,checked=0;
+  async function worker(){
+    while(cursor<candidates.length){
+      const record=candidates[cursor++];
+      const result=await fetchIndexedAttendanceRecord(record);
+      checked++;
+      if(result)found.push(result);
+      if(note&&checked%24===0)note.textContent=`출석 CSV 자동 확인 중... ${checked}/${candidates.length}`;
+    }
+  }
+  await Promise.all(Array.from({length:concurrency},worker));
+  return found;
+}
+async function refreshAllAttendanceStats(){
+  await loadMonthlyAttendanceCalendar();
+  await loadAttendanceStats();
+}
+
+async function loadMonthlyAttendanceCalendar(){
+  const monthEl=$('#attendanceCalendarMonth');
+  const root=$('#attendanceCalendar');
+  const note=$('#attendanceCalendarStatus');
+  if(!monthEl||!root||!note||!monthEl.value)return;
+
+  const [year,mon]=monthEl.value.split('-').map(Number);
+  const monthPrefix=monthEl.value;
+  const days=new Date(year,mon,0).getDate();
+  const firstDay=new Date(year,mon-1,1).getDay();
+
+  note.className='remote-status';
+  note.textContent='GitHub 저장소에서 출석 CSV 목록과 월간 출석자료를 자동으로 불러오는 중입니다...';
+
+  let indexRecords=[];
+  try{indexRecords=await fetchRemoteAttendanceIndex()}catch(e){indexRecords=[]}
+  const monthRecords=indexRecords.filter(x=>x.date.startsWith(monthPrefix));
+  let loaded=(await Promise.all(monthRecords.map(fetchIndexedAttendanceRecord))).filter(Boolean);
+
+  // GitHub API 또는 attendance-index.json이 누락되거나 차단된 경우에도
+  // 선택한 달의 날짜·예배 조합을 직접 확인하여 실제 CSV를 자동 집계합니다.
+  if(!loaded.length){
+    note.textContent='출석목록을 찾지 못해 선택한 달의 CSV 파일을 직접 자동 확인합니다...';
+    loaded=await probeMonthlyAttendanceFiles(year,mon,note);
+  }
+
+  const records={},summary={};
+  ALL_SERVICES.forEach(service=>summary[service]={present:0,online:0,visitor:0,total:0});
+  loaded.forEach(x=>{
+    const day=Number(x.date.slice(8,10));
+    if(!records[day])records[day]=[];
+    if(x.count>0)records[day].push(x);
+    if(!summary[x.service])summary[x.service]={present:0,online:0,visitor:0,total:0};
+    summary[x.service].present+=x.presentCount||0;
+    summary[x.service].online+=x.onlineCount||0;
+    summary[x.service].visitor+=x.visitorCount||0;
+    summary[x.service].total+=x.count||0;
+  });
+
+  let output=['일','월','화','수','목','금','토'].map(x=>`<div class="calendar-head">${x}</div>`).join('');
+  for(let i=0;i<firstDay;i++)output+='<div class="calendar-day empty"></div>';
+  for(let day=1;day<=days;day++){
+    const items=(records[day]||[]).sort((a,b)=>ALL_SERVICES.indexOf(a.service)-ALL_SERVICES.indexOf(b.service));
+    const total=items.reduce((sum,item)=>sum+item.count,0);
+    output+=`<div class="calendar-day"><div class="calendar-date">${day}</div>${items.map(item=>{const onlineText=serviceUsesOnline(item.service)?`${item.onlineCount||0}`:'-';return `<div class="calendar-service"><b>${esc(item.service)}</b><br><small>출석 ${item.presentCount||0} · 온라인 ${onlineText} · 방문 ${item.visitorCount||0} · 합계 ${item.count||0}</small></div>`}).join('')}${total?`<div class="calendar-total">합계 ${total}명</div>`:''}</div>`;
+  }
+  root.innerHTML=output;
+
+  const summaryRoot=$('#attendanceMonthlySummary');
+  if(summaryRoot){
+    const services=[...new Set([...ALL_SERVICES,...Object.keys(summary)])];
+    const totals=services.reduce((a,service)=>{
+      const v=summary[service]||{present:0,online:0,visitor:0,total:0};
+      a.present+=v.present;a.online+=v.online;a.visitor+=v.visitor;a.total+=v.total;return a;
+    },{present:0,online:0,visitor:0,total:0});
+    summaryRoot.innerHTML=`<table class="monthly-service-table"><thead><tr><th>예배</th><th>출석</th><th>온라인</th><th>방문자</th><th>합계</th></tr></thead><tbody>${services.map(service=>{const v=summary[service]||{present:0,online:0,visitor:0,total:0};const onlineText=serviceUsesOnline(service)?`${v.online}명`:'-';return `<tr><td>${esc(service)}</td><td>${v.present}명</td><td class="online-cell">${onlineText}</td><td class="visitor-cell">${v.visitor}명</td><td><b>${v.total}명</b></td></tr>`}).join('')}<tr class="total-row"><td>전체 합계</td><td>${totals.present}명</td><td>${totals.online}명</td><td>${totals.visitor}명</td><td>${totals.total}명</td></tr></tbody></table><p class="stats-note">※ 온라인 인원은 수요예배와 금요기도회만 집계하며, 그 외 예배는 ‘-’로 표시합니다.</p>`;
+  }
+
+  const total=loaded.reduce((sum,x)=>sum+x.count,0);
+  const visitorTotal=loaded.reduce((sum,x)=>sum+x.visitorCount,0);
+  if(!loaded.length){
+    note.className='remote-status warn';
+    note.textContent=`${year}년 ${mon}월 출석 CSV가 GitHub에 없습니다. attendance-날짜-예배명.csv 파일을 업로드해 주세요.`;
+  }else{
+    note.className='remote-status ok';
+    note.textContent=`${year}년 ${mon}월 ${loaded.length}개 예배 · 전체 참석 ${total}명 · 방문자 ${visitorTotal}명입니다.`;
+  }
+}
+
+function showAppDiagnostic(message){
+  const home=document.getElementById('home');
+  if(!home)return;
+  let box=document.getElementById('appDiagnostic');
+  if(!box){
+    box=document.createElement('div');
+    box.id='appDiagnostic';
+    box.className='remote-status warn';
+    home.insertBefore(box,home.firstChild);
+  }
+  box.textContent='앱 초기화 확인: '+message;
+}
+
+function setupMainNavigation(){
+  document.querySelectorAll('.bottom .nav button').forEach(b=>{
+    b.onclick=()=>{
+      document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+      document.querySelectorAll('.bottom .nav button').forEach(n=>n.classList.remove('active'));
+      const page=document.getElementById(b.dataset.page);
+      if(page)page.classList.add('active');
+      b.classList.add('active');
+      try{
+        if(b.dataset.page==='statsPage'){loadAttendanceStats();loadMonthlyAttendanceCalendar();}
+        if(b.dataset.page==='carePage')loadCareManagement();
+        if(b.dataset.page==='financePage')renderFinanceDashboard();
+      }catch(e){
+        console.error('메뉴 화면 표시 오류:',e);
+      }
+      window.scrollTo(0,0);
+    };
+  });
+}
+
+
+window.addEventListener('error',function(e){
+  console.error('앱 오류:',e.error||e.message);
+  setupMainNavigation();
+});
+window.addEventListener('unhandledrejection',function(e){
+  console.error('비동기 오류:',e.reason);
+  setupMainNavigation();
+});
+
+function init(){
+setupMainNavigation();
+applyLargeText();
+try{
+  setupFinanceMonthOptions();
+  renderFinanceDashboard();
+}catch(e){
+  console.error('재정 대시보드 초기화 오류:',e);
+}
+document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>jumpToPage(b.dataset.jump));
+bindClick('#backupAll',backupAllData);
+bindClick('#restoreAllBtn',()=>$('#restoreAllInput')?.click());
+bindChange('#restoreAllInput',e=>{if(e.target.files[0])restoreAllData(e.target.files[0])});
+bindClick('#toggleLargeText',toggleLargeText);
+bindClick('#resetLocalData',resetLocalRecords);
+bindClick('#installPwaBtn',installPwa);
+bindClick('#refreshOfficeExcel',()=>window.loadLatestOfficeExcel&&window.loadLatestOfficeExcel());
+const fs={};D.families.forEach(f=>{const k=f.size>=4?'4인 이상':`${f.size}인`;fs[k]=(fs[k]||0)+1});$('#familyKpi').textContent=D.families.length;$('#memberKpi').textContent=D.members.length;$('#avgKpi').textContent=(D.members.length/D.families.length).toFixed(1);$('#groupKpi').textContent=allGroups.length;renderOfficeData();chart($('#familySizeChart'),fs);chart($('#positionChart'),D.stats.positions);chart($('#groupChart'),D.stats.groups);const bm={};for(let i=1;i<=12;i++)bm[`${i}월`]=D.stats.birthMonths[i]||0;chart($('#birthdayChart'),bm,12);
+  for(let i=1;i<=12;i++)$('#birthdayMonth').insertAdjacentHTML('beforeend',`<option value="${i}">${i}월</option>`);
+  $('#birthdayMonth').value=String(new Date().getMonth()+1);
+  $('#birthdayMonth').addEventListener('change',renderBirthdayList);
+  renderBirthdayList();renderSolarBirthdayHome();allGroups.forEach(x=>{$('#familyGroup').insertAdjacentHTML('beforeend',`<option>${esc(x)}</option>`);$('#memberGroup').insertAdjacentHTML('beforeend',`<option>${esc(x)}</option>`)});allPositions.forEach(x=>$('#positionFilter').insertAdjacentHTML('beforeend',`<option>${esc(x)}</option>`));
+  const months=[...new Set(S.map(x=>x.date.slice(5,7)))].sort();months.forEach(m=>$('#serviceMonth').insertAdjacentHTML('beforeend',`<option value="${m}">${Number(m)}월</option>`));const currentMonth=String(new Date().getMonth()+1).padStart(2,'0');$('#serviceMonth').value=months.includes(currentMonth)?currentMonth:'';
+  $('#serviceMonth').addEventListener('change',renderServices);$('#serviceSearch').addEventListener('input',renderServices);renderServices();
+  const now=new Date(),sunday=new Date(now);sunday.setDate(now.getDate()-now.getDay());$('#attendanceDate').value=sunday.toISOString().slice(0,10);
+  $('#attendanceDate').addEventListener('change',()=>{renderAttendanceExtras();syncVisitorInputs();loadGitHubAttendance(false)});
+  $('#attendanceService').addEventListener('change',()=>{renderAttendanceExtras();syncVisitorInputs();loadGitHubAttendance(false)});$('#attendanceSearch').addEventListener('input',renderAttendance);
+  $('#markAllPresent').onclick=()=>{const o={};D.members.forEach(m=>o[m.name]='present');saveAttendance(o);renderAttendance()};
+  $('#clearAttendance').onclick=()=>{if(confirm('선택한 날짜의 교인 출석과 방문자 기록을 모두 지울까요?')){localStorage.removeItem(attendanceKey($('#attendanceDate').value));localStorage.removeItem(visitorKey($('#attendanceDate').value));syncVisitorInputs();renderAttendance()}};
+  $('#loadGitHubAttendance').onclick=()=>loadGitHubAttendance(true);$('#exportAttendance').onclick=exportAttendanceCsv;$('#importAttendanceBtn').onclick=()=>$('#importAttendance').click();
+  $('#importAttendance').onchange=e=>{if(e.target.files[0])importAttendanceCsv(e.target.files[0])};$('#addVisitor').onclick=addVisitorFromForm;['visitorName','visitorCount','visitorMemo'].forEach(id=>$('#'+id).addEventListener('keydown',e=>{if(e.key==='Enter')addVisitorFromForm()}));syncVisitorInputs();renderAttendanceExtras();loadGitHubAttendance(false);
+  document.querySelectorAll('[data-att-view]').forEach(b=>b.onclick=()=>{attendanceView=b.dataset.attView;renderCompactAttendance()});
+  $('#sharePresent').onclick=sharePresentList;$('#copyPresent').onclick=copyPresentList;$('#shareAbsent').onclick=shareAbsentList;$('#copyAbsent').onclick=copyAbsentList;$('#exportAbsent').onclick=exportAbsentCsv;
+  const calendarMonth=$('#attendanceCalendarMonth');
+  if(calendarMonth)calendarMonth.value=new Date().toISOString().slice(0,7);
+  bindClick('#refreshAttendanceCalendar',loadMonthlyAttendanceCalendar);
+  bindClick('#refreshAllAttendanceStats',refreshAllAttendanceStats);
+  bindClick('#scanGitHubAttendance',scanGitHubAttendanceFiles);
+  bindChange('#attendanceCalendarMonth',loadMonthlyAttendanceCalendar);
+  $('#statsDate').value=$('#attendanceDate').value;$('#statsService').value='성결예배';$('#careDate').value=$('#attendanceDate').value;$('#careService').value='성결예배';$('#refreshCare').onclick=loadCareManagement;$('#shareCare').onclick=shareCareList;$('#copyCare').onclick=copyCareList;$('#refreshStats').onclick=loadAttendanceStats;$('#statsService').onchange=loadAttendanceStats;$('#statsDate').onchange=loadAttendanceStats;
+  $('#homeAttendanceService').onchange=loadHomeMonthlyAttendance;$('#refreshHomeAttendance').onclick=loadHomeMonthlyAttendance;loadHomeMonthlyAttendance();
+  $('#attendanceGoal').value=getGoal();$('#attendanceGoal').onchange=e=>{setGoal(e.target.value);updateAttendanceGoal();loadHomeMonthlyAttendance()};updateAttendanceGoal();
+
+
+// GESMS V10.0 Alpha evangelism tabs
+function bindEvangelismTabs(){
+  document.querySelectorAll('[data-ev-tab]').forEach((btn,i)=>{
+    if(i===0)btn.classList.add('active');
+    btn.addEventListener('click',()=>{
+      document.querySelectorAll('[data-ev-tab]').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.ev-panel').forEach(x=>x.classList.remove('active'));
+      btn.classList.add('active');
+      const panel=document.getElementById(btn.dataset.evTab);if(panel)panel.classList.add('active');
+    });
+  });
+}
+bindEvangelismTabs();
+
+  renderOfficeData();if(window.loadLatestOfficeExcel)window.loadLatestOfficeExcel().catch(e=>console.error('Excel 업데이트 오류',e));renderFamilies();renderMembers();['familySearch','familyGroup','familySize'].forEach(id=>$('#'+id).addEventListener(id==='familySearch'?'input':'change',renderFamilies));['memberSearch','positionFilter','memberGroup'].forEach(id=>$('#'+id).addEventListener(id==='memberSearch'?'input':'change',renderMembers));if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js')}
+try{
+  init();
+}catch(e){
+  console.error('앱 초기화 오류:',e);showAppDiagnostic(e&&e.message?e.message:String(e));
+  setupMainNavigation();
+  const home=document.getElementById('home');
+  if(home)home.classList.add('active');
+}
+</script>
+</body></html>

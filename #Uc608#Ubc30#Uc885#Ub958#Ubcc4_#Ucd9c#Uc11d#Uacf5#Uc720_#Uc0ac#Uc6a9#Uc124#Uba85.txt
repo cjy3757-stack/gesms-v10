@@ -1,0 +1,27 @@
+Gunpo Eunhye Corps Family Management System v3.1
+
+지원 예배
+- 새벽기도
+- 성결예배
+- 구령예배
+- 수요예배
+- 금요기도회
+
+같은 날짜라도 예배 종류별로 따로 저장됩니다.
+
+예:
+attendance-2026-07-19-새벽기도.csv
+attendance-2026-07-19-성결예배.csv
+attendance-2026-07-19-구령예배.csv
+attendance-2026-07-22-수요예배.csv
+attendance-2026-07-24-금요기도회.csv
+
+사용 순서
+1. 예배일 선택
+2. 예배 종류 선택
+3. 출석 체크
+4. 날짜별 CSV 저장
+5. 생성된 CSV를 GitHub 저장소에 업로드하고 Commit changes
+6. 다른 사용자는 같은 날짜와 같은 예배 종류를 선택하면 출석 기록 확인
+
+예배일이 같아도 예배 종류가 다르면 서로 다른 출석부입니다.

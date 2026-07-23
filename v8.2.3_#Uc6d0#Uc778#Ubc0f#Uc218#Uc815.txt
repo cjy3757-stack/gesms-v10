@@ -1,0 +1,16 @@
+확인된 직접 원인
+
+v8.2.2의 초기화 코드에서는 loadMonthlyAttendanceCalendar 함수를 호출하고 있었지만,
+실제 함수 정의가 index.html에서 누락되어 있었습니다.
+
+브라우저 오류:
+ReferenceError: loadMonthlyAttendanceCalendar is not defined
+
+이 오류가 init() 중간에서 발생하여 다음 작업이 전부 중단됐습니다.
+- 총 가정 및 총 교인 표시
+- 월별 출석 그래프 생성
+- 공지, 일정, 생일 표시
+- 가족 및 개인 명단 생성
+- 여러 메뉴 내부 화면 초기화
+
+v8.2.3에서는 누락된 함수를 복구하고, 초기화 오류가 있으면 홈 화면에 원인을 표시하도록 수정했습니다.

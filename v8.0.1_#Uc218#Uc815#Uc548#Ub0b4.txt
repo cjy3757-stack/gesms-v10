@@ -1,0 +1,14 @@
+Gunpo Eunhye Corps Family Management System v8.0.1
+
+수정 사항
+- 홈 화면 재정 요약이 0원으로 표시되던 문제 수정
+- 재정 메뉴를 열 때 실제 finance-data.js 데이터를 다시 표시
+- finance-data.js를 읽지 못하면 안내문 표시
+- 서비스워커 캐시 버전을 v8.0.1로 변경
+
+GitHub 업데이트
+1. ZIP 압축 해제
+2. 기존 저장소에 모든 파일 덮어쓰기
+3. Commit changes
+4. 휴대폰 앱 완전 종료 후 재실행
+5. 이전 화면이면 홈 화면 앱 삭제 후 다시 설치

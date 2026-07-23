@@ -1,0 +1,12 @@
+Gunpo Eunhye Corps Family Management System v7.0 Final Stable
+
+1. ZIP 압축을 풉니다.
+2. 기존 GitHub 저장소에 프로그램 파일을 덮어씁니다.
+3. Commit changes를 누릅니다.
+4. 기존 실제 출석 CSV 파일은 삭제하지 않습니다.
+5. 배포본에는 테스트 출석 CSV가 없습니다.
+
+문제가 생기면:
+- 휴대폰 앱을 완전히 종료 후 다시 실행
+- 브라우저에서 새로고침
+- 이전 PWA를 삭제 후 다시 홈 화면에 추가

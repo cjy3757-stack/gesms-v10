@@ -1,0 +1,13 @@
+시스템명 최종 통일
+
+GunpoEunhye Corps Family Management System V8.2.4
+
+수정 위치
+- 화면 상단 제목
+- 브라우저 탭 제목
+- PWA manifest 이름
+- README 제목
+- 서비스워커 캐시 버전
+
+GitHub에 전체 파일을 덮어쓴 뒤 Commit changes를 누르세요.
+휴대폰에 설치된 기존 앱은 삭제 후 다시 설치하는 것이 안전합니다.

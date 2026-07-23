@@ -1,0 +1,14 @@
+월간 전체 예배 통계 업데이트 방법
+
+1. 출석 메뉴에서 날짜와 예배 종류를 선택해 출석을 체크합니다.
+2. '날짜별 CSV 저장'을 눌러 해당 출석 CSV를 저장합니다.
+3. 통계 메뉴에서 '출석목록 JSON 저장'을 눌러 attendance-index.json을 저장합니다.
+4. GitHub 저장소에 다음 두 파일을 함께 업로드하고 Commit changes를 누릅니다.
+   - attendance-날짜-예배종류.csv
+   - attendance-index.json
+5. GitHub Pages 반영 후 다른 휴대폰에서 통계 메뉴의 '전체 통계 새로고침'을 누릅니다.
+
+중요
+- 새 CSV만 올리고 attendance-index.json을 올리지 않으면 월간 전체 예배 통계가 새 파일을 찾지 못합니다.
+- 기존 attendance-index.json은 새로 저장한 파일로 덮어써야 합니다.
+- 공지사항만 변경한 경우 공지사항.xlsx만 같은 이름으로 덮어쓰면 됩니다.

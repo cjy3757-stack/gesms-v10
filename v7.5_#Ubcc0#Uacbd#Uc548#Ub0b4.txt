@@ -1,0 +1,5 @@
+Gunpo Eunhye Corps Family Management System v7.5
+
+- 홈 화면 빠른 실행 3개 버튼의 글씨 크기를 크게 확대
+- 개인 메뉴에 전화번호 표시
+- 전화번호를 누르면 휴대폰 전화 앱으로 연결

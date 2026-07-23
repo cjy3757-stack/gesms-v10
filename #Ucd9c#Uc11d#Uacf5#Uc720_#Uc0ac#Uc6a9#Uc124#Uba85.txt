@@ -1,0 +1,24 @@
+Gunpo Eunhye Corps Family Management System v3.0
+
+[날짜별 출석 저장]
+1. 예배일을 선택합니다.
+2. 출석/온라인/결석을 체크합니다.
+3. '날짜별 CSV 저장'을 누릅니다.
+4. attendance-YYYY-MM-DD.csv 파일이 휴대폰에 저장됩니다.
+
+[여러 사람에게 공유]
+1. GitHub 저장소에서 Add file → Upload files를 누릅니다.
+2. 휴대폰에서 저장한 attendance-YYYY-MM-DD.csv 파일을 올립니다.
+3. Commit changes를 누릅니다.
+4. 1~3분 후 다른 사람들은 앱에서 같은 예배일을 선택하면 공유 출석 기록을 볼 수 있습니다.
+5. 바로 반영되지 않으면 'GitHub 출석 불러오기'를 누릅니다.
+
+[날짜별 저장 방식]
+- 2026-07-19 출석: attendance-2026-07-19.csv
+- 2026-07-26 출석: attendance-2026-07-26.csv
+- 날짜별 파일이 서로 달라서 이전 출석 기록이 덮어써지지 않습니다.
+
+[중요]
+- 휴대폰에서 체크한 즉시 다른 사람에게 자동 전송되는 실시간 방식은 아닙니다.
+- CSV를 GitHub에 업로드하고 Commit한 뒤에 공유됩니다.
+- GitHub 저장소가 Public이면 출석 CSV도 공개될 수 있으니 개인정보 관리에 주의하세요.
