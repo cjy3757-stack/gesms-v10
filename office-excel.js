@@ -1,10 +1,14 @@
-/* GunpoEunhye V9.0 - Excel office data loader */
+/* GESMS V10.0 Release - robust Excel office data loader */
 (function(){
   'use strict';
-  const NOTICE_FILES=['공지사항.xlsx','#Uacf5#Uc9c0#Uc0ac#Ud56d.xlsx'];
-  const EVENT_FILES=['교회일정.xlsx','#Uad50#Ud68c#Uc77c#Uc815.xlsx'];
+  const OWNER='cjy3757-stack';
+  const REPO='gesms-v10';
+  const BRANCHES=['main','master'];
+  const NOTICE_MATCH=name=>/^공지사항(?:\([^)]*\)|[_ -].*)?\.xlsx$/i.test(name)||name==='notice.xlsx';
+  const EVENT_MATCH=name=>/^교회일정(?:\([^)]*\)|[_ -].*)?\.xlsx$/i.test(name)||name==='events.xlsx';
   const text=v=>String(v??'').trim();
   const pad=n=>String(n).padStart(2,'0');
+
   function excelDate(v){
     if(!v&&v!==0)return '';
     if(typeof v==='string' && /^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(v)){
@@ -57,19 +61,50 @@
     }
     throw new Error(`필수 열(${required.join(', ')})을 찾지 못했습니다.`);
   }
-  async function fetchWorkbook(names){
+  async function githubFiles(){
     let last='';
-    for(const name of names){
+    for(const branch of BRANCHES){
       try{
-        const url=`./${encodeURIComponent(name)}?v=${Date.now()}`;
-        const r=await fetch(url,{cache:'no-store',headers:{'Cache-Control':'no-cache'}});
-        if(!r.ok){last=`${name}: HTTP ${r.status}`;continue;}
-        const buf=await r.arrayBuffer();
-        if(buf.byteLength<100){last=`${name}: 파일이 비어 있습니다.`;continue;}
-        return {rows:await parseXlsx(buf),name};
-      }catch(e){last=`${name}: ${e.message||e}`;}
+        const url=`https://api.github.com/repos/${OWNER}/${REPO}/contents/?ref=${branch}&t=${Date.now()}`;
+        const r=await fetch(url,{cache:'no-store',headers:{Accept:'application/vnd.github+json'}});
+        if(!r.ok){last=`GitHub API HTTP ${r.status}`;continue;}
+        const list=await r.json();
+        return Array.isArray(list)?list:[];
+      }catch(e){last=e.message||String(e);}
     }
-    throw new Error(last||'Excel 파일을 불러오지 못했습니다.');
+    throw new Error(last||'GitHub 파일 목록을 읽지 못했습니다.');
+  }
+  async function fetchBuffer(url,label){
+    const r=await fetch(`${url}${url.includes('?')?'&':'?'}v=${Date.now()}`,{cache:'no-store'});
+    if(!r.ok)throw new Error(`${label}: HTTP ${r.status}`);
+    const buf=await r.arrayBuffer();
+    if(buf.byteLength<100)throw new Error(`${label}: 파일이 비어 있습니다.`);
+    return buf;
+  }
+  async function fetchWorkbook(kind){
+    const matcher=kind==='notice'?NOTICE_MATCH:EVENT_MATCH;
+    const label=kind==='notice'?'공지사항':'교회일정';
+    let apiError='';
+    try{
+      const files=await githubFiles();
+      const item=files.find(x=>x.type==='file'&&matcher(x.name));
+      if(item){
+        const url=item.download_url || `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${item.path.split('/').map(encodeURIComponent).join('/')}`;
+        return {rows:await parseXlsx(await fetchBuffer(url,item.name)),name:item.name};
+      }
+      apiError=`${label} Excel 파일이 저장소 최상위에 없습니다.`;
+    }catch(e){apiError=e.message||String(e);}
+
+    // GitHub API가 일시적으로 제한될 때를 위한 동일 출처 보조 경로
+    const aliases=kind==='notice'?['공지사항.xlsx','notice.xlsx']:['교회일정.xlsx','events.xlsx'];
+    let last=apiError;
+    for(const name of aliases){
+      try{
+        const url=new URL(name,location.href).href;
+        return {rows:await parseXlsx(await fetchBuffer(url,name)),name};
+      }catch(e){last=e.message||String(e);}
+    }
+    throw new Error(last||`${label} 파일을 불러오지 못했습니다.`);
   }
   function rowsToNotices(rows){
     const h=findHeader(rows,['시작일','제목','내용']);
@@ -96,13 +131,13 @@
   }
   window.loadLatestOfficeExcel=async function(){
     setStatus('공지사항과 교회일정 최신 파일을 확인하는 중입니다…',true);
-    const results=await Promise.allSettled([fetchWorkbook(NOTICE_FILES),fetchWorkbook(EVENT_FILES)]);
-    let messages=[];
+    const results=await Promise.allSettled([fetchWorkbook('notice'),fetchWorkbook('event')]);
+    const messages=[];
     if(results[0].status==='fulfilled'){
-      window.NOTICE_DATA=rowsToNotices(results[0].value.rows);messages.push(`공지 ${window.NOTICE_DATA.length}건`);
+      window.NOTICE_DATA=rowsToNotices(results[0].value.rows);messages.push(`공지 ${window.NOTICE_DATA.length}건 (${results[0].value.name})`);
     }else messages.push(`공지 실패: ${results[0].reason?.message||results[0].reason}`);
     if(results[1].status==='fulfilled'){
-      window.EVENT_DATA=rowsToEvents(results[1].value.rows);messages.push(`일정 ${window.EVENT_DATA.length}건`);
+      window.EVENT_DATA=rowsToEvents(results[1].value.rows);messages.push(`일정 ${window.EVENT_DATA.length}건 (${results[1].value.name})`);
     }else messages.push(`일정 실패: ${results[1].reason?.message||results[1].reason}`);
     if(typeof window.refreshOfficeDataFromExcel==='function')window.refreshOfficeDataFromExcel();
     const ok=results.some(r=>r.status==='fulfilled');

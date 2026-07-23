@@ -1,24 +1,14 @@
 {
-  "name": "GunpoEunhye Smart Ministry System (GESMS) V10.0 RC2",
-  "short_name": "GESMS Beta",
-  "description": "군포은혜영문 스마트 목양 시스템 V10.0 RC2",
-  "start_url": "./index.html",
+  "name": "GunpoEunhye Smart Ministry System (GESMS) V10.0 Release",
+  "short_name": "GESMS",
+  "description": "군포은혜영문 스마트 목양 시스템 V10.0 정식 버전",
+  "start_url": "./index.html?v=10.0-release",
   "scope": "./",
   "display": "standalone",
   "background_color": "#f7f4ef",
   "theme_color": "#09244b",
   "icons": [
-    {
-      "src": "icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
-    },
-    {
-      "src": "icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
-    }
+    {"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
   ]
 }
