@@ -1,7 +1,7 @@
 {
-  "name": "GunpoEunhye Smart Ministry System (GESMS) V10.0 Alpha",
-  "short_name": "GESMS V10 Alpha",
-  "description": "군포은혜영문 스마트 목양 시스템 - 교인관리, 출석, 전도, 돌봄, 재정 통합 PWA",
+  "name": "GunpoEunhye Smart Ministry System (GESMS) V10.0 Beta",
+  "short_name": "GESMS Beta",
+  "description": "군포은혜영문 스마트 목양 시스템 V10.0 Beta",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
