@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#9e1b32" name="theme-color"/>
 <meta content="noindex,nofollow" name="robots"/>
-<title>GunpoEunhye Smart Ministry System (GESMS) V10.6.1.1</title>
+<title>GunpoEunhye Smart Ministry System (GESMS) V10.7.1</title>
 <link href="manifest.webmanifest" rel="manifest"/>
 <link href="icon-192.png" rel="icon"/>
 <style>
@@ -379,11 +379,25 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .weekly-attendance-total b{font-size:22px}
 @media(max-width:760px){.weekly-attendance-head{align-items:stretch;flex-direction:column}.weekly-attendance-head .action-btn{width:100%}}
 
+
+/* GESMS V10.7 - 일만상상 월별 보기 */
+.project-month-toolbar{display:flex;gap:8px;overflow-x:auto;padding:5px 2px 13px;scrollbar-width:thin}
+.project-month-btn{flex:0 0 auto;border:1px solid #d8e0e8;background:#f5f8fb;color:#26435f;border-radius:999px;padding:9px 14px;font-weight:800;cursor:pointer}
+.project-month-btn.active{background:#24517a;color:#fff;border-color:#24517a;box-shadow:0 5px 12px rgba(36,81,122,.2)}
+.project-month-section{border:1px solid #dce5ec;border-radius:18px;overflow:hidden;margin-bottom:15px;background:#fff;box-shadow:0 6px 16px rgba(22,57,87,.07)}
+.project-month-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 17px;cursor:pointer;background:#edf6fb;color:#173b5b}
+.project-month-section:nth-child(4n+2) .project-month-head{background:#f5f2e7;color:#6c5217}
+.project-month-section:nth-child(4n+3) .project-month-head{background:#edf7f0;color:#285a3a}
+.project-month-section:nth-child(4n+4) .project-month-head{background:#f8eef1;color:#783042}
+.project-month-head h4{margin:0;font-size:17px}.project-month-head b{background:rgba(255,255,255,.75);border-radius:999px;padding:5px 10px;font-size:12px}
+.project-month-body{display:grid;gap:12px;padding:13px}.project-month-section.collapsed .project-month-body{display:none}
+.project-month-body .prayer-person{margin:0}
+@media(max-width:700px){.project-month-head{padding:12px 14px}.project-month-head h4{font-size:15px}.project-month-body{padding:10px}}
 </style>
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.6.1.1</h1><p>군포은혜영문 스마트 목양 시스템 V10.6.1.1</p></div><div class="private">🔒 교회 내부용</div></div></header>
+<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.7.1</h1><p>군포은혜영문 스마트 목양 시스템 V10.7.1</p></div><div class="private">🔒 교회 내부용</div></div></header>
 <main>
 <section class="page active" id="home">
 <div class="install-banner" id="installBanner">
@@ -402,7 +416,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <button data-jump="carePage">📞 돌봄 관리</button>
 </div>
 </div>
-<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.6.1.1</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
+<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.7.1</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
 <div class="ministry-dashboard">
 <div class="ministry-card soul"><div class="ministry-icon">❤️</div><div><span>영혼구원 진행</span><b id="homeSoulProgress">데이터 확인중</b><small id="homeSoulMeta">기도대상자 Excel을 자동으로 읽어 집계합니다.</small></div></div>
 <div class="ministry-card prayer"><div class="ministry-icon">🙏</div><div><span>오늘 기도대상</span><b id="homePrayerCount">- 명</b><small id="homePrayerNames">오늘 기도할 대상을 표시합니다.</small></div></div>
@@ -697,6 +711,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <script src="office-data.js"></script>
 <script src="jszip.min.js"></script>
 <script src="member-excel.js"></script>
+<script src="stats-v10.7.js"></script>
 <script src="office-excel.js"></script>
 <script src="prayer-excel.js"></script>
 <script src="finance-data.js"></script>
