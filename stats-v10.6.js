@@ -1,7 +1,7 @@
-/* GESMS V10.6 - 목양 통계 대시보드 */
+/* GESMS V10.6.1 - 목양 통계 대시보드 */
 (function(){
   'use strict';
-  const VERSION='V10.6';
+  const VERSION='V10.6.1';
   const $=s=>document.querySelector(s);
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const currentYear=()=>new Date().getFullYear();
@@ -13,7 +13,7 @@
     const style=document.createElement('style');
     style.id='gesmsV106Style';
     style.textContent=`
-      .v106-dashboard{margin-bottom:18px}
+      .v106-dashboard{margin-top:16px;margin-bottom:18px}
       .v106-title{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-bottom:14px}
       .v106-title h3{margin:0;color:var(--navy)}
       .v106-badge{background:#fff0f3;color:var(--red);font-weight:900;border-radius:999px;padding:7px 11px;font-size:12px}
@@ -71,9 +71,9 @@
       root=document.createElement('section');
       root.id='v106Dashboard';
       root.className='v106-dashboard';
-      const title=page.querySelector('.section-title');
-      if(title) title.insertAdjacentElement('afterend',root);
-      else page.prepend(root);
+      const weekly=page.querySelector('#weeklyAttendanceCard');
+      if(weekly) weekly.insertAdjacentElement('afterend',root);
+      else page.appendChild(root);
     }
 
     const known=members.filter(m=>Number.isFinite(ageOf(m)));

@@ -1,4 +1,4 @@
-const CACHE='gesms-v10-6-stats-dashboard-20260724-1';
+const CACHE='gesms-v10-6-1-order-dedupe-unicode-20260725-1';
 const STATIC=['./','./index.html','./data.js','./service-data.js','./office-data.js','./office-excel.js','./prayer-excel.js','./jszip.min.js','./member-excel.js','./stats-v10.6.js','./finance-data.js','./manifest.webmanifest','./logo.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(STATIC)));self.skipWaiting();});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.map(key=>key===CACHE?Promise.resolve():caches.delete(key)))));self.clients.claim();});
