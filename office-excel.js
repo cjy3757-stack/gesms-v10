@@ -143,12 +143,12 @@
       const today=new Date().toISOString().slice(0,10);
       const activeCount=window.NOTICE_DATA.filter(n=>(!n.start||n.start<=today)&&(!n.end||n.end>=today)).length;
       messages.push(`현재 공지 ${activeCount}건 / 전체 ${window.NOTICE_DATA.length}건 (${results[0].value.name})`);
-    }else messages.push(`공지 실패: ${results[0].reason?.message||results[0].reason}`);
+    }else messages.push(`공지 Excel 갱신 실패 · 앱 내장 자료 유지`);
     if(results[1].status==='fulfilled'){
       window.EVENT_DATA=rowsToEvents(results[1].value.rows);messages.push(`일정 ${window.EVENT_DATA.length}건 (${results[1].value.name})`);
-    }else messages.push(`일정 실패: ${results[1].reason?.message||results[1].reason}`);
+    }else messages.push(`일정 Excel 갱신 실패 · 앱 내장 자료 유지`);
     if(typeof window.refreshOfficeDataFromExcel==='function')window.refreshOfficeDataFromExcel();
-    const ok=results.some(r=>r.status==='fulfilled');
+    const ok=results.some(r=>r.status==='fulfilled')||Array.isArray(window.EVENT_DATA)||Array.isArray(window.NOTICE_DATA);
     setStatus(`${messages.join(' · ')} · ${new Date().toLocaleTimeString('ko-KR')} 확인`,ok);
     return ok;
   };
