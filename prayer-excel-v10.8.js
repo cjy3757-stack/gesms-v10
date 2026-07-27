@@ -1,9 +1,7 @@
-/* GESMS V10.9.1 Stable - 새신자등록현황 + 월별 전도담당 */
+/* GESMS V10.9.2 Stable - 전도영혼구원 V3.1 단일 원본 연동 */
 (function(){
 'use strict';
-const UNIFIED_FILES=['GESMS_전도영혼구원_표준자료양식_V3.1_버전자동연동.xlsx','GESMS_전도영혼구원_표준자료양식_V3.0.xlsx'];
-const UNIFIED_FILE=UNIFIED_FILES[0];
-const FALLBACK_PRAYER_FILES=['기도대상자관리_표준양식_V2.0.xlsx','기도대상자관리.xlsx'];
+const UNIFIED_FILE='GESMS_전도영혼구원_표준자료양식_V3.1_버전자동연동.xlsx';
 const DUTY_FILE='기도_식사_전도_봉사일정.xlsx';
 const STAGES=['기도중','관계형성','첫만남','초청','교회방문','새가족','등록교인','군우편입'];
 const VISIBLE_STAGES=['기도중','관계형성','첫만남','초청','교회방문','새가족','등록교인'];
@@ -38,22 +36,12 @@ function rowsToProjects(rows){return rowsToObjects(rows,['프로젝트번호','�
 function rowsToSettings(rows){const out={};for(const row of (rows||[])){const key=text(row?.[0]),value=row?.[1];if(!key||key==='항목'||key==='GESMS 환경설정')continue;out[key]=value;}return out;}
 async function fetchBuffer(name){const r=await fetch('./'+encodeURIComponent(name)+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error(`${name}: HTTP ${r.status}`);return r.arrayBuffer();}
 async function fetchDefault(){
-  let last='';
-  for(const name of UNIFIED_FILES){
-    try{
-      const sheets=await workbookSheets(await fetchBuffer(name));
-      const prayerRows=sheets['기도대상자관리'];
-      const projectRows=sheets['일만상상프로젝트'];
-      if(!prayerRows)throw new Error('기도대상자관리 시트를 찾지 못했습니다.');
-      if(!projectRows)throw new Error('일만상상프로젝트 시트를 찾지 못했습니다.');
-      return {name,targets:rowsToTargets(prayerRows),projects:rowsToProjects(projectRows),settings:rowsToSettings(sheets['환경설정'])};
-    }catch(e){last=`${name}: ${e.message||e}`;}
-  }
-  for(const name of FALLBACK_PRAYER_FILES){
-    try{const sheets=await workbookSheets(await fetchBuffer(name));const first=Object.values(sheets)[0]||[];return {name,targets:rowsToTargets(sheets['기도대상자관리']||first),projects:[],settings:{},warning:'통합 전도영혼구원 파일을 읽지 못해 기존 기도대상자 파일을 사용했습니다.'};}
-    catch(e){last=e.message||String(e)}
-  }
-  throw new Error(last);
+  const sheets=await workbookSheets(await fetchBuffer(UNIFIED_FILE));
+  const prayerRows=sheets['기도대상자관리'];
+  const projectRows=sheets['일만상상프로젝트'];
+  if(!prayerRows)throw new Error('기도대상자관리 시트를 찾지 못했습니다.');
+  if(!projectRows)throw new Error('일만상상프로젝트 시트를 찾지 못했습니다.');
+  return {name:UNIFIED_FILE,targets:rowsToTargets(prayerRows),projects:rowsToProjects(projectRows),settings:rowsToSettings(sheets['환경설정'])};
 }
 function y(o,k){return text(o[k]).toUpperCase()==='Y';}
 function currentStage(o){const direct=text(o['진행상태']);if(STAGES.includes(direct))return direct;for(let i=STAGES.length-1;i>=0;i--)if(y(o,STAGES[i]))return STAGES[i];return direct||'기도 준비';}
@@ -145,6 +133,6 @@ function renderProjects(){
 }
 function setStatus(msg,error=false){const el=$('#prayerExcelStatus');if(!el)return;el.textContent=msg;el.classList.toggle('error',error);}
 function apply(data){targets=data.targets||[];projects=data.projects||[];appSettings=data.settings||{};appSettings['앱버전']=window.GESMS_APP_VERSION||appSettings['앱버전']||'자동연동';window.PRAYER_TARGETS=targets;window.MISSION_PROJECTS=projects;window.GESMS_SETTINGS=appSettings;renderFilters();renderStats();renderList();renderProjects();if(window.refreshOfficeDataFromExcel)window.refreshOfficeDataFromExcel();const goalSource=Number(appSettings['연간영혼구원목표'])>0?` · 연간목표 ${getGoal()}명(환경설정)`:'';setStatus(`${data.name} · 기도대상 ${targets.length}명 · 프로젝트 ${projects.length}건${goalSource}${data.warning?' · '+data.warning:''}`);}
-async function load(){setStatus(`${UNIFIED_FILE} 최신 파일을 확인하는 중입니다.`);try{apply(await fetchDefault())}catch(e){targets=[];projects=[];renderFilters();renderStats();renderList();renderProjects();setStatus(`자동 불러오기 실패: ${e.message||e}`,true)}}
+async function load(){setStatus(`${UNIFIED_FILE} 최신 파일을 확인하는 중입니다.`);targets=[];projects=[];window.PRAYER_TARGETS=[];window.MISSION_PROJECTS=[];try{apply(await fetchDefault())}catch(e){appSettings={};renderFilters();renderStats();renderList();renderProjects();setStatus(`V3.1 파일 불러오기 실패: ${e.message||e} · 이전 자료는 표시하지 않습니다.`,true)}}
 window.initPrayerMinistry=function(){['prayerSearch','prayerOwner','prayerGroup','prayerState'].forEach(id=>{const el=$('#'+id);if(el)el.addEventListener(id==='prayerSearch'?'input':'change',renderList)});$('#refreshPrayerExcel')?.addEventListener('click',load);$('#refreshEvangelismDuty')?.addEventListener('click',loadEvangelismDuties);$('#evangelismDutyMonth')?.addEventListener('change',renderEvangelismDuties);const goalInput=$('#soulGoal');if(goalInput){goalInput.readOnly=true;goalInput.title='통합 엑셀의 환경설정 시트에서 수정합니다.';}const saveGoal=$('#saveSoulGoal');if(saveGoal)saveGoal.style.display='none';$('#selectPrayerExcel')?.addEventListener('click',()=>$('#prayerExcelInput').click());$('#prayerExcelInput')?.addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const sheets=await workbookSheets(await f.arrayBuffer());apply({name:f.name,targets:rowsToTargets(sheets['기도대상자관리']),projects:rowsToProjects(sheets['일만상상프로젝트']),settings:rowsToSettings(sheets['환경설정'])})}catch(err){setStatus(`파일 읽기 실패: ${err.message||err}`,true)}});$('#downloadPrayerTemplate')?.addEventListener('click',()=>{location.href='./'+encodeURIComponent(UNIFIED_FILE)});load();loadEvangelismDuties();};
 })();
