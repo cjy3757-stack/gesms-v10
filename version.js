@@ -1,5 +1,5 @@
 /* GESMS 단일 버전 관리 파일: 새 버전 배포 시 아래 한 줄만 변경 */
-window.GESMS_APP_VERSION = 'V10.9.2 Stable';
+window.GESMS_APP_VERSION = 'V10.9.3 Stable';
 
 (function applyGesmsVersion(){
   const version = window.GESMS_APP_VERSION;
