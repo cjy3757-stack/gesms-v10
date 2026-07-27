@@ -2067,7 +2067,18 @@ function bindEvangelismTabs(){
 bindEvangelismTabs();
 if(window.initPrayerMinistry)window.initPrayerMinistry();
 
-  renderOfficeData();if(window.loadLatestOfficeExcel)window.loadLatestOfficeExcel().catch(e=>console.error('Excel 업데이트 오류',e));renderFamilies();renderMembers();['familySearch','familyGroup','familySize'].forEach(id=>$('#'+id).addEventListener(id==='familySearch'?'input':'change',renderFamilies));['memberSearch','positionFilter','memberGroup'].forEach(id=>$('#'+id).addEventListener(id==='memberSearch'?'input':'change',renderMembers));if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js')}
+  renderOfficeData();
+  if(window.loadLatestOfficeExcel)window.loadLatestOfficeExcel().catch(e=>console.error('Excel 업데이트 오류',e));
+  window.addEventListener('online',()=>window.loadLatestOfficeExcel&&window.loadLatestOfficeExcel().catch(()=>{}));
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&window.loadLatestOfficeExcel)window.loadLatestOfficeExcel().catch(()=>{})});
+  renderFamilies();renderMembers();
+  ['familySearch','familyGroup','familySize'].forEach(id=>$('#'+id).addEventListener(id==='familySearch'?'input':'change',renderFamilies));
+  ['memberSearch','positionFilter','memberGroup'].forEach(id=>$('#'+id).addEventListener(id==='memberSearch'?'input':'change',renderMembers));
+  if('serviceWorker'in navigator){
+    let refreshing=false;
+    navigator.serviceWorker.addEventListener('controllerchange',()=>{if(refreshing)return;refreshing=true;location.reload()});
+    navigator.serviceWorker.register('./sw.js?v=10.9.6').then(reg=>reg.update()).catch(e=>console.error('서비스워커 등록 오류',e));
+  }}
 init().catch(e=>{
   console.error('앱 초기화 오류:',e);showAppDiagnostic(e&&e.message?e.message:String(e));
   setupMainNavigation();

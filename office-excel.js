@@ -84,38 +84,31 @@
   async function fetchWorkbook(kind){
     const matcher=kind==='notice'?NOTICE_MATCH:EVENT_MATCH;
     const label=kind==='notice'?'공지사항':'교회일정';
-    let apiError='';
+    const aliases=kind==='notice'?['공지사항.xlsx','notice.xlsx']:['교회일정.xlsx','events.xlsx'];
+    let last='';
+
+    // 휴대폰/PWA에서는 같은 출처의 파일을 먼저 읽어 외부 GitHub API 차단·지연 영향을 받지 않습니다.
+    for(const name of aliases){
+      try{
+        const url=new URL('./'+name,location.href).href;
+        return {rows:await parseXlsx(await fetchBuffer(url,name)),name};
+      }catch(e){last=e.message||String(e);}
+    }
+
+    // 저장소 파일명이 바뀐 경우에만 GitHub API를 보조 경로로 사용합니다.
     try{
       const files=await githubFiles();
       const candidates=files.filter(x=>x.type==='file'&&matcher(x.name));
-      const preferredNames=kind==='notice'
-        ? ['공지사항.xlsx','notice.xlsx']
-        : ['교회일정.xlsx','events.xlsx'];
-      const rank=name=>{
-        const exact=preferredNames.indexOf(name);
-        if(exact>=0)return exact;
-        if(kind==='notice'&&name.startsWith('공지사항'))return 10;
-        if(kind==='event'&&name.startsWith('교회일정'))return 10;
-        return 99;
-      };
+      const preferredNames=aliases;
+      const rank=name=>{const exact=preferredNames.indexOf(name);return exact>=0?exact:10;};
       candidates.sort((a,b)=>rank(a.name)-rank(b.name)||a.name.localeCompare(b.name,'ko'));
       const item=candidates[0];
       if(item){
         const url=item.download_url || `https://raw.githubusercontent.com/${OWNER}/${REPO}/main/${item.path.split('/').map(encodeURIComponent).join('/')}`;
         return {rows:await parseXlsx(await fetchBuffer(url,item.name)),name:item.name};
       }
-      apiError=`${label} Excel 파일이 저장소 최상위에 없습니다.`;
-    }catch(e){apiError=e.message||String(e);}
-
-    // GitHub API가 일시적으로 제한될 때를 위한 동일 출처 보조 경로
-    const aliases=kind==='notice'?['공지사항.xlsx','notice.xlsx']:['교회일정.xlsx','events.xlsx'];
-    let last=apiError;
-    for(const name of aliases){
-      try{
-        const url=new URL(name,location.href).href;
-        return {rows:await parseXlsx(await fetchBuffer(url,name)),name};
-      }catch(e){last=e.message||String(e);}
-    }
+      last=`${label} Excel 파일이 저장소 최상위에 없습니다.`;
+    }catch(e){last=e.message||String(e);}
     throw new Error(last||`${label} 파일을 불러오지 못했습니다.`);
   }
   function rowsToNotices(rows){
