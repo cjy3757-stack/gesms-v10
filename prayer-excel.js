@@ -1,4 +1,4 @@
-/* GESMS V10.9.3 Stable - 전도영혼구원 V3.1 단일 원본 연동 */
+/* GESMS V10.9.2 Stable - 전도영혼구원 V3.1 단일 원본 연동 */
 (function(){
 'use strict';
 const UNIFIED_FILE='GESMS_전도영혼구원_표준자료양식_V3.1_버전자동연동.xlsx';
