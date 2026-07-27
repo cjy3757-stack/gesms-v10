@@ -409,6 +409,19 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .project-preview-title h4{margin:0 0 5px;white-space:normal}
 .project-preview-title p{margin:0;font-size:12px;color:#657184}
 @media(max-width:520px){.project-date-badge{min-width:58px;padding:8px 6px}.project-preview-title p{font-size:11px}.project-preview-card .stage-badge{font-size:10px}}
+
+/* GESMS V10.9 전도현황·통합일정 */
+.ev-result-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}
+.ev-result-card{border:1px solid var(--line);border-radius:16px;padding:14px;background:#fff}
+.ev-result-card h4{margin:0 0 10px;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.ev-result-card h4 span{font-size:.82rem;color:var(--muted);font-weight:700}
+.registered-person,.rank-row{display:grid;grid-template-columns:minmax(70px,1fr) minmax(90px,1fr) auto;gap:8px;align-items:center;padding:10px 4px;border-top:1px solid var(--line);font-size:.9rem}
+.registered-person:first-child,.rank-row:first-child{border-top:0}
+.registered-person b,.rank-row b{color:var(--navy)}
+.registered-person small,.rank-row small{color:var(--muted)}
+.rank-row{grid-template-columns:30px 1fr auto}.rank-no{font-weight:800;color:var(--red)}
+.mission-event{border-left:5px solid #3c9c68}.mission-event .event-badge{background:#e6f6ec;color:#227346}
+@media(max-width:760px){.ev-result-grid{grid-template-columns:1fr}.registered-person{grid-template-columns:1fr auto}.registered-person small{grid-column:1/-1}.registered-person time{text-align:right}}
 </style>
 <script src="version.js"></script>
 </head>
@@ -442,7 +455,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <div id="memberExcelStatus" class="remote-status">군우명단 Excel을 확인하는 중입니다…</div>
 <div class="kpis"><div class="kpi"><span>총 가정</span><b id="familyKpi">0</b></div><div class="kpi"><span>총 교인</span><b id="memberKpi">0</b></div><div class="kpi"><span>평균 가족원</span><b id="avgKpi">0</b></div><div class="kpi"><span>소속 모임</span><b id="groupKpi">0</b></div></div>
 <div class="card" style="margin-top:16px">
-<h3>📅 다가오는 교회 일정</h3>
+<h3>📅 다가오는 일정 <small style="font-weight:500;color:var(--muted)">교회일정 · 일만상상</small></h3>
 <div id="homeEvents"></div>
 </div>
 <div class="grid2">
@@ -695,11 +708,15 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <div class="ev-panel active" id="evStatus"><div class="card"><h3>📈 전도현황</h3>
 <div class="target-setting"><label>연간 영혼구원 목표 <input class="target-input" id="soulGoal" min="1" type="number" value="5" readonly> 명</label><span style="color:var(--muted);font-size:.9rem">통합 엑셀의 환경설정 시트에서 수정</span><button class="action-btn secondary" id="saveSoulGoal" style="display:none">목표 저장</button><button class="action-btn secondary" id="refreshPrayerExcel">Excel 새로고침</button></div>
 <div class="soul-kpis"><div><span>연간 목표</span><b id="soulGoalKpi">100</b></div><div><span>현재 대상자</span><b id="soulCurrentKpi">0</b></div><div><span>교회 방문</span><b id="soulVisitKpi">0</b></div><div><span>새가족</span><b id="soulNewKpi">0</b></div></div>
-<div class="stage-chart" id="soulStageChart"></div><p class="alpha-copy" id="soulSummaryText">기도대상자 Excel을 불러오는 중입니다.</p></div></div>
+<div class="stage-chart" id="soulStageChart"></div><p class="alpha-copy" id="soulSummaryText">기도대상자 Excel을 불러오는 중입니다.</p>
+<div class="ev-result-grid">
+  <section class="ev-result-card"><h4>🌾 등록교인 현황 <span id="registeredMemberCount">0명</span></h4><div id="registeredMemberSummary" class="registered-summary"><div class="empty">등록교인 자료를 확인하는 중입니다.</div></div></section>
+  <section class="ev-result-card"><h4>🙋 전도자별 현황 <span>Top 10</span></h4><div id="evangelistRanking" class="evangelist-ranking"><div class="empty">전도자 자료를 확인하는 중입니다.</div></div></section>
+</div></div></div>
 <div class="ev-panel" id="prayerTargets"><div class="card"><h3>🙏 기도대상자관리</h3>
 <div class="upload-box"><button class="action-btn secondary" id="selectPrayerExcel">내 PC Excel 불러오기</button><input type="file" id="prayerExcelInput" accept=".xlsx"><button class="action-btn secondary" id="downloadPrayerTemplate">표준양식 다운로드</button></div>
 <div class="prayer-status" id="prayerExcelStatus">GESMS_전도영혼구원_표준자료양식_V3.0.xlsx를 확인하는 중입니다.</div>
-<div class="prayer-toolbar"><input id="prayerSearch" placeholder="이름, 담당자, 관계, 기도제목 검색"><select id="prayerOwner"><option value="">모든 담당자</option></select><select id="prayerGroup"><option value="">모든 소그룹</option></select><select id="prayerState"><option value="">모든 진행상태</option><option>기도중</option><option>관계형성</option><option>첫만남</option><option>초청</option><option>교회방문</option><option>새가족</option><option>등록교인</option><option>군우편입</option></select></div>
+<div class="prayer-toolbar"><input id="prayerSearch" placeholder="이름, 담당자, 관계, 기도제목 검색"><select id="prayerOwner"><option value="">모든 담당자</option></select><select id="prayerGroup"><option value="">모든 소그룹</option></select><select id="prayerState"><option value="">모든 진행상태</option><option>기도중</option><option>관계형성</option><option>첫만남</option><option>초청</option><option>교회방문</option><option>새가족</option><option>등록교인</option></select></div>
 <div class="result"><span id="prayerCount">0명</span><span>대상자를 누르면 영혼관리 카드가 펼쳐집니다.</span></div><div class="prayer-list" id="prayerList"></div></div></div>
 <div class="ev-panel" id="tenThousand"><div class="card"><h3>🌱 일만상상 프로젝트</h3><div id="projectSummary"></div><div class="prayer-list" id="projectList"></div></div></div>
 </section>
@@ -1529,8 +1546,26 @@ function activeNoticeData(){
 }
 function upcomingEventData(){
   const today=appTodayISO();
-  return EVENT_DATA.filter(e=>!e.date||e.date>=today)
-    .sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.time).localeCompare(String(b.time)));
+  const church=EVENT_DATA.filter(e=>!e.date||e.date>=today).map(e=>({...e,source:e.source||'교회일정'}));
+  const mission=(window.MISSION_PROJECTS||[]).filter(p=>{
+    const start=String(p['시작일']||p['종료일']||'');
+    const end=String(p['종료일']||p['시작일']||'');
+    return (start&&start>=today)||(end&&end>=today);
+  }).map(p=>({
+    date:String(p['시작일']||p['종료일']||''),
+    endDate:String(p['종료일']||''),
+    time:'',category:'일만상상',source:'일만상상',
+    title:String(p['사업명']||'일만상상 프로젝트'),
+    location:String(p['장소']||p['활동장소']||''),
+    owner:String(p['담당자']||p['담당부서']||''),
+    note:String(p['핵심활동']||p['사업목적']||''),
+    status:String(p['상태']||'')
+  }));
+  const seen=new Set();
+  return [...church,...mission].filter(e=>{
+    const key=[e.source,e.date,e.endDate,e.title].join('|');
+    if(seen.has(key))return false;seen.add(key);return true;
+  }).sort((a,b)=>String(a.date).localeCompare(String(b.date))||String(a.time).localeCompare(String(b.time))||String(a.title).localeCompare(String(b.title),'ko'));
 }
 function appNoticeHtml(limit){
   const arr=activeNoticeData();
@@ -1541,7 +1576,9 @@ function appNoticeHtml(limit){
   }).join(''):'<div class="empty">현재 표시할 공지사항이 없습니다.</div>';
 }
 function appEventHtml(e){
-  return `<article class="event-card"><span class="event-badge">${esc(e.category||'일정')}</span><time>${esc(appFormatDate(e.date))}${e.time?' · '+esc(e.time):''}</time><h4>${esc(e.title)}</h4><p>${e.location?'장소: '+esc(e.location)+'<br>':''}${e.owner?'담당: '+esc(e.owner)+'<br>':''}${esc(e.note||'')}</p></article>`;
+  const period=e.endDate&&e.endDate!==e.date?`${appFormatDate(e.date)} ~ ${appFormatDate(e.endDate)}`:appFormatDate(e.date);
+  const badge=e.source==='일만상상'?'🌱 일만상상':(e.category||'교회일정');
+  return `<article class="event-card ${e.source==='일만상상'?'mission-event':''}"><span class="event-badge">${esc(badge)}</span><time>${esc(period)}${e.time?' · '+esc(e.time):''}</time><h4>${esc(e.title)}</h4><p>${e.location?'장소: '+esc(e.location)+'<br>':''}${e.owner?'담당: '+esc(e.owner)+'<br>':''}${e.status?'상태: '+esc(e.status)+'<br>':''}${esc(e.note||'')}</p></article>`;
 }
 function refreshOfficeDataFromExcel(){NOTICE_DATA=window.NOTICE_DATA||NOTICE_DATA;EVENT_DATA=window.EVENT_DATA||EVENT_DATA;renderOfficeData()}
 window.refreshOfficeDataFromExcel=refreshOfficeDataFromExcel;
