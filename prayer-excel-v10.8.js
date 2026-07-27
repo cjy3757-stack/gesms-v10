@@ -1,7 +1,8 @@
-/* GESMS V10.8 Stable - 기존 데이터 로딩 유지 + 일만상상 날짜 선표시 */
+/* GESMS V10.8.1 Stable - 전도 데이터 로딩 복구 + 일만상상 날짜 선표시 */
 (function(){
 'use strict';
-const UNIFIED_FILE='GESMS_전도영혼구원_표준자료양식_V3.0.xlsx';
+const UNIFIED_FILES=['GESMS_전도영혼구원_표준자료양식_V3.1_버전자동연동.xlsx','GESMS_전도영혼구원_표준자료양식_V3.0.xlsx'];
+const UNIFIED_FILE=UNIFIED_FILES[0];
 const FALLBACK_PRAYER_FILES=['기도대상자관리_표준양식_V2.0.xlsx','기도대상자관리.xlsx'];
 const STAGES=['기도중','관계형성','첫만남','초청','교회방문','새가족','등록교인','군우편입'];
 const $=s=>document.querySelector(s), text=v=>String(v??'').trim(), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -30,17 +31,27 @@ async function workbookSheets(buffer){
   return result;
 }
 function rowsToObjects(rows, required){let hi=-1,headers=[];for(let i=0;i<Math.min(rows?.length||0,25);i++){const a=(rows[i]||[]).map(text);if(required.every(h=>a.includes(h))){hi=i;headers=a;break}}if(hi<0)throw new Error(required.join('·')+' 열을 찾지 못했습니다.');const out=[];for(let i=hi+1;i<rows.length;i++){const r=rows[i]||[];if(!r.some(v=>text(v)))continue;const o={};headers.forEach((h,j)=>{if(h)o[h]=r[j]});out.push(o)}return out;}
-function rowsToTargets(rows){return rowsToObjects(rows,['관리번호','이름','담당자']).filter(o=>text(o['이름'])&& !['미사용','중지'].includes(text(o['사용여부']))).map(o=>{['기도시작일','최근만남일','다음연락일','교회방문일','새가족등록일','등록교인일','군우편입일','기도응답일'].forEach(k=>o[k]=excelDate(o[k]));return o});}
+function rowsToTargets(rows){return rowsToObjects(rows,['관리번호','이름']).filter(o=>text(o['이름'])&& !['미사용','중지'].includes(text(o['사용여부']))).map(o=>{o['담당자']=text(o['담당자']||o['인도자']);['기도시작일','최근만남일','다음연락일','교회방문일','새가족등록일','등록교인일','군우편입일','기도응답일'].forEach(k=>o[k]=excelDate(o[k]));return o});}
 function rowsToProjects(rows){return rowsToObjects(rows,['프로젝트번호','사업명','분야']).filter(o=>text(o['사업명'])).map(o=>{['시작일','종료일'].forEach(k=>o[k]=excelDate(o[k]));let p=Number(o['진행률(%)']);if(Number.isFinite(p)){if(p<=1)p*=100;o['진행률(%)']=Math.max(0,Math.min(100,Math.round(p)))}else o['진행률(%)']=0;return o});}
 function rowsToSettings(rows){const out={};for(const row of (rows||[])){const key=text(row?.[0]),value=row?.[1];if(!key||key==='항목'||key==='GESMS 환경설정')continue;out[key]=value;}return out;}
 async function fetchBuffer(name){const r=await fetch('./'+encodeURIComponent(name)+'?v='+Date.now(),{cache:'no-store'});if(!r.ok)throw new Error(`${name}: HTTP ${r.status}`);return r.arrayBuffer();}
 async function fetchDefault(){
-  try{const sheets=await workbookSheets(await fetchBuffer(UNIFIED_FILE));return {name:UNIFIED_FILE,targets:rowsToTargets(sheets['기도대상자관리']),projects:rowsToProjects(sheets['일만상상프로젝트']),settings:rowsToSettings(sheets['환경설정'])};}
-  catch(unifiedError){
-    let last=unifiedError.message||String(unifiedError);
-    for(const name of FALLBACK_PRAYER_FILES){try{const sheets=await workbookSheets(await fetchBuffer(name));const first=Object.values(sheets)[0]||[];return {name,targets:rowsToTargets(sheets['기도대상자관리']||first),projects:[],settings:{},warning:'통합 V3.0 파일을 찾지 못해 기존 기도대상자 파일을 사용했습니다.'};}catch(e){last=e.message||String(e)}}
-    throw new Error(last);
+  let last='';
+  for(const name of UNIFIED_FILES){
+    try{
+      const sheets=await workbookSheets(await fetchBuffer(name));
+      const prayerRows=sheets['기도대상자관리'];
+      const projectRows=sheets['일만상상프로젝트'];
+      if(!prayerRows)throw new Error('기도대상자관리 시트를 찾지 못했습니다.');
+      if(!projectRows)throw new Error('일만상상프로젝트 시트를 찾지 못했습니다.');
+      return {name,targets:rowsToTargets(prayerRows),projects:rowsToProjects(projectRows),settings:rowsToSettings(sheets['환경설정'])};
+    }catch(e){last=`${name}: ${e.message||e}`;}
   }
+  for(const name of FALLBACK_PRAYER_FILES){
+    try{const sheets=await workbookSheets(await fetchBuffer(name));const first=Object.values(sheets)[0]||[];return {name,targets:rowsToTargets(sheets['기도대상자관리']||first),projects:[],settings:{},warning:'통합 전도영혼구원 파일을 읽지 못해 기존 기도대상자 파일을 사용했습니다.'};}
+    catch(e){last=e.message||String(e)}
+  }
+  throw new Error(last);
 }
 function y(o,k){return text(o[k]).toUpperCase()==='Y';}
 function currentStage(o){const direct=text(o['진행상태']);if(STAGES.includes(direct))return direct;for(let i=STAGES.length-1;i>=0;i--)if(y(o,STAGES[i]))return STAGES[i];return direct||'기도 준비';}
