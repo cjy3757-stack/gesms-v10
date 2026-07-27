@@ -1,0 +1,2 @@
+<!-- 기존 member-excel.js 바로 다음 줄에 추가 -->
+<script src="stats-v10.6.js"></script>

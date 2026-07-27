@@ -1,14 +1,15 @@
-/* GESMS V10.9 Stable - 전도현황 요약 + 통합 일정 */
+/* GESMS V10.9.1 Stable - 새신자등록현황 + 월별 전도담당 */
 (function(){
 'use strict';
 const UNIFIED_FILES=['GESMS_전도영혼구원_표준자료양식_V3.1_버전자동연동.xlsx','GESMS_전도영혼구원_표준자료양식_V3.0.xlsx'];
 const UNIFIED_FILE=UNIFIED_FILES[0];
 const FALLBACK_PRAYER_FILES=['기도대상자관리_표준양식_V2.0.xlsx','기도대상자관리.xlsx'];
+const DUTY_FILE='기도_식사_전도_봉사일정.xlsx';
 const STAGES=['기도중','관계형성','첫만남','초청','교회방문','새가족','등록교인','군우편입'];
 const VISIBLE_STAGES=['기도중','관계형성','첫만남','초청','교회방문','새가족','등록교인'];
 const $=s=>document.querySelector(s), text=v=>String(v??'').trim(), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const pad=n=>String(n).padStart(2,'0');
-let targets=[], projects=[], appSettings={};
+let targets=[], projects=[], appSettings={}, evangelismDuties=[];
 function excelDate(v){if(v===null||v===undefined||v==='')return '';if(typeof v==='string'&&/^\d{4}[-/.]\d{1,2}[-/.]\d{1,2}/.test(v)){const m=v.match(/(\d{4})[-/.](\d{1,2})[-/.](\d{1,2})/);return `${m[1]}-${pad(m[2])}-${pad(m[3])}`;}const n=Number(v);if(!Number.isFinite(n))return text(v);const d=new Date(Date.UTC(1899,11,30)+Math.round(n*86400000));return `${d.getUTCFullYear()}-${pad(d.getUTCMonth()+1)}-${pad(d.getUTCDate())}`;}
 function colIndex(ref){let n=0;for(const ch of (ref.match(/[A-Z]+/i)||['A'])[0].toUpperCase())n=n*26+ch.charCodeAt(0)-64;return n-1;}
 async function workbookSheets(buffer){
@@ -68,11 +69,27 @@ function renderRegisteredSummary(list){
   if(!box)return;
   box.innerHTML=list.length?list.map(o=>`<div class="registered-person"><b>${esc(o['이름'])}</b><span>전도자 ${esc(o['담당자']||'미입력')}</span><small>등록일 ${esc(registrationDate(o)||'미입력')}</small></div>`).join(''):'<div class="empty">등록교인이 없습니다.</div>';
 }
-function renderEvangelistRanking(){
-  const box=$('#evangelistRanking');if(!box)return;
-  const counts={};targets.forEach(o=>{const owner=text(o['담당자']);if(owner)counts[owner]=(counts[owner]||0)+1;});
-  const rows=Object.entries(counts).sort((a,b)=>b[1]-a[1]||a[0].localeCompare(b[0],'ko')).slice(0,10);
-  box.innerHTML=rows.length?rows.map(([name,count],i)=>`<div class="rank-row"><span class="rank-no">${i+1}</span><b>${esc(name)}</b><small>${count}명 섬김</small></div>`).join(''):'<div class="empty">전도자 정보가 입력되지 않았습니다.</div>';
+function rowsToEvangelismDuties(rows){
+  return rowsToObjects(rows,['일자','전도담당']).filter(o=>text(o['일자'])).map(o=>({date:excelDate(o['일자']),team:text(o['전도담당']),event:text(o['행사'])})).filter(o=>/^\d{4}-\d{2}-\d{2}$/.test(o.date));
+}
+function dutyFallback(){
+  return (window.SERVICE_DATA||[]).map(o=>({date:text(o.date),team:text(o.evangelism),event:text(o.event)})).filter(o=>/^\d{4}-\d{2}-\d{2}$/.test(o.date));
+}
+function renderEvangelismDuties(){
+  const select=$('#evangelismDutyMonth'), list=$('#evangelismDutyList'), label=$('#evangelismDutyMonthLabel');if(!select||!list)return;
+  const months=[...new Set(evangelismDuties.map(o=>o.date.slice(0,7)))].sort();
+  const current=`${new Date().getFullYear()}-${pad(new Date().getMonth()+1)}`;
+  const old=select.value, chosen=months.includes(old)?old:(months.includes(current)?current:(months[0]||''));
+  select.innerHTML=months.map(m=>{const [y,mo]=m.split('-');return `<option value="${m}">${y}년 ${Number(mo)}월</option>`}).join('');select.value=chosen;
+  const rows=evangelismDuties.filter(o=>o.date.startsWith(chosen)).sort((a,b)=>a.date.localeCompare(b.date));
+  if(label){const [y,mo]=(chosen||'-').split('-');label.textContent=chosen?`${y}년 ${Number(mo)}월`:'자료 없음';}
+  list.innerHTML=rows.length?rows.map(o=>{const d=new Date(o.date+'T00:00:00'),week=['일','월','화','수','목','금','토'][d.getDay()];const team=o.team&&o.team!=='-'?o.team:'미정';return `<div class="duty-row ${team==='미정'?'no-duty':''}"><div class="duty-date">${o.date.slice(5).replace('-','/')}<small>${week}요일</small></div><div class="duty-team"><b>${esc(team)}</b><small>${esc(o.event||'전도담당 일정')}</small></div></div>`}).join(''):'<div class="empty">선택한 월의 전도담당 일정이 없습니다.</div>';
+}
+async function loadEvangelismDuties(){
+  const status=$('#evangelismDutyStatus');if(status){status.textContent=`${DUTY_FILE} 최신 파일을 확인하는 중입니다.`;status.classList.remove('error');}
+  try{const sheets=await workbookSheets(await fetchBuffer(DUTY_FILE));const rows=sheets['26년도 담당']||Object.values(sheets)[0]||[];evangelismDuties=rowsToEvangelismDuties(rows);if(!evangelismDuties.length)throw new Error('전도담당 자료가 없습니다.');if(status)status.textContent=`${DUTY_FILE} · ${evangelismDuties.length}건 자동연동`;}
+  catch(e){evangelismDuties=dutyFallback();if(status){status.textContent=evangelismDuties.length?`Excel 자동연동 실패 · 내장 일정 ${evangelismDuties.length}건 사용`:`일정 불러오기 실패: ${e.message||e}`;status.classList.toggle('error',!evangelismDuties.length);}}
+  renderEvangelismDuties();
 }
 function renderStats(){
   const goal=getGoal(),counts={};STAGES.forEach(k=>counts[k]=targets.filter(o=>currentStage(o)===k).length);
@@ -85,7 +102,7 @@ function renderStats(){
   $('#homeSoulProgress').textContent=`${registered}/${goal}명 · ${rate}%`;$('#homeSoulMeta').textContent=`기도대상 ${current}명 · 교회방문 ${visit}명 · 새가족 ${newc}명 · 등록교인 ${registered}명`;
   const today=targets.filter(o=>currentStage(o)==='기도중').slice(0,5);$('#homePrayerCount').textContent=`${targets.filter(o=>currentStage(o)==='기도중').length}명`;$('#homePrayerNames').textContent=today.length?today.map(o=>text(o['이름'])).join(', '):'등록된 기도중 대상자가 없습니다.';
   const contacts=targets.filter(o=>{const d=daysFrom(o['다음연락일']);return d!==null&&d>=0&&d<=7}).sort((a,b)=>text(a['다음연락일']).localeCompare(text(b['다음연락일'])));$('#homeContactCount').textContent=`${contacts.length}명`;$('#homeContactNames').textContent=contacts.length?contacts.slice(0,4).map(o=>`${text(o['이름'])}(${o['다음연락일'].slice(5)})`).join(', '):'7일 이내 연락 대상이 없습니다.';
-  renderRegisteredSummary(registeredList);renderEvangelistRanking();
+  renderRegisteredSummary(registeredList);renderEvangelismDuties();
 }
 function renderList(){const list=filtered();$('#prayerCount').textContent=`${list.length}명`;$('#prayerList').innerHTML=list.length?list.map(o=>{const rawStage=currentStage(o),stage=rawStage==='군우편입'?'등록교인':rawStage,phone=text(o['연락처']),contact=o['다음연락일']?`다음 연락 ${o['다음연락일']}`:'다음 연락 미정';return `<article class="prayer-person"><div class="prayer-head"><div class="prayer-avatar">${esc(text(o['이름']).slice(0,1))}</div><div><h4>${esc(o['이름'])}</h4><p>담당 ${esc(o['담당자']||'-')} · ${esc(o['소속부서/소그룹']||'소속 미정')} · ${esc(contact)}</p></div><span class="stage-badge">${esc(stage)}</span></div><div class="prayer-detail"><div class="detail-grid"><div><span>관계</span><b>${esc([o['관계구분'],o['관계상세']].filter(Boolean).join(' · ')||'-')}</b></div><div><span>연락처</span><b>${esc(phone||'-')}</b></div><div><span>기도 시작</span><b>${esc(o['기도시작일']||'-')}</b></div><div><span>최근 만남</span><b>${esc(o['최근만남일']||'-')}</b></div><div><span>다음 연락</span><b>${esc(o['다음연락일']||'-')}</b></div><div><span>진행상태</span><b>${esc(stage)}</b></div></div><div class="prayer-topic"><b>${esc(o['기도제목구분']||'기도제목')}</b><br>${esc(o['기도제목상세']||'-')}</div>${text(o['비고'])?`<div class="prayer-topic" style="border-color:var(--navy);background:#eef3f8"><b>비고</b><br>${esc(o['비고'])}</div>`:''}</div></article>`}).join(''):'<div class="no-results">조건에 맞는 기도대상자가 없습니다.</div>';document.querySelectorAll('.prayer-head').forEach(x=>x.onclick=()=>x.parentElement.classList.toggle('open'));}
 function money(v){const n=Number(v);return Number.isFinite(n)?n.toLocaleString('ko-KR')+'원':'-';}
@@ -129,5 +146,5 @@ function renderProjects(){
 function setStatus(msg,error=false){const el=$('#prayerExcelStatus');if(!el)return;el.textContent=msg;el.classList.toggle('error',error);}
 function apply(data){targets=data.targets||[];projects=data.projects||[];appSettings=data.settings||{};appSettings['앱버전']=window.GESMS_APP_VERSION||appSettings['앱버전']||'자동연동';window.PRAYER_TARGETS=targets;window.MISSION_PROJECTS=projects;window.GESMS_SETTINGS=appSettings;renderFilters();renderStats();renderList();renderProjects();if(window.refreshOfficeDataFromExcel)window.refreshOfficeDataFromExcel();const goalSource=Number(appSettings['연간영혼구원목표'])>0?` · 연간목표 ${getGoal()}명(환경설정)`:'';setStatus(`${data.name} · 기도대상 ${targets.length}명 · 프로젝트 ${projects.length}건${goalSource}${data.warning?' · '+data.warning:''}`);}
 async function load(){setStatus(`${UNIFIED_FILE} 최신 파일을 확인하는 중입니다.`);try{apply(await fetchDefault())}catch(e){targets=[];projects=[];renderFilters();renderStats();renderList();renderProjects();setStatus(`자동 불러오기 실패: ${e.message||e}`,true)}}
-window.initPrayerMinistry=function(){['prayerSearch','prayerOwner','prayerGroup','prayerState'].forEach(id=>{const el=$('#'+id);if(el)el.addEventListener(id==='prayerSearch'?'input':'change',renderList)});$('#refreshPrayerExcel')?.addEventListener('click',load);const goalInput=$('#soulGoal');if(goalInput){goalInput.readOnly=true;goalInput.title='통합 엑셀의 환경설정 시트에서 수정합니다.';}const saveGoal=$('#saveSoulGoal');if(saveGoal)saveGoal.style.display='none';$('#selectPrayerExcel')?.addEventListener('click',()=>$('#prayerExcelInput').click());$('#prayerExcelInput')?.addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const sheets=await workbookSheets(await f.arrayBuffer());apply({name:f.name,targets:rowsToTargets(sheets['기도대상자관리']),projects:rowsToProjects(sheets['일만상상프로젝트']),settings:rowsToSettings(sheets['환경설정'])})}catch(err){setStatus(`파일 읽기 실패: ${err.message||err}`,true)}});$('#downloadPrayerTemplate')?.addEventListener('click',()=>{location.href='./'+encodeURIComponent(UNIFIED_FILE)});load();};
+window.initPrayerMinistry=function(){['prayerSearch','prayerOwner','prayerGroup','prayerState'].forEach(id=>{const el=$('#'+id);if(el)el.addEventListener(id==='prayerSearch'?'input':'change',renderList)});$('#refreshPrayerExcel')?.addEventListener('click',load);$('#refreshEvangelismDuty')?.addEventListener('click',loadEvangelismDuties);$('#evangelismDutyMonth')?.addEventListener('change',renderEvangelismDuties);const goalInput=$('#soulGoal');if(goalInput){goalInput.readOnly=true;goalInput.title='통합 엑셀의 환경설정 시트에서 수정합니다.';}const saveGoal=$('#saveSoulGoal');if(saveGoal)saveGoal.style.display='none';$('#selectPrayerExcel')?.addEventListener('click',()=>$('#prayerExcelInput').click());$('#prayerExcelInput')?.addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;try{const sheets=await workbookSheets(await f.arrayBuffer());apply({name:f.name,targets:rowsToTargets(sheets['기도대상자관리']),projects:rowsToProjects(sheets['일만상상프로젝트']),settings:rowsToSettings(sheets['환경설정'])})}catch(err){setStatus(`파일 읽기 실패: ${err.message||err}`,true)}});$('#downloadPrayerTemplate')?.addEventListener('click',()=>{location.href='./'+encodeURIComponent(UNIFIED_FILE)});load();loadEvangelismDuties();};
 })();
