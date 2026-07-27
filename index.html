@@ -1691,21 +1691,57 @@ function renderFinanceDashboard(){
 
 const ALL_SERVICES=['새벽기도','성결예배','구령예배','수요예배','금요기도회','소그룹모임','부흥집회','기타'];
 
+// 출석 CSV 파일명이 ZIP/운영체제 인코딩 문제로 깨져도 반드시 표준 예배명으로 복원합니다.
+// 이 표준화 함수는 월간 달력, 월간 합계, GitHub 파일 검색, 로컬 인덱스에 공통 적용됩니다.
+const SERVICE_NAME_ALIASES={
+  '새벽기도':'새벽기도','∞âêδ▓╜Ω╕░δÅä':'새벽기도',
+  '성결예배':'성결예배','∞ä▒Ω▓░∞ÿêδ░░':'성결예배',
+  '구령예배':'구령예배','Ω╡¼δá╣∞ÿêδ░░':'구령예배',
+  '수요예배':'수요예배','∞êÿ∞Üö∞ÿêδ░░':'수요예배',
+  '금요기도회':'금요기도회','Ω╕ê∞ÜöΩ╕░δÅäφÜî':'금요기도회',
+  '소그룹모임':'소그룹모임','∞åîΩ╖╕δú╣δ¬¿∞₧ä':'소그룹모임',
+  '부흥집회':'부흥집회','δ╢Çφ¥Ñ∞ºæφÜî':'부흥집회',
+  '기타':'기타','Ω╕░φâÇ':'기타'
+};
+function normalizeServiceName(value){
+  let s=decodeGitHubUnicodeName(String(value||''));
+  try{s=decodeURIComponent(s)}catch(e){}
+  s=s.replace(/^\uFEFF/,'').replace(/[\u0000-\u001F\u007F]/g,'').trim();
+  if(SERVICE_NAME_ALIASES[s])return SERVICE_NAME_ALIASES[s];
+  const compact=s.replace(/\s+/g,'');
+  if(SERVICE_NAME_ALIASES[compact])return SERVICE_NAME_ALIASES[compact];
+  const bySafe=ALL_SERVICES.find(name=>safeServiceName(name)===safeServiceName(s));
+  return bySafe||s;
+}
+function dedupeAttendanceRecords(records){
+  const map=new Map();
+  (records||[]).forEach(r=>{
+    if(!r)return;
+    const service=normalizeServiceName(r.service);
+    const key=String(r.date||'')+'|'+service;
+    const normalized={...r,service};
+    const current=map.get(key);
+    // 같은 날짜·예배가 정상 한글 파일과 깨진 파일로 동시에 존재하면 정상 한글 파일을 우선합니다.
+    const score=x=>/^[\x00-\x7F]*$/.test(String(x.file||''))?0:(String(x.file||'').includes(service)?2:1);
+    if(!current||score(normalized)>score(current))map.set(key,normalized);
+  });
+  return [...map.values()];
+}
 
-function attendanceIndexLocalKey(){return 'gesmsV10AttendanceIndex'}
+function attendanceIndexLocalKey(){return 'gesmsV10AttendanceIndexV2'}
 function normalizeAttendanceIndex(data){
   const arr=Array.isArray(data)?data:(Array.isArray(data.records)?data.records:[]);
   const seen=new Set();
   return arr.map(x=>({
     date:String(x.date||'').slice(0,10),
-    service:String(x.service||'').trim(),
+    service:normalizeServiceName(x.service),
     file:String(x.file||'').trim()
   })).filter(x=>{
-    if(!/^\d{4}-\d{2}-\d{2}$/.test(x.date)||!x.service)return false;
+    if(!/^\d{4}-\d{2}-\d{2}$/.test(x.date)||!ALL_SERVICES.includes(x.service))return false;
     if(!x.file)x.file=`attendance-${x.date}-${safeServiceName(x.service)}.csv`;
     const key=x.date+'|'+x.service;
     if(seen.has(key))return false;seen.add(key);return true;
-  }).sort((a,b)=>a.date.localeCompare(b.date)||a.service.localeCompare(b.service,'ko'));
+  }).sort((a,b)=>a.date.localeCompare(b.date)||ALL_SERVICES.indexOf(a.service)-ALL_SERVICES.indexOf(b.service));
 }
 function getLocalAttendanceIndex(){
   try{return normalizeAttendanceIndex(JSON.parse(localStorage.getItem(attendanceIndexLocalKey())||'[]'))}catch(e){return []}
@@ -1740,7 +1776,8 @@ function attendanceRecordFromPath(path){
   let serviceSafe=match[2];
   try{serviceSafe=decodeURIComponent(serviceSafe)}catch(e){}
   serviceSafe=decodeGitHubUnicodeName(serviceSafe);
-  const service=ALL_SERVICES.find(x=>safeServiceName(x)===safeServiceName(serviceSafe))||serviceSafe;
+  const service=normalizeServiceName(serviceSafe);
+  if(!ALL_SERVICES.includes(service))return null;
   return {date:match[1],service,file:clean};
 }
 async function fetchGitHubAttendanceFiles(){
@@ -1859,13 +1896,13 @@ async function loadMonthlyAttendanceCalendar(){
   let indexRecords=[];
   try{indexRecords=await fetchRemoteAttendanceIndex()}catch(e){indexRecords=[]}
   const monthRecords=indexRecords.filter(x=>x.date.startsWith(monthPrefix));
-  let loaded=(await Promise.all(monthRecords.map(fetchIndexedAttendanceRecord))).filter(Boolean);
+  let loaded=dedupeAttendanceRecords((await Promise.all(monthRecords.map(fetchIndexedAttendanceRecord))).filter(Boolean));
 
   // GitHub API 또는 attendance-index.json이 누락되거나 차단된 경우에도
   // 선택한 달의 날짜·예배 조합을 직접 확인하여 실제 CSV를 자동 집계합니다.
   if(!loaded.length){
     note.textContent='출석목록을 찾지 못해 선택한 달의 CSV 파일을 직접 자동 확인합니다...';
-    loaded=await probeMonthlyAttendanceFiles(year,mon,note);
+    loaded=dedupeAttendanceRecords(await probeMonthlyAttendanceFiles(year,mon,note));
   }
 
   const records={},summary={};
