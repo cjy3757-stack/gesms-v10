@@ -1875,6 +1875,53 @@ async function probeMonthlyAttendanceFiles(year,mon,note){
   await Promise.all(Array.from({length:concurrency},worker));
   return found;
 }
+function readLocalMonthlyAttendanceRecords(year,mon){
+  const month=String(mon).padStart(2,'0');
+  const prefix=`${year}-${month}`;
+  const records=[];
+  const days=new Date(year,mon,0).getDate();
+  for(let day=1;day<=days;day++){
+    const date=`${prefix}-${String(day).padStart(2,'0')}`;
+    ALL_SERVICES.forEach(service=>{
+      let attendance={};
+      try{attendance=JSON.parse(localStorage.getItem(`gunpoAttendance:${date}:${service}`)||'{}')||{}}catch(e){attendance={}}
+      const statuses=Object.values(attendance);
+      const presentCount=statuses.filter(x=>x==='present').length;
+      const onlineCount=statuses.filter(x=>x==='online').length;
+      let visitorCount=0;
+      try{
+        const raw=localStorage.getItem(`gunpoVisitors:${date}:${service}`);
+        if(raw){
+          const data=JSON.parse(raw);
+          const entries=Array.isArray(data)?data:(Array.isArray(data.entries)?data.entries:[]);
+          visitorCount=entries.reduce((sum,x)=>sum+Math.max(0,Number(x&&x.count)||0),0);
+          if(!entries.length&&data&&data.count)visitorCount=Math.max(0,Number(data.count)||0);
+        }
+      }catch(e){}
+      if(statuses.length||visitorCount>0){
+        records.push({
+          date,service,
+          presentCount,onlineCount,visitorCount,
+          count:presentCount+onlineCount+visitorCount,
+          source:'local'
+        });
+      }
+    });
+  }
+  return records;
+}
+function mergeMonthlyAttendanceRecords(remoteRecords,localRecords){
+  const map=new Map();
+  (remoteRecords||[]).forEach(x=>map.set(`${x.date}|${normalizeServiceName(x.service)}`,{...x,service:normalizeServiceName(x.service),source:x.source||'remote'}));
+  (localRecords||[]).forEach(x=>{
+    const key=`${x.date}|${normalizeServiceName(x.service)}`;
+    const current=map.get(key);
+    // 이 기기에서 직접 등록·가져온 최신 출석자료가 있으면 월간 달력에 즉시 반영합니다.
+    if(!current||x.count>0)map.set(key,{...x,service:normalizeServiceName(x.service),source:'local'});
+  });
+  return [...map.values()].sort((a,b)=>a.date.localeCompare(b.date)||ALL_SERVICES.indexOf(a.service)-ALL_SERVICES.indexOf(b.service));
+}
+
 async function refreshAllAttendanceStats(){
   await loadMonthlyAttendanceCalendar();
   await loadAttendanceStats();
@@ -1905,6 +1952,11 @@ async function loadMonthlyAttendanceCalendar(){
     note.textContent='출석목록을 찾지 못해 선택한 달의 CSV 파일을 직접 자동 확인합니다...';
     loaded=dedupeAttendanceRecords(await probeMonthlyAttendanceFiles(year,mon,note));
   }
+
+  // 모바일에서 출석 메뉴에는 보이지만 통계 달력에 빠지는 문제를 방지합니다.
+  // GitHub CSV 자료와 이 기기의 localStorage 출석자료를 날짜·예배별로 병합합니다.
+  const localMonthlyRecords=readLocalMonthlyAttendanceRecords(year,mon);
+  loaded=mergeMonthlyAttendanceRecords(loaded,localMonthlyRecords);
 
   const records={},summary={};
   ALL_SERVICES.forEach(service=>summary[service]={present:0,online:0,visitor:0,total:0});
@@ -1946,7 +1998,8 @@ async function loadMonthlyAttendanceCalendar(){
     note.textContent=indexedCount?`${year}년 ${mon}월 출석 CSV ${indexedCount}개는 확인했지만 내용을 읽지 못했습니다. 파일명·경로·CSV 형식을 확인해 주세요.`:`${year}년 ${mon}월 출석 CSV가 GitHub에 없습니다. attendance-날짜-예배명.csv 파일을 업로드해 주세요.`;
   }else{
     note.className='remote-status ok';
-    note.textContent=`${year}년 ${mon}월 ${loaded.length}개 예배 · 전체 참석 ${total}명 · 방문자 ${visitorTotal}명입니다.`;
+    const localCount=loaded.filter(x=>x.source==='local').length;
+    note.textContent=`${year}년 ${mon}월 ${loaded.length}개 예배 · 전체 참석 ${total}명 · 방문자 ${visitorTotal}명${localCount?` · 이 기기 등록자료 ${localCount}개 반영`:''}입니다.`;
   }
 }
 
