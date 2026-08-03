@@ -1369,19 +1369,19 @@ async function loadHomeMonthlyAttendance(){
 
 
 function currentWeekRange(){
+  // 교회 주간 기준: 일요일부터 토요일까지.
+  // 월요일에 앱을 열어도 직전 일요일 예배가 '이번 주' 카드에 포함됩니다.
   const now=new Date();
-  const monday=new Date(now);
-  const day=(now.getDay()+6)%7;
-  monday.setHours(12,0,0,0);
-  monday.setDate(now.getDate()-day);
-  const sunday=new Date(monday);
-  sunday.setDate(monday.getDate()+6);
-  return {monday,sunday};
+  const sunday=new Date(now);
+  sunday.setHours(12,0,0,0);
+  sunday.setDate(now.getDate()-now.getDay());
+  const saturday=new Date(sunday);
+  saturday.setDate(sunday.getDate()+6);
+  return {sunday,saturday};
 }
-function dateForWeekday(monday,weekday){
-  const d=new Date(monday);
-  const offset=(weekday+6)%7;
-  d.setDate(monday.getDate()+offset);
+function dateForWeekday(sunday,weekday){
+  const d=new Date(sunday);
+  d.setDate(sunday.getDate()+weekday);
   return isoDate(d);
 }
 async function loadHomeWeeklyAttendance(){
@@ -1389,8 +1389,8 @@ async function loadHomeWeeklyAttendance(){
   const status=$('#homeWeeklyAttendanceStatus');
   const period=$('#homeWeeklyAttendancePeriod');
   if(!root||!status)return;
-  const {monday,sunday}=currentWeekRange();
-  const start=isoDate(monday),end=isoDate(sunday);
+  const {sunday,saturday}=currentWeekRange();
+  const start=isoDate(sunday),end=isoDate(saturday);
   if(period)period.textContent=`${start.replaceAll('-','.')} ~ ${end.replaceAll('-','.')}`;
   status.className='remote-status';
   status.textContent='이번 주 출석 CSV와 기기 저장자료를 확인하는 중입니다…';
@@ -1398,7 +1398,7 @@ async function loadHomeWeeklyAttendance(){
   const services=['성결예배','구령예배','수요예배','금요기도회','새벽기도','소그룹모임','부흥집회','기타'];
   const rows=[];
   for(const service of services){
-    const date=dateForWeekday(monday,serviceWeekday(service));
+    const date=dateForWeekday(sunday,serviceWeekday(service));
     if(date>appTodayISO())continue;
     const count=await fetchAttendanceCount(date,service);
     if(count!==null)rows.push({service,date,count});
