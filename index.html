@@ -193,31 +193,30 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .finance-monthly-chart-card{margin-top:16px}
 .finance-chart-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:12px 0 14px;font-size:12px;color:var(--muted);font-weight:700}
 .finance-chart-legend span{display:flex;align-items:center;gap:6px}
-.finance-chart-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.finance-chart-legend i{width:12px;height:4px;border-radius:99px;display:inline-block}
 .finance-chart-legend i.income{background:#2c6e9b}
 .finance-chart-legend i.expense{background:#b23a48}
 .finance-chart-legend i.balance{background:#c99417}
-.finance-monthly-chart{display:flex;flex-direction:column;gap:16px}
-.finance-chart-month{padding:12px 0;border-bottom:1px dashed var(--line)}
-.finance-chart-month:last-child{border-bottom:0}
-.finance-chart-month-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
-.finance-chart-month-title strong{color:var(--navy);font-size:14px}
-.finance-chart-month-title small{color:var(--muted)}
-.finance-chart-series{display:grid;grid-template-columns:42px 1fr 108px;gap:8px;align-items:center;margin:7px 0;font-size:12px}
-.finance-chart-series>span:first-child{font-weight:800}
-.finance-chart-track{height:14px;background:#eee8e2;border-radius:99px;overflow:hidden}
-.finance-chart-track i{display:block;height:100%;border-radius:99px;min-width:2px}
-.finance-chart-series.income .finance-chart-track i{background:#2c6e9b}
-.finance-chart-series.expense .finance-chart-track i{background:#b23a48}
-.finance-chart-series.balance .finance-chart-track i{background:#c99417}
-.finance-chart-series b{text-align:right;color:var(--navy);font-size:12px}
+.finance-monthly-chart{width:100%;overflow:hidden}
+.finance-line-chart-wrap{width:100%;background:#fbfaf8;border:1px solid var(--line);border-radius:14px;padding:8px 8px 2px}
+.finance-line-chart{display:block;width:100%;height:auto;min-height:250px}
+.finance-line-grid{stroke:#ded8d2;stroke-width:1;stroke-dasharray:4 5}
+.finance-line-axis{stroke:#bcb4ab;stroke-width:1}
+.finance-line-label{fill:#6c6a68;font-size:12px;font-family:inherit}
+.finance-line-value{fill:#17324d;font-size:11px;font-family:inherit;font-weight:700}
+.finance-line-income{fill:none;stroke:#2c6e9b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.finance-line-expense{fill:none;stroke:#b23a48;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.finance-line-balance{fill:none;stroke:#c99417;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+.finance-dot-income{fill:#2c6e9b}
+.finance-dot-expense{fill:#b23a48}
+.finance-dot-balance{fill:#c99417}
 .finance-selected-month-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
 .finance-selected-month-summary>div{background:#f7f4ef;border-radius:13px;padding:11px}
 .finance-selected-month-summary span{display:block;color:var(--muted);font-size:11px}
 .finance-selected-month-summary b{display:block;margin-top:4px;color:var(--navy);font-size:16px}
 @media(max-width:760px){
-  .finance-chart-series{grid-template-columns:38px 1fr 92px;gap:6px}
-  .finance-chart-series b{font-size:11px}
+  .finance-line-label{font-size:10px}
+  .finance-line-value{font-size:9px}
   .finance-selected-month-summary{grid-template-columns:1fr}
 }
 
@@ -717,8 +716,8 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <div class="finance-kpi"><span>총예산</span><b id="financeBudget">0원</b><small>연간 예산</small></div>
 </div>
 <div class="card finance-monthly-chart-card">
-<h3>📊 월별 수입 · 지출 · 잔액</h3>
-<p class="finance-note">월별 재정 규모를 비교할 수 있습니다. 잔액은 해당 월 말 기준입니다.</p>
+<h3>📈 월별 누적 수입 · 지출 · 잔액 추이</h3>
+<p class="finance-note">각 월 말 기준 누적 수입·누적 지출과 현재 잔액의 흐름을 곡선 그래프로 보여줍니다.</p>
 <div class="finance-chart-legend">
 <span><i class="income"></i>수입</span>
 <span><i class="expense"></i>지출</span>
@@ -1722,8 +1721,8 @@ function renderFinanceMonthlyChart(){
     const s=(FINANCE_MONTHS[k]||{}).summary||{};
     return {
       key:k,
-      income:Number(s.monthlyIncome||0),
-      expense:Number(s.monthlyExpense||0),
+      income:Number(s.income||0),
+      expense:Number(s.expense||0),
       balance:Number(s.balance||0)
     };
   });
@@ -1734,38 +1733,69 @@ function renderFinanceMonthlyChart(){
     return;
   }
 
+  const W=920,H=300, L=74,R=22,T=28,B=48;
+  const plotW=W-L-R, plotH=H-T-B;
   const maxValue=Math.max(1,...rows.flatMap(r=>[r.income,r.expense,r.balance]));
-  const width=v=>Math.max(0,Math.min(100,(Number(v||0)/maxValue)*100));
+  const niceMax=Math.ceil(maxValue/50000000)*50000000 || maxValue;
 
-  root.innerHTML=rows.map(r=>`
-    <div class="finance-chart-month">
-      <div class="finance-chart-month-title">
-        <strong>${financeMonthLabel(r.key)}</strong>
-        ${r.key===currentFinanceKey?'<small>현재 선택 월</small>':''}
-      </div>
-      <div class="finance-chart-series income">
-        <span>수입</span>
-        <div class="finance-chart-track"><i style="width:${width(r.income)}%"></i></div>
-        <b>${money(r.income)}</b>
-      </div>
-      <div class="finance-chart-series expense">
-        <span>지출</span>
-        <div class="finance-chart-track"><i style="width:${width(r.expense)}%"></i></div>
-        <b>${money(r.expense)}</b>
-      </div>
-      <div class="finance-chart-series balance">
-        <span>잔액</span>
-        <div class="finance-chart-track"><i style="width:${width(r.balance)}%"></i></div>
-        <b>${money(r.balance)}</b>
-      </div>
-    </div>`).join('');
+  const x=i=>{
+    if(rows.length===1)return L+plotW/2;
+    return L+(plotW*i/(rows.length-1));
+  };
+  const y=v=>T+plotH-(Number(v||0)/niceMax)*plotH;
+
+  function smoothPath(values){
+    if(!values.length)return '';
+    const pts=values.map((v,i)=>[x(i),y(v)]);
+    if(pts.length===1)return `M ${pts[0][0]} ${pts[0][1]}`;
+    let d=`M ${pts[0][0]} ${pts[0][1]}`;
+    for(let i=0;i<pts.length-1;i++){
+      const [x0,y0]=pts[i], [x1,y1]=pts[i+1];
+      const mid=(x0+x1)/2;
+      d+=` C ${mid} ${y0}, ${mid} ${y1}, ${x1} ${y1}`;
+    }
+    return d;
+  }
+
+  const ticks=4;
+  const grid=Array.from({length:ticks+1},(_,i)=>{
+    const val=niceMax*(ticks-i)/ticks;
+    const yy=T+plotH*i/ticks;
+    return `<line class="finance-line-grid" x1="${L}" y1="${yy}" x2="${W-R}" y2="${yy}"></line>
+      <text class="finance-line-label" x="${L-8}" y="${yy+4}" text-anchor="end">${Math.round(val/1000000)}백만</text>`;
+  }).join('');
+
+  const xLabels=rows.map((r,i)=>`<text class="finance-line-label" x="${x(i)}" y="${H-15}" text-anchor="middle">${financeMonthLabel(r.key).replace('2026년 ','')}</text>`).join('');
+
+  function dots(field, cls, valueOffset){
+    return rows.map((r,i)=>`
+      <circle class="${cls}" cx="${x(i)}" cy="${y(r[field])}" r="5"></circle>
+      <text class="finance-line-value" x="${x(i)}" y="${y(r[field])+valueOffset}" text-anchor="middle">${Math.round(r[field]/10000).toLocaleString()}만</text>
+    `).join('');
+  }
+
+  root.innerHTML=`
+    <div class="finance-line-chart-wrap">
+      <svg class="finance-line-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="월별 누적 수입, 누적 지출, 잔액 추이 곡선 그래프">
+        ${grid}
+        <line class="finance-line-axis" x1="${L}" y1="${T}" x2="${L}" y2="${H-B}"></line>
+        <line class="finance-line-axis" x1="${L}" y1="${H-B}" x2="${W-R}" y2="${H-B}"></line>
+        ${xLabels}
+        <path class="finance-line-income" d="${smoothPath(rows.map(r=>r.income))}"></path>
+        <path class="finance-line-expense" d="${smoothPath(rows.map(r=>r.expense))}"></path>
+        <path class="finance-line-balance" d="${smoothPath(rows.map(r=>r.balance))}"></path>
+        ${dots('income','finance-dot-income',-10)}
+        ${dots('expense','finance-dot-expense',18)}
+        ${dots('balance','finance-dot-balance',-10)}
+      </svg>
+    </div>`;
 
   const selected=rows.find(r=>r.key===currentFinanceKey)||rows[rows.length-1];
   if(summaryRoot){
     summaryRoot.innerHTML=`
-      <div><span>${financeMonthLabel(selected.key)} 수입</span><b>${money(selected.income)}</b></div>
-      <div><span>${financeMonthLabel(selected.key)} 지출</span><b>${money(selected.expense)}</b></div>
-      <div><span>${financeMonthLabel(selected.key)} 잔액</span><b>${money(selected.balance)}</b></div>`;
+      <div><span>${financeMonthLabel(selected.key)} 누적 수입</span><b>${money(selected.income)}</b></div>
+      <div><span>${financeMonthLabel(selected.key)} 누적 지출</span><b>${money(selected.expense)}</b></div>
+      <div><span>${financeMonthLabel(selected.key)} 현재 잔액</span><b>${money(selected.balance)}</b></div>`;
   }
 }
 
