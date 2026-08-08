@@ -190,6 +190,37 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .finance-budget-bar{height:12px;background:#eee8e2;border-radius:99px;overflow:hidden;margin-top:6px}
 .finance-budget-bar i{display:block;height:100%;background:linear-gradient(90deg,#9b2840,#d36075);border-radius:99px}
 .finance-warning{margin-top:16px;background:#fff4e5;border:1px solid #ecd39c;border-radius:14px;padding:13px;color:#7a5917;font-size:13px;line-height:1.6}
+.finance-monthly-chart-card{margin-top:16px}
+.finance-chart-legend{display:flex;gap:16px;align-items:center;flex-wrap:wrap;margin:12px 0 14px;font-size:12px;color:var(--muted);font-weight:700}
+.finance-chart-legend span{display:flex;align-items:center;gap:6px}
+.finance-chart-legend i{width:12px;height:12px;border-radius:3px;display:inline-block}
+.finance-chart-legend i.income{background:#2c6e9b}
+.finance-chart-legend i.expense{background:#b23a48}
+.finance-chart-legend i.balance{background:#c99417}
+.finance-monthly-chart{display:flex;flex-direction:column;gap:16px}
+.finance-chart-month{padding:12px 0;border-bottom:1px dashed var(--line)}
+.finance-chart-month:last-child{border-bottom:0}
+.finance-chart-month-title{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:9px}
+.finance-chart-month-title strong{color:var(--navy);font-size:14px}
+.finance-chart-month-title small{color:var(--muted)}
+.finance-chart-series{display:grid;grid-template-columns:42px 1fr 108px;gap:8px;align-items:center;margin:7px 0;font-size:12px}
+.finance-chart-series>span:first-child{font-weight:800}
+.finance-chart-track{height:14px;background:#eee8e2;border-radius:99px;overflow:hidden}
+.finance-chart-track i{display:block;height:100%;border-radius:99px;min-width:2px}
+.finance-chart-series.income .finance-chart-track i{background:#2c6e9b}
+.finance-chart-series.expense .finance-chart-track i{background:#b23a48}
+.finance-chart-series.balance .finance-chart-track i{background:#c99417}
+.finance-chart-series b{text-align:right;color:var(--navy);font-size:12px}
+.finance-selected-month-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.finance-selected-month-summary>div{background:#f7f4ef;border-radius:13px;padding:11px}
+.finance-selected-month-summary span{display:block;color:var(--muted);font-size:11px}
+.finance-selected-month-summary b{display:block;margin-top:4px;color:var(--navy);font-size:16px}
+@media(max-width:760px){
+  .finance-chart-series{grid-template-columns:38px 1fr 92px;gap:6px}
+  .finance-chart-series b{font-size:11px}
+  .finance-selected-month-summary{grid-template-columns:1fr}
+}
+
 .finance-home-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .finance-home-grid div{background:#f7f4ef;border-radius:14px;padding:13px}
 .finance-home-grid span{display:block;color:var(--muted);font-size:12px}
@@ -684,6 +715,17 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <div class="finance-kpi"><span>총지출</span><b id="financeExpense">0원</b><small id="financeExpenseBudget"></small><em id="financeExpenseRate"></em></div>
 <div class="finance-kpi"><span>잔액</span><b id="financeBalance">0원</b><small>수입 - 지출</small></div>
 <div class="finance-kpi"><span>총예산</span><b id="financeBudget">0원</b><small>연간 예산</small></div>
+</div>
+<div class="card finance-monthly-chart-card">
+<h3>📊 월별 수입 · 지출 · 잔액</h3>
+<p class="finance-note">월별 재정 규모를 비교할 수 있습니다. 잔액은 해당 월 말 기준입니다.</p>
+<div class="finance-chart-legend">
+<span><i class="income"></i>수입</span>
+<span><i class="expense"></i>지출</span>
+<span><i class="balance"></i>잔액</span>
+</div>
+<div id="financeMonthlyChart" class="finance-monthly-chart"></div>
+<div id="financeSelectedMonthSummary" class="finance-selected-month-summary"></div>
 </div>
 <div class="card">
 <h3>📥 장년부 재정수입</h3>
@@ -1670,6 +1712,63 @@ function renderFinanceGroupAccordion(groups,rootId){
     title.textContent=(box.classList.contains('open')?'▾ ':'▸ ')+title.textContent.replace(/^[▸▾]\s*/,'');
   });
 }
+function renderFinanceMonthlyChart(){
+  const root=$('#financeMonthlyChart');
+  const summaryRoot=$('#financeSelectedMonthSummary');
+  if(!root)return;
+
+  const keys=Object.keys(FINANCE_MONTHS).sort();
+  const rows=keys.map(k=>{
+    const s=(FINANCE_MONTHS[k]||{}).summary||{};
+    return {
+      key:k,
+      income:Number(s.monthlyIncome||0),
+      expense:Number(s.monthlyExpense||0),
+      balance:Number(s.balance||0)
+    };
+  });
+
+  if(!rows.length){
+    root.innerHTML='<div class="empty">월별 재정자료가 없습니다.</div>';
+    if(summaryRoot)summaryRoot.innerHTML='';
+    return;
+  }
+
+  const maxValue=Math.max(1,...rows.flatMap(r=>[r.income,r.expense,r.balance]));
+  const width=v=>Math.max(0,Math.min(100,(Number(v||0)/maxValue)*100));
+
+  root.innerHTML=rows.map(r=>`
+    <div class="finance-chart-month">
+      <div class="finance-chart-month-title">
+        <strong>${financeMonthLabel(r.key)}</strong>
+        ${r.key===currentFinanceKey?'<small>현재 선택 월</small>':''}
+      </div>
+      <div class="finance-chart-series income">
+        <span>수입</span>
+        <div class="finance-chart-track"><i style="width:${width(r.income)}%"></i></div>
+        <b>${money(r.income)}</b>
+      </div>
+      <div class="finance-chart-series expense">
+        <span>지출</span>
+        <div class="finance-chart-track"><i style="width:${width(r.expense)}%"></i></div>
+        <b>${money(r.expense)}</b>
+      </div>
+      <div class="finance-chart-series balance">
+        <span>잔액</span>
+        <div class="finance-chart-track"><i style="width:${width(r.balance)}%"></i></div>
+        <b>${money(r.balance)}</b>
+      </div>
+    </div>`).join('');
+
+  const selected=rows.find(r=>r.key===currentFinanceKey)||rows[rows.length-1];
+  if(summaryRoot){
+    summaryRoot.innerHTML=`
+      <div><span>${financeMonthLabel(selected.key)} 수입</span><b>${money(selected.income)}</b></div>
+      <div><span>${financeMonthLabel(selected.key)} 지출</span><b>${money(selected.expense)}</b></div>
+      <div><span>${financeMonthLabel(selected.key)} 잔액</span><b>${money(selected.balance)}</b></div>`;
+  }
+}
+
 function renderFinanceDashboard(){
   const keys=Object.keys(FINANCE_MONTHS).sort().reverse();
   if(!currentFinanceKey&&keys.length)currentFinanceKey=keys[0];
@@ -1689,6 +1788,7 @@ function renderFinanceDashboard(){
   setTextSafe('#financeMonthlyExpense',money(s.monthlyExpense||0));
   renderFinanceGroupAccordion(FDATA.incomeGroups,'financeIncomeGroups');
   renderFinanceGroupAccordion(FDATA.expenseGroups,'financeExpenseGroups');
+  renderFinanceMonthlyChart();
 }
 
 
