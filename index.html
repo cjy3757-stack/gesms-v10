@@ -576,6 +576,9 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <option value="새벽기도">새벽기도</option>
 <option selected="" value="성결예배">성결예배</option>
 <option value="구령예배">구령예배</option>
+<option value="주일학교">주일학교</option>
+<option value="학생부">학생부</option>
+<option value="청년부">청년부</option>
 <option value="수요예배">수요예배</option>
 <option value="금요기도회">금요기도회</option>
 <option value="소그룹모임">소그룹모임</option>
@@ -584,7 +587,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 </select>
 </label>
 <input id="attendanceSearch" placeholder="이름 또는 가족 검색"/>
-<div class="service-type-help">예배 종류에 소그룹모임·부흥집회·기타가 추가되었습니다. 특별집회는 실제 진행 날짜를 선택해 출석을 기록하세요.</div>
+<div class="service-type-help">예배 종류에 주일학교·학생부·청년부·소그룹모임·부흥집회·기타가 포함되어 있습니다. 실제 진행 날짜를 선택해 출석을 기록하세요.</div>
 </div>
 <div class="attendance-summary">
 <div class="att-stat"><b id="attTotal">0</b><span>등록교인</span></div><div class="att-stat"><b id="attPresent">0</b><span>출석</span></div><div class="att-stat"><b id="attOnline">0</b><span>온라인</span></div><div class="att-stat visitor"><b id="attVisitors">0</b><span>방문자</span></div><div class="att-stat total-attendance"><b id="attActualTotal">0</b><span>전체 참석</span></div><div class="att-stat"><b id="attAbsent">0</b><span>불출석</span></div><div class="att-stat"><b id="attUnchecked">0</b><span>미체크</span></div><div class="att-stat"><b id="attRate">0%</b><span>교인 참석률</span></div>
@@ -1690,7 +1693,7 @@ function renderFinanceDashboard(){
 
 
 
-const ALL_SERVICES=['새벽기도','성결예배','구령예배','수요예배','금요기도회','소그룹모임','부흥집회','기타'];
+const ALL_SERVICES=['새벽기도','성결예배','구령예배','주일학교','학생부','청년부','수요예배','금요기도회','소그룹모임','부흥집회','기타'];
 
 // 출석 CSV 파일명이 ZIP/운영체제 인코딩 문제로 깨져도 반드시 표준 예배명으로 복원합니다.
 // 이 표준화 함수는 월간 달력, 월간 합계, GitHub 파일 검색, 로컬 인덱스에 공통 적용됩니다.
