@@ -214,6 +214,14 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .finance-selected-month-summary>div{background:#f7f4ef;border-radius:13px;padding:11px}
 .finance-selected-month-summary span{display:block;color:var(--muted);font-size:11px}
 .finance-selected-month-summary b{display:block;margin-top:4px;color:var(--navy);font-size:16px}
+.finance-history-table-wrap{margin-top:14px;overflow-x:auto;border:1px solid var(--line);border-radius:14px}
+.finance-history-table{width:100%;border-collapse:collapse;min-width:520px;background:#fff}
+.finance-history-table th,.finance-history-table td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;font-size:12px}
+.finance-history-table th:first-child,.finance-history-table td:first-child{text-align:center}
+.finance-history-table thead th{background:#f7f4ef;color:var(--navy);font-weight:800}
+.finance-history-table tbody tr:last-child td{border-bottom:0}
+.finance-history-table tbody tr.is-current{background:#fff9e8}
+
 @media(max-width:760px){
   .finance-line-label{font-size:10px}
   .finance-line-value{font-size:9px}
@@ -725,6 +733,12 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 </div>
 <div id="financeMonthlyChart" class="finance-monthly-chart"></div>
 <div id="financeSelectedMonthSummary" class="finance-selected-month-summary"></div>
+<div class="finance-history-table-wrap">
+<table class="finance-history-table" aria-label="월별 누적 재정 요약">
+<thead><tr><th>월</th><th>누적 수입</th><th>누적 지출</th><th>잔액</th></tr></thead>
+<tbody id="financeHistoryTableBody"></tbody>
+</table>
+</div>
 </div>
 <div class="card">
 <h3>📥 장년부 재정수입</h3>
@@ -1796,6 +1810,16 @@ function renderFinanceMonthlyChart(){
       <div><span>${financeMonthLabel(selected.key)} 누적 수입</span><b>${money(selected.income)}</b></div>
       <div><span>${financeMonthLabel(selected.key)} 누적 지출</span><b>${money(selected.expense)}</b></div>
       <div><span>${financeMonthLabel(selected.key)} 현재 잔액</span><b>${money(selected.balance)}</b></div>`;
+  }
+  const historyBody=$('#financeHistoryTableBody');
+  if(historyBody){
+    historyBody.innerHTML=rows.map(r=>`
+      <tr class="${r.key===currentFinanceKey?'is-current':''}">
+        <td>${financeMonthLabel(r.key).replace('2026년 ','')}</td>
+        <td>${money(r.income)}</td>
+        <td>${money(r.expense)}</td>
+        <td>${money(r.balance)}</td>
+      </tr>`).join('');
   }
 }
 
