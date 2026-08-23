@@ -6,7 +6,7 @@
 <meta content="width=device-width,initial-scale=1,viewport-fit=cover" name="viewport"/>
 <meta content="#9e1b32" name="theme-color"/>
 <meta content="noindex,nofollow" name="robots"/>
-<title>GunpoEunhye Smart Ministry System (GESMS) V10.7.3</title>
+<title>GunpoEunhye Smart Ministry System (GESMS) V11.1 Stable</title>
 <link href="manifest.webmanifest" rel="manifest"/>
 <link href="icon-192.png" rel="icon"/>
 <style>
@@ -125,6 +125,13 @@ button,select,input{min-height:var(--tap)}
 .simple-help{font-size:13px;line-height:1.65;color:var(--muted)}
 .install-banner{display:none;background:#fff4e5;border:1px solid #ecd39c;border-radius:15px;padding:12px;margin-bottom:14px}
 .install-banner.show{display:block}
+.data-sync-panel{display:flex;align-items:center;justify-content:space-between;gap:12px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:13px 15px;margin:0 0 14px;box-shadow:var(--shadow)}
+.data-sync-panel>div{display:flex;flex-direction:column;gap:3px}
+.data-sync-panel b{color:var(--navy)}
+.data-sync-panel small{color:var(--muted);font-size:12px}
+.data-sync-panel .action-btn{white-space:nowrap}
+@media(max-width:560px){.data-sync-panel{align-items:stretch;flex-direction:column}.data-sync-panel .action-btn{width:100%}}
+
 html.large-mode body{font-size:18px}
 html.large-mode .att-row{padding:15px}
 html.large-mode .att-options button{padding:10px 12px;font-size:14px}
@@ -462,11 +469,11 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .mission-event{border-left:5px solid #3c9c68}.mission-event .event-badge{background:#e6f6ec;color:#227346}
 @media(max-width:760px){.ev-result-grid{grid-template-columns:1fr}.registered-person{grid-template-columns:1fr auto}.registered-person small{grid-column:1/-1}.registered-person time{text-align:right}}
 </style>
-<script src="version.js?v=10.9.7"></script>
+<script src="version.js?v=11.1"></script>
 </head>
 <body>
 <div class="app">
-<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V10.7.3</h1><p>군포은혜영문 스마트 목양 시스템 V10.7.3</p></div><div class="private">🔒 교회 내부용</div></div></header>
+<header><div class="brand"><img alt="GESMS 원형 로고" src="logo.png"/><div><h1>GunpoEunhye Smart Ministry System (GESMS) V11.1 Stable</h1><p>군포은혜영문 스마트 목양 시스템 V11.1 Stable</p></div><div class="private">🔒 교회 내부용</div></div></header>
 <main>
 <section class="page active" id="home">
 <div class="install-banner" id="installBanner">
@@ -474,6 +481,14 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <p class="simple-help" style="margin:5px 0 8px">홈 화면에 추가하면 일반 앱처럼 바로 실행할 수 있습니다.</p>
 <button class="action-btn" id="installPwaBtn">앱 설치</button>
 </div>
+<div class="data-sync-panel" id="dataSyncPanel">
+  <div>
+    <b>🔄 최신 데이터 동기화</b>
+    <small id="lastSyncText">마지막 동기화: 확인 전</small>
+  </div>
+  <button class="action-btn" id="syncAllDataBtn">지금 동기화</button>
+</div>
+<div class="remote-status" id="globalSyncStatus" style="display:none"></div>
 <div class="easy-panel">
 <h3>⚡ 빠른 실행</h3>
 <div class="quick-actions">
@@ -485,7 +500,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <button data-jump="carePage">📞 돌봄 관리</button>
 </div>
 </div>
-<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V10.9.7</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
+<div class="hero gesms-hero"><div><span class="alpha-badge">GESMS V11.1 Stable</span><h2>한 영혼을 끝까지 품는 스마트 목양 시스템</h2><p>교인관리, 예배 출석, 돌봄, 영혼구원, 봉사, 재정과 교회 일정을 하나의 사역 흐름으로 연결합니다.</p></div><img src="logo.png" alt="GESMS 로고"/></div>
 <div class="ministry-dashboard">
 <div class="ministry-card soul"><div class="ministry-icon">❤️</div><div><span>영혼구원 진행</span><b id="homeSoulProgress">데이터 확인중</b><small id="homeSoulMeta">기도대상자 Excel을 자동으로 읽어 집계합니다.</small></div></div>
 <div class="ministry-card prayer"><div class="ministry-icon">🙏</div><div><span>오늘 기도대상</span><b id="homePrayerCount">- 명</b><small id="homePrayerNames">오늘 기도할 대상을 표시합니다.</small></div></div>
@@ -758,7 +773,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <section class="page" id="eventsPage"><h2 class="section-title">교회 일정</h2><div class="schedule" id="events"></div></section>
 <section class="page" id="evangelismPage">
 <h2 class="section-title">❤️ 전도(영혼구원)</h2>
-<div class="alpha-notice"><b>GESMS V10.9.7</b><span>기도대상자 Excel 자동연동, 검색·필터, 전도단계 통계와 영혼관리 카드를 적용한 정식 운영 버전입니다.</span></div>
+<div class="alpha-notice"><b>GESMS V11.1 Stable</b><span>기도대상자 Excel 자동연동, 검색·필터, 전도단계 통계와 영혼관리 카드를 적용한 정식 운영 버전입니다.</span></div>
 <div class="evangelism-menu">
 <button class="evangelism-tile" data-ev-tab="evStatus"><span>📈</span><b>전도현황</b><small>목표·현재·단계별 현황</small></button>
 <button class="evangelism-tile" data-ev-tab="prayerTargets"><span>🙏</span><b>기도대상자관리</b><small>Excel 자동연동</small></button>
@@ -786,11 +801,11 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <section class="page" id="settingsPage">
 <h2 class="section-title">⚙ 설정</h2>
 <div class="card"><h3>📂 Excel 데이터 관리</h3><div class="data-manager-grid"><div><span>👨‍👩‍👧</span><b>교인명단</b><small>data.js / 원본 Excel</small></div><div><span>✅</span><b>출석</b><small>날짜별 CSV</small></div><div><span>📢</span><b>공지</b><small>공지사항.xlsx</small></div><div><span>📅</span><b>일정</b><small>교회일정.xlsx</small></div><div class="new"><span>🙏</span><b>기도대상자</b><small>자동연동 적용</small></div><div class="new"><span>🌱</span><b>일만상상</b><small>통합 Excel 자동연동</small></div></div></div>
-<div class="card" style="margin-top:16px"><h3>ℹ 시스템 정보</h3><div class="system-info"><img src="logo.png" alt="GESMS 로고"><div><b>GunpoEunhye Smart Ministry System</b><p>군포은혜영문 스마트 목양 시스템</p><span>GESMS V10.9.7</span></div></div></div>
+<div class="card" style="margin-top:16px"><h3>ℹ 시스템 정보</h3><div class="system-info"><img src="logo.png" alt="GESMS 로고"><div><b>GunpoEunhye Smart Ministry System</b><p>군포은혜영문 스마트 목양 시스템</p><span>GESMS V11.1 Stable</span></div></div></div>
 </section>
-<section class="page" id="morePage"><h2 class="section-title">이용 안내</h2><div class="info"><b>📱 앱처럼 설치</b><br/>안드로이드 Chrome: ⋮ → 앱 설치 또는 홈 화면에 추가<br/>아이폰 Safari: 공유 □↑ → 홈 화면에 추가<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔄 데이터 업데이트</b><br/>명단 또는 시스템 파일이 변경되면 GitHub 저장소에 업로드하여 같은 주소에서 최신 자료를 사용할 수 있습니다.<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔐 개인정보 보호</b><br/>교회 내부에서만 사용하고 외부 전송이나 공개 게시를 삼가 주세요.</div></section>
+<section class="page" id="morePage"><h2 class="section-title">이용 안내</h2><div class="info"><b>📱 앱처럼 설치</b><br/>안드로이드 Chrome: ⋮ → 앱 설치 또는 홈 화면에 추가<br/>아이폰 Safari: 공유 □↑ → 홈 화면에 추가<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔄 데이터 업데이트</b><br/>GitHub 저장소에 새 자료를 업로드한 뒤 Pages 배포가 끝나면 앱의 ‘지금 동기화’를 누르면 최신 공개 자료를 다시 확인합니다. 앱을 다시 열 때도 자동으로 최신 자료를 확인합니다.<hr style="border:0;border-top:1px solid var(--line);margin:16px 0"/><b>🔐 개인정보 보호</b><br/>교회 내부에서만 사용하고 외부 전송이나 공개 게시를 삼가 주세요.</div></section>
 </main>
-<footer class="gesms-footer"><b>GESMS V10.9.7</b><span>GunpoEunhye Smart Ministry System</span><small>© 2026 Salvation Army Gunpo Eunhye Corps</small></footer>
+<footer class="gesms-footer"><b>GESMS V11.1 Stable</b><span>GunpoEunhye Smart Ministry System</span><small>© 2026 Salvation Army Gunpo Eunhye Corps</small></footer>
 <nav class="bottom" aria-label="주요 메뉴"><div class="nav main-nav">
 <button class="active" data-page="home"><span>🏠</span>홈</button>
 <button data-page="familiesPage"><span>👨‍👩‍👧</span>가족</button>
@@ -1346,17 +1361,24 @@ function occurrenceDates(base,service,count=12){
 async function fetchAttendanceCount(date,service){
   if(date>appTodayISO())return null;
   const key='gunpoAttendance:'+date+':'+service;
+
+  // 공개된 GitHub CSV를 항상 먼저 확인합니다.
+  // 다른 기기의 오래된 localStorage 때문에 최신 출석이 가려지는 문제를 방지합니다.
+  try{
+    const r=await fetch(`./attendance-${date}-${safeServiceName(service)}.csv?v=${Date.now()}`,{cache:'no-store'});
+    if(r.ok){
+      const parsed=parseAttendanceCsvData(await r.text());
+      return Object.values(parsed.attendance).filter(x=>x==='present'||x==='online').length+parsed.visitorCount;
+    }
+  }catch(e){}
+
+  // 오프라인이거나 아직 GitHub에 올라가지 않은 경우에만 이 기기의 저장값을 사용합니다.
   try{
     const local=JSON.parse(localStorage.getItem(key)||'{}');
     const visitor=getVisitorData(date,service).count;
     if(Object.keys(local).length||visitor)return Object.values(local).filter(x=>x==='present'||x==='online').length+visitor;
   }catch(e){}
-  try{
-    const r=await fetch(`./attendance-${date}-${safeServiceName(service)}.csv?v=${Date.now()}`,{cache:'no-store'});
-    if(!r.ok)return null;
-    const parsed=parseAttendanceCsvData(await r.text());
-    return Object.values(parsed.attendance).filter(x=>x==='present'||x==='online').length+parsed.visitorCount;
-  }catch(e){return null}
+  return null;
 }
 async function loadAttendanceStats(){
   const service=$('#statsService').value,base=$('#statsDate').value,status=$('#statsLoadStatus');
@@ -1479,6 +1501,71 @@ async function loadHomeWeeklyAttendance(){
   status.textContent=`이번 주 출석자료 ${rows.length}건을 불러왔습니다.`;
 }
 
+
+function formatSyncTime(ts){
+  if(!ts)return '확인 전';
+  try{
+    const d=new Date(Number(ts));
+    return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`;
+  }catch(e){return '확인 전'}
+}
+function updateLastSyncText(){
+  const el=$('#lastSyncText');
+  if(!el)return;
+  const ts=localStorage.getItem('gesmsLastDataSync');
+  el.textContent='마지막 동기화: '+formatSyncTime(ts);
+}
+async function syncPublishedData(options={}){
+  const silent=!!options.silent;
+  const status=$('#globalSyncStatus');
+  const btn=$('#syncAllDataBtn');
+  if(btn)btn.disabled=true;
+  if(status&&!silent){
+    status.style.display='block';
+    status.className='remote-status';
+    status.textContent='GitHub의 최신 출석·일정·전도·재정 자료를 확인하는 중입니다...';
+  }
+
+  try{
+    // GitHub 트리 자체도 no-store로 다시 확인하여 새 CSV 파일을 즉시 발견합니다.
+    try{await fetchGitHubAttendanceFiles()}catch(e){}
+
+    // 메인과 통계는 최신 공개 CSV를 네트워크 우선으로 다시 계산합니다.
+    const jobs=[];
+    if(typeof loadHomeWeeklyAttendance==='function')jobs.push(loadHomeWeeklyAttendance());
+    if(typeof updateAttendanceGoal==='function')jobs.push(updateAttendanceGoal());
+    if(typeof loadHomeMonthlyAttendance==='function')jobs.push(loadHomeMonthlyAttendance());
+    if($('#attendanceCalendarMonth')&&$('#attendanceCalendarMonth').value&&typeof loadMonthlyAttendanceCalendar==='function')jobs.push(loadMonthlyAttendanceCalendar());
+    if($('#statsService')&&$('#statsDate')&&typeof loadAttendanceStats==='function')jobs.push(loadAttendanceStats());
+    await Promise.allSettled(jobs);
+
+    // 출석 메뉴에서 사용자가 명시적으로 누른 경우에만 선택 날짜를 GitHub 값으로 강제 새로고침합니다.
+    if(!silent&&$('#attendanceDate')&&$('#attendanceService')&&typeof loadGitHubAttendance==='function'){
+      try{await loadGitHubAttendance(true)}catch(e){}
+    }
+
+    const now=Date.now();
+    localStorage.setItem('gesmsLastDataSync',String(now));
+    updateLastSyncText();
+
+    if(status&&!silent){
+      status.className='remote-status ok';
+      status.textContent='최신 데이터 동기화를 완료했습니다. GitHub Pages 배포가 끝난 자료부터 바로 반영됩니다.';
+    }
+  }catch(e){
+    if(status&&!silent){
+      status.className='remote-status warn';
+      status.textContent='동기화 중 일부 자료를 불러오지 못했습니다. 인터넷 연결 또는 GitHub Pages 배포 상태를 확인해 주세요.';
+    }
+  }finally{
+    if(btn)btn.disabled=false;
+  }
+}
+function autoSyncPublishedData(){
+  const last=Number(localStorage.getItem('gesmsLastDataSync')||0);
+  if(Date.now()-last>120000)syncPublishedData({silent:true});
+}
+
 function getGoal(){return Number(localStorage.getItem('gunpoAttendanceGoal')||60)}
 function setGoal(value){localStorage.setItem('gunpoAttendanceGoal',String(value))}
 async function updateAttendanceGoal(){
@@ -1494,14 +1581,14 @@ async function updateAttendanceGoal(){
 async function fetchAttendanceObject(date,service){
   const key='gunpoAttendance:'+date+':'+service;
   try{
+    const r=await fetch(`./attendance-${date}-${safeServiceName(service)}.csv?v=${Date.now()}`,{cache:'no-store'});
+    if(r.ok)return parseAttendanceCsvText(await r.text());
+  }catch(e){}
+  try{
     const local=JSON.parse(localStorage.getItem(key)||'{}');
     if(Object.keys(local).length)return local;
   }catch(e){}
-  try{
-    const r=await fetch(`./attendance-${date}-${safeServiceName(service)}.csv?v=${Date.now()}`,{cache:'no-store'});
-    if(!r.ok)return null;
-    return parseAttendanceCsvText(await r.text());
-  }catch(e){return null}
+  return null;
 }
 function personGroup(member){return (member.group1||'소속 미지정').trim()||'소속 미지정'}
 function renderCareList(el,items){
@@ -2258,6 +2345,10 @@ const bm={};for(let i=1;i<=12;i++)bm[`${i}월`]=(D.stats&&D.stats.birthMonths&&D
   $('#statsDate').value=$('#attendanceDate').value;$('#statsService').value='성결예배';$('#careDate').value=$('#attendanceDate').value;$('#careService').value='성결예배';$('#refreshCare').onclick=loadCareManagement;$('#shareCare').onclick=shareCareList;$('#copyCare').onclick=copyCareList;$('#refreshStats').onclick=loadAttendanceStats;$('#statsService').onchange=loadAttendanceStats;$('#statsDate').onchange=loadAttendanceStats;
   $('#homeAttendanceService').onchange=loadHomeMonthlyAttendance;$('#refreshHomeAttendance').onclick=loadHomeMonthlyAttendance;loadHomeMonthlyAttendance();
   bindClick('#refreshWeeklyAttendance',loadHomeWeeklyAttendance);
+  bindClick('#syncAllDataBtn',()=>syncPublishedData({silent:false}));
+  updateLastSyncText();
+  setTimeout(autoSyncPublishedData,1200);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')autoSyncPublishedData()});
   loadHomeWeeklyAttendance();
   renderHomeKpis();
   $('#attendanceGoal').value=getGoal();$('#attendanceGoal').onchange=e=>{setGoal(e.target.value);updateAttendanceGoal();loadHomeMonthlyAttendance()};updateAttendanceGoal();
