@@ -1,1 +1,1 @@
-window.GESMS_APP_VERSION='V11.1 Stable';
+window.GESMS_APP_VERSION='V11.1.1 Stable';
