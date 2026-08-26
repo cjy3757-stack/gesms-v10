@@ -1,4 +1,4 @@
-const CACHE='gesms-v11-1-2-attendance-sync-rootfix-20260826';
+const CACHE='gesms-v11-1-4-project-completion-rate-20260826';
 const STATIC=['./','./index.html','./version.js','./data.js','./service-data.js','./office-data.js','./prayer-static-data.js','./office-excel.js','./prayer-excel-v10.8.js','./jszip.min.js','./member-excel.js','./stats-v10.7.3.js','./finance-data.js','./manifest.webmanifest','./logo.png','./icon-192.png','./icon-512.png'];
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(STATIC)));self.skipWaiting();});
 self.addEventListener('activate',e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim())));

@@ -110,6 +110,20 @@ function projectMonthLabel(key){
   if(key==='미정')return '일정 미정';
   const [y,m]=key.split('-');return `${y}년 ${Number(m)}월`;
 }
+function projectTodayISO(){
+  const d=new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+}
+function projectEffectiveStatus(p){
+  const raw=text(p['상태'])||'예정';
+  if(raw==='완료')return '완료';
+
+  const end=text(p['종료일']||p['시작일']);
+  if(/^\d{4}-\d{2}-\d{2}$/.test(end) && end<projectTodayISO())return '완료';
+
+  return raw;
+}
+
 function shortProjectDate(p){
   const start=text(p['시작일']), end=text(p['종료일']);
   const md=d=>/^\d{4}-\d{2}-\d{2}$/.test(d)?d.slice(5).replace('-','/'):'';
@@ -120,13 +134,16 @@ function shortProjectDate(p){
 }
 function projectCard(p){
   const date=shortProjectDate(p);
-  return `<article class="prayer-person project-preview-card"><div class="prayer-head"><div class="project-date-badge"><b>${esc(date.main)}</b>${date.sub?`<small>${esc(date.sub)}</small>`:''}</div><div class="project-preview-title"><h4>${esc(p['사업명'])}</h4><p>📅 ${esc(p['시작일']||p['종료일']||'일정 미정')} · ${esc(p['분야']||'-')} · ${esc(p['담당부서']||'-')}</p></div><span class="stage-badge">${esc(p['상태']||'-')}</span></div><div class="prayer-detail"><div class="detail-grid"><div><span>기간</span><b>${esc(p['시작일']||'-')} ~ ${esc(p['종료일']||'-')}</b></div><div><span>담당자</span><b>${esc(p['담당자']||'-')}</b></div><div><span>진행률</span><b>${esc(p['진행률(%)'])}%</b></div><div><span>참여/수혜</span><b>${esc(p['참여인원']||0)}명 / ${esc(p['수혜인원']||0)}명</b></div><div><span>예산/지출</span><b>${money(p['예산'])} / ${money(p['실제지출'])}</b></div></div><div class="prayer-topic"><b>핵심활동</b><br>${esc(p['핵심활동']||p['사업목적']||'-')}</div>${text(p['결과/열매'])?`<div class="prayer-topic" style="border-color:var(--navy);background:#eef3f8"><b>결과·열매</b><br>${esc(p['결과/열매'])}</div>`:''}</div></article>`;
+  const effectiveStatus=projectEffectiveStatus(p);
+  return `<article class="prayer-person project-preview-card"><div class="prayer-head"><div class="project-date-badge"><b>${esc(date.main)}</b>${date.sub?`<small>${esc(date.sub)}</small>`:''}</div><div class="project-preview-title"><h4>${esc(p['사업명'])}</h4><p>📅 ${esc(p['시작일']||p['종료일']||'일정 미정')} · ${esc(p['분야']||'-')} · ${esc(p['담당부서']||'-')}</p></div><span class="stage-badge">${esc(effectiveStatus)}</span></div><div class="prayer-detail"><div class="detail-grid"><div><span>기간</span><b>${esc(p['시작일']||'-')} ~ ${esc(p['종료일']||'-')}</b></div><div><span>담당자</span><b>${esc(p['담당자']||'-')}</b></div><div><span>진행률</span><b>${esc(p['진행률(%)'])}%</b></div><div><span>참여/수혜</span><b>${esc(p['참여인원']||0)}명 / ${esc(p['수혜인원']||0)}명</b></div><div><span>예산/지출</span><b>${money(p['예산'])} / ${money(p['실제지출'])}</b></div></div><div class="prayer-topic"><b>핵심활동</b><br>${esc(p['핵심활동']||p['사업목적']||'-')}</div>${text(p['결과/열매'])?`<div class="prayer-topic" style="border-color:var(--navy);background:#eef3f8"><b>결과·열매</b><br>${esc(p['결과/열매'])}</div>`:''}</div></article>`;
 }
 function renderProjects(){
   const el=$('#projectList'), summary=$('#projectSummary'); if(!el||!summary)return;
-  const states=['예정','진행중','완료','보류'], counts=Object.fromEntries(states.map(s=>[s,projects.filter(p=>text(p['상태'])===s).length]));
-  const budget=projects.reduce((a,p)=>a+(Number(p['예산'])||0),0), spent=projects.reduce((a,p)=>a+(Number(p['실제지출'])||0),0);
-  summary.innerHTML=`<div class="soul-kpis"><div><span>전체</span><b>${projects.length}</b></div><div><span>진행중</span><b>${counts['진행중']}</b></div><div><span>완료</span><b>${counts['완료']}</b></div><div><span>예산 집행</span><b>${budget?Math.round(spent/budget*100):0}%</b></div></div><div class="project-view-guide">📅 월을 선택하면 날짜와 사업명이 먼저 표시됩니다. 항목을 누르면 상세내용을 볼 수 있습니다.</div>`;
+  const total=projects.length;
+  const completed=projects.filter(p=>projectEffectiveStatus(p)==='완료').length;
+  const inProgress=Math.max(0,total-completed);
+  const completionRate=total?Math.round(completed/total*100):0;
+  summary.innerHTML=`<div class="soul-kpis"><div><span>전체</span><b>${total}</b></div><div><span>진행중</span><b>${inProgress}</b></div><div><span>완료</span><b>${completed}</b></div><div><span>완료율</span><b>${completionRate}%</b></div></div><div class="project-view-guide">📅 월을 선택하면 날짜와 사업명이 먼저 표시됩니다. 일정이 지난 계획은 자동으로 완료 처리되며 완료율에도 자동 반영됩니다. 항목을 누르면 상세내용을 볼 수 있습니다.</div>`;
   if(!projects.length){el.innerHTML='<div class="no-results">등록된 일만상상 프로젝트가 없습니다.</div>';return;}
   const grouped={};projects.forEach(p=>{const k=projectMonthKey(p);(grouped[k]||(grouped[k]=[])).push(p)});
   Object.values(grouped).forEach(list=>list.sort((a,b)=>text(a['시작일']).localeCompare(text(b['시작일']))||text(a['사업명']).localeCompare(text(b['사업명'],'ko'))));
