@@ -1,3 +1,3 @@
-window.GESMS_APP_VERSION='V11.1.5';
-window.GESMS_APP_LABEL='V11.1.5 Stable';
-window.GESMS_BUILD_DATE='2026-08-26';
+window.GESMS_APP_VERSION='V11.2.1';
+window.GESMS_APP_LABEL='V11.2.1 Stable';
+window.GESMS_BUILD_DATE='2026-08-27';

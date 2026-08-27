@@ -468,8 +468,12 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .rank-row{grid-template-columns:30px 1fr auto}.rank-no{font-weight:800;color:var(--red)}
 .mission-event{border-left:5px solid #3c9c68}.mission-event .event-badge{background:#e6f6ec;color:#227346}
 @media(max-width:760px){.ev-result-grid{grid-template-columns:1fr}.registered-person{grid-template-columns:1fr auto}.registered-person small{grid-column:1/-1}.registered-person time{text-align:right}}
+
+.attendance-check-heading{margin:18px 0 10px;color:var(--navy);font-size:18px;font-weight:800}
+.attendance-bottom-actions{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
+
 </style>
-<script src="version.js?v=11.2"></script>
+<script src="version.js?v=11.2.1"></script>
 </head>
 <body>
 <div class="app">
@@ -675,6 +679,10 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <h3 id="attendanceListTitle">전체 출석 현황</h3>
 <div id="attendanceCompactList"></div>
 </div>
+<h3 class="attendance-check-heading">출석 점검</h3>
+<div class="share-box" id="absentSharePreview" style="display:none"></div><div class="remote-status" id="remoteAttendanceStatus">예배일과 예배 종류를 선택하면 이 휴대폰의 저장 기록을 먼저 불러오고, 기록이 없으면 GitHub의 예배별 CSV를 확인합니다.</div>
+<div id="attendanceList"></div>
+<div class="attendance-bottom-actions">
 <div class="att-actions">
 <button class="action-btn" id="markAllPresent">전체 출석</button>
 <button class="action-btn danger" id="clearAttendance">당일 기록 초기화</button>
@@ -688,8 +696,8 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <button class="action-btn secondary" id="exportAbsent">불출석 CSV 저장</button>
 <input accept=".csv" hidden="" id="importAttendance" type="file"/>
 </div>
-<div class="share-box" id="absentSharePreview" style="display:none"></div><div class="remote-status" id="remoteAttendanceStatus">예배일과 예배 종류를 선택하면 이 휴대폰의 저장 기록을 먼저 불러오고, 기록이 없으면 GitHub의 예배별 CSV를 확인합니다.</div>
-<div id="attendanceList"></div></section>
+</div>
+</section>
 <section class="page" id="carePage">
 <h2 class="section-title">돌봄 관리</h2>
 <div class="card">
@@ -827,7 +835,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <script src="member-excel.js?v=10.9.7"></script>
 <script src="stats-v10.7.3.js?v=10.9.7"></script>
 <script src="office-excel.js?v=10.9.7"></script>
-<script src="prayer-excel-v10.8.js?v=11.2"></script>
+<script src="prayer-excel-v10.8.js?v=11.2.1"></script>
 <script src="finance-data.js?v=10.9.7"></script>
 <script>
 const D=window.APP_DATA,$=s=>document.querySelector(s);
@@ -2530,9 +2538,9 @@ init().catch(e=>{
 <script>
 (function(){
   function applyGesmsVersion(){
-    var v=(window.GESMS_APP_VERSION||'V11.2').replace(/\s+Stable$/,'');
+    var v=(window.GESMS_APP_VERSION||'V11.2.1').replace(/\s+Stable$/,'');
     var label=window.GESMS_APP_LABEL||(v+' Stable');
-    var build=window.GESMS_BUILD_DATE||'2026-08-26';
+    var build=window.GESMS_BUILD_DATE||'2026-08-27';
 
     document.title='GunpoEunhye Smart Ministry System (GESMS) '+v;
 
