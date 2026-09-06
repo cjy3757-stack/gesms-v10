@@ -473,7 +473,7 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 .attendance-bottom-actions{margin-top:22px;padding-top:16px;border-top:1px solid var(--line)}
 
 </style>
-<script src="version.js?v=11.2.1"></script>
+<script src="version.js?v=11.2.3"></script>
 </head>
 <body>
 <div class="app">
@@ -835,8 +835,8 @@ html.large-mode .att-options button{padding:10px 12px;font-size:14px}
 <script src="member-excel.js?v=10.9.7"></script>
 <script src="stats-v10.7.3.js?v=10.9.7"></script>
 <script src="office-excel.js?v=10.9.7"></script>
-<script src="prayer-excel-v10.8.js?v=11.2.1"></script>
-<script src="finance-data.js?v=10.9.7"></script>
+<script src="prayer-excel-v10.8.js?v=11.2.3"></script>
+<script src="finance-data.js?v=11.2.3"></script>
 <script>
 const D=window.APP_DATA,$=s=>document.querySelector(s);
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -1523,6 +1523,22 @@ function updateLastSyncText(){
   const ts=localStorage.getItem('gesmsLastDataSync');
   el.textContent='마지막 동기화: '+formatSyncTime(ts);
 }
+
+async function syncFinanceDataFromGitHub(){
+  try{
+    const r=await fetch(`./finance-data.js?v=11.2.3'no-store'});
+    if(!r.ok)throw new Error('finance-data fetch failed');
+    const text=await r.text();
+    new Function(text)();
+    FINANCE_MONTHS=window.FINANCE_MONTHS||FINANCE_MONTHS;
+    setupFinanceMonthOptions();
+    renderFinanceDashboard();
+    return {ok:true,months:Object.keys(FINANCE_MONTHS).length};
+  }catch(e){
+    return {ok:false,error:e};
+  }
+}
+
 async function syncPublishedData(options={}){
   const silent=!!options.silent;
   const status=$('#globalSyncStatus');
@@ -1532,7 +1548,7 @@ async function syncPublishedData(options={}){
   if(status&&!silent){
     status.style.display='block';
     status.className='remote-status';
-    status.textContent='GitHub의 최신 출석자료를 확인하고 통계에 반영하는 중입니다...';
+    status.textContent='GitHub의 최신 출석·재정자료를 확인하고 반영하는 중입니다...';
   }
 
   try{
@@ -1549,6 +1565,7 @@ async function syncPublishedData(options={}){
     // 실제 GitHub에 존재하는 출석 CSV 목록만 가져온 뒤,
     // 해당 월 파일들을 출석메뉴와 동일한 localStorage 구조로 저장합니다.
     const attendanceSync=await syncAttendanceMonthFromGitHub(monthPrefix);
+    const financeSync=await syncFinanceDataFromGitHub();
 
     // 새로 저장된 출석자료를 기준으로 화면을 다시 계산합니다.
     const jobs=[];
@@ -1570,10 +1587,10 @@ async function syncPublishedData(options={}){
     if(status&&!silent){
       if(attendanceSync.failed===0&&renderFailed===0){
         status.className='remote-status ok';
-        status.textContent=`동기화 완료 · ${monthPrefix.replace('-','년 ')}월 출석 CSV ${attendanceSync.success}개 반영 · 월간 통계 갱신 완료`;
+        status.textContent=`동기화 완료 · ${monthPrefix.replace('-','년 ')}월 출석 CSV ${attendanceSync.success}개 반영 · 재정 ${financeSync.ok?'최신자료 반영':'확인 실패'} · 월간 통계 갱신 완료`;
       }else{
         status.className='remote-status warn';
-        status.textContent=`동기화 일부 완료 · 출석 CSV ${attendanceSync.success}/${attendanceSync.total}개 반영 · 실패 ${attendanceSync.failed}개`;
+        status.textContent=`동기화 일부 완료 · 출석 CSV ${attendanceSync.success}/${attendanceSync.total}개 반영 · 출석 실패 ${attendanceSync.failed}개 · 재정 ${financeSync.ok?'반영':'확인 실패'}`;
       }
     }
   }catch(e){
@@ -1775,7 +1792,7 @@ function bindClick(selector,handler){const el=$(selector);if(el)el.onclick=handl
 function bindChange(selector,handler){const el=$(selector);if(el)el.onchange=handler}
 
 
-const FINANCE_MONTHS=window.FINANCE_MONTHS||{};
+let FINANCE_MONTHS=window.FINANCE_MONTHS||{};
 let currentFinanceKey='';
 
 function money(value){return Number(value||0).toLocaleString('ko-KR')+'원'}
@@ -2538,9 +2555,9 @@ init().catch(e=>{
 <script>
 (function(){
   function applyGesmsVersion(){
-    var v=(window.GESMS_APP_VERSION||'V11.2.1').replace(/\s+Stable$/,'');
+    var v=(window.GESMS_APP_VERSION||'V11.2.3').replace(/\s+Stable$/,'');
     var label=window.GESMS_APP_LABEL||(v+' Stable');
-    var build=window.GESMS_BUILD_DATE||'2026-08-27';
+    var build=window.GESMS_BUILD_DATE||'2026-09-06';
 
     document.title='GunpoEunhye Smart Ministry System (GESMS) '+v;
 

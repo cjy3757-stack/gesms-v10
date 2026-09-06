@@ -1,14 +1,13 @@
-# GunpoEunhye Corps Family Management System V8.5.1
+# GESMS V11.2.3 Stable — 필수파일 정리본
 
-## 출석 통계 자동화
+실제 운영에 필요한 파일만 남긴 기준 배포본입니다.
 
-V8.5.1부터 `attendance-index.json`을 직접 작성하거나 수정하지 않습니다.
+## 평소 관리하는 파일
+- 군우명단: `GESMS_군우명단.xlsx`
+- 공지사항: `공지사항.xlsx`
+- 교회일정: `교회일정.xlsx`
+- 전도/영혼구원: `GESMS_전도영혼구원_표준자료양식_V3.1_버전자동연동.xlsx`
+- 출석: `attendance-YYYY-MM-DD-예배명.csv`
+- 재정: 해당 월 수입부/지출부 PDF 2개 업로드 → GitHub Actions가 `finance-data.js` 갱신
 
-1. 앱에서 날짜와 예배 종류를 선택해 출석을 체크합니다.
-2. 날짜별 CSV를 저장합니다.
-3. 해당 CSV만 GitHub 저장소에 업로드합니다.
-4. 통계 화면에서 **전체 통계 새로고침** 또는 **GitHub CSV 자동검색**을 누릅니다.
-
-파일명은 앱이 자동 생성하는 `attendance-YYYY-MM-DD-예배명.csv` 형식을 그대로 유지해야 합니다. 출석 CSV는 저장소 루트 또는 하위 폴더에 둘 수 있습니다.
-
-GitHub API 자동검색이 일시적으로 실패할 경우 기존 `attendance-index.json`과 기기 저장 목록을 예비 수단으로 사용합니다.
+과거 버전 안내문, 중복/깨진 이름 파일, 구버전 JS, 과거 재정 PDF는 정리본에서 제거했습니다.
